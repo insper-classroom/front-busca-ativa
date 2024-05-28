@@ -1,11 +1,14 @@
 import React from 'react';
 import './static/header.css';
-import logoBranco from '../components/img/logoBranco.png';  // Importando a imagem corretamente
+import logoBranco from '../components/img/logoBranco.png';
 
 const Header = () => {
   return (
     <header className="header">
-      <h1>Busca Ativa Escolar</h1>
+      <div className="logo-container">
+        <img src={logoBranco} alt="Logo" className="logo" />
+        <h1>Busca Ativa Escolar</h1>
+      </div>
       <nav>
         <ul>
           <li>Relatórios</li>
@@ -13,7 +16,6 @@ const Header = () => {
           <li>Admin</li>
         </ul>
       </nav>
-      <img src={logoBranco} alt="Logo" className="logo" /> {/* Adicionando a imagem do logo */}
     </header>
   );
 };

@@ -1,35 +1,64 @@
+/* Fonte personalizada */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
 .header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-background-color: #007bff;
-color: white;
-/* padding: 10px; */
-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 50px;
+  margin-right: 15px;
 }
 
 .header h1 {
-margin: 0;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .header nav ul {
-list-style: none;
-display: flex;
-gap: 15px;
-margin: 0px; /* Remove a margem padrão */
-padding: 0px; /* Remove o preenchimento padrão */
-/* align-items: center;  */
-display: flex;
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
 }
 
 .header nav ul li {
-cursor: pointer;
-align-items: center;
-display: flex;
-
+  cursor: pointer;
+  padding: 10px 15px;
+  transition: background-color 0.3s, transform 0.3s;
+  white-space: nowrap; /* Impede a quebra de texto */
 }
 
-.header .logo {
-height: 70px; /* Ajuste o tamanho conforme necessário */
-margin-left: 0px; /* Garante que a imagem fique à direita */
+.header nav ul li:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  transform: scale(1.05);
 }
