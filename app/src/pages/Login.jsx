@@ -47,7 +47,6 @@ export default function Login() {
       <Header />
       <div className='login-container'>
         <Grid container spacing={2} className="login-container">
-          
           <Grid item xs={5} style={{textAlign:'center'}}>
             <img src={logo} alt="Logo Busca Ativa" style={{ width: '100%', width: 350, height: 300 }} />
             <Typography variant="h6" component="h6" style={{textAlign: 'justify', paddingLeft:"10%"}}>A Busca Ativa Escolar é uma iniciativa do UNICEF, Undime, Congemas e Conasems que ajuda governos a identificar e reintegrar crianças fora da escola. Utilizando uma metodologia social e uma ferramenta tecnológica, facilita o planejamento de políticas públicas com dados concretos. Reúne áreas como Educação, Saúde e Assistência Social, melhorando a comunicação e o acompanhamento dos casos. A ferramenta é acessível em qualquer dispositivo, auxiliando na gestão das informações sobre cada criança.</Typography>
