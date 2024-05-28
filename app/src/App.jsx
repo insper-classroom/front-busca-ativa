@@ -15,15 +15,21 @@ import Logout from './functions/Logout';
 
 function App() {  
   const [permissao, setPermissao] = useState(null);
-  
+  const [verificandoPermissao, setVerificandoPermissao] = useState(true); 
+
   useEffect(() => {
     const verificarPermissao = async () => {
       const permissaoUsuario = await permissaoUser(); 
       console.log('Permissão do usuário:', permissaoUsuario);
       setPermissao(permissaoUsuario);
+      setVerificandoPermissao(false);
     };    
     verificarPermissao();
   }, []);
+
+  if (verificandoPermissao) {
+    return <div></div>;
+  }
 
   return (
     <>
@@ -64,4 +70,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
