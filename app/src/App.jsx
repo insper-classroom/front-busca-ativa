@@ -7,7 +7,7 @@ import Login from './pages/Login'
 import HomeAdmin from './pages/Admin/HomeAdmin'
 import HomeProfessor from './pages/Professor/HomeProfessor'
 import HomeAgente from './pages/Agente/HomeAgente'
-
+import Dashboard from './pages/Dashboard';
 import EstaAutenticado from './functions/EstaAutenticado';
 import NaoEncontrado from './functions/NaoEncontrado';
 import permissaoUser from './functions/PermissaoUser';
@@ -59,7 +59,7 @@ function App() {
             <Route path="/home" element={<HomeAgente />} />
 
           )}
-
+        <Route path="/dashboard" element={<Dashboard />} />
         </Route>
         
         <Route path="*" element={<NaoEncontrado />} />
