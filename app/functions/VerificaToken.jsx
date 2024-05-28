@@ -6,7 +6,7 @@ const VerificaToken = async () => {
     const token = cookies.get('token');
 
     if (token) {
-      const response = await fetch('https://localhost:8000/verificar-login', {
+      const response = await fetch('http://localhost:8000/verificar-login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
