@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './static/HeaderAdmin.css';
 import logoBranco from '../../components/img/logoBranco.png';
+import Logout from '../../functions/Logout';
 
 const HeaderAdmin = () => {
   return (
@@ -20,6 +21,9 @@ const HeaderAdmin = () => {
           </li>
           <li>
             <Link to="/usuarios">Usuários</Link>
+          </li>
+          <li>
+            <Logout />
           </li>
         </ul>
       </nav>
