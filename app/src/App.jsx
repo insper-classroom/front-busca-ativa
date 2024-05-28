@@ -2,20 +2,16 @@ import { useState, useEffect } from 'react'
 import React from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom';
 
-import Login from '../pages/Login'
+import Login from './pages/Login'
 
-import HomeAdmin from '../pages/Admin/HomeAdmin'
-import HomeProfessor from '../pages/Professor/HomeProfessor'
-import HomeAgente from '../pages/Agente/HomeAgente'
+import HomeAdmin from './pages/Admin/HomeAdmin'
+import HomeProfessor from './pages/Professor/HomeProfessor'
+import HomeAgente from './pages/Agente/HomeAgente'
 
-import VerificaToken from '../functions/VerificaToken'
-import EstaAutenticado from '../functions/EstaAutenticado';
-import NaoEncontrado from '../functions/NaoEncontrado';
-import permissaoUser from '../functions/PermissaoUser';
-
-const isAuthenticated = async () => {
-  return await VerificaToken();
-} 
+import EstaAutenticado from './functions/EstaAutenticado';
+import NaoEncontrado from './functions/NaoEncontrado';
+import permissaoUser from './functions/PermissaoUser';
+import Logout from './functions/Logout';
 
 function App() {  
   const [permissao, setPermissao] = useState(null);
@@ -32,10 +28,10 @@ function App() {
   return (
     <>
       <Routes>
-          <Route
-        path="/"
-        element={permissao === null ? <Navigate to="/login" /> : <Navigate to="/home" />}
-    />
+        <Route
+          path="/"
+          element={permissao === null ? <Navigate to="/login" /> : <Navigate to="/home" />}
+        />
 
         <Route path="/login" element={<Login />} />
 
@@ -43,7 +39,7 @@ function App() {
           {permissao === 'Admin' && (
             // Colocar as páginas do admin aqui
             <Route path="/home" element={<HomeAdmin />} />
-            
+
           )}
 
           {permissao === 'Professor' && (
@@ -62,6 +58,8 @@ function App() {
         
         <Route path="*" element={<NaoEncontrado />} />
       </Routes>
+      <Logout />
+
     </>
   )
 }
