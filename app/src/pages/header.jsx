@@ -1,6 +1,6 @@
 import React from 'react';
-import './static/Header.css';
-import logoBranco from './img/logoBranco.png';  // Importando a imagem corretamente
+import './static/header.css';
+import logoBranco from '../components/img/logoBranco.png';  // Importando a imagem corretamente
 
 const Header = () => {
   return (
