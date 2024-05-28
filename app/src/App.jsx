@@ -42,19 +42,19 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         <Route element={<EstaAutenticado/>} >
-          {permissao === 'Admin' && (
+          {permissao === 'admin' && (
             // Colocar as páginas do admin aqui
             <Route path="/home" element={<HomeAdmin />} />
 
           )}
 
-          {permissao === 'Professor' && (
+          {permissao === 'professor' && (
             // Colocar as páginas do professor aqui
             <Route path="/home" element={<HomeProfessor />} />
 
           )}
 
-          {permissao === 'Agente' && (
+          {permissao === 'agente' && (
             // Colocar as páginas do agente aqui  
             <Route path="/home" element={<HomeAgente />} />
 
