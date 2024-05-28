@@ -19,27 +19,23 @@ const isAuthenticated = async () => {
 
 function App() {  
   const [permissao, setPermissao] = useState(null);
-  const [verificandoPermissao, setVerificandoPermissao] = useState(true); 
+  
   useEffect(() => {
     const verificarPermissao = async () => {
       const permissaoUsuario = await permissaoUser(); 
       console.log('Permissão do usuário:', permissaoUsuario);
       setPermissao(permissaoUsuario);
-      setVerificandoPermissao(false);
     };    
     verificarPermissao();
   }, []);
-  if (verificandoPermissao) {
-    return <div></div>;
-  }
 
   return (
     <>
       <Routes>
-        <Route
-          path="/"
-          element={permissao === null ? <Navigate to="/login" /> : <Navigate to="/home" />}
-        />
+          <Route
+        path="/"
+        element={permissao === null ? <Navigate to="/login" /> : <Navigate to="/home" />}
+    />
 
         <Route path="/login" element={<Login />} />
 
@@ -47,24 +43,27 @@ function App() {
           {permissao === 'admin' && (
             // Colocar as páginas do admin aqui
             <Route path="/home" element={<HomeAdmin />} />
+            
           )}
-          {permissao === 'professor' && (
+
+          {permissao === 'Professor' && (
             // Colocar as páginas do professor aqui
             <Route path="/home" element={<HomeProfessor />} />
 
           )}
-          {permissao === 'agente' && (
+
+          {permissao === 'Agente' && (
             // Colocar as páginas do agente aqui  
             <Route path="/home" element={<HomeAgente />} />
+
           )}
 
         </Route>
         
         <Route path="*" element={<NaoEncontrado />} />
       </Routes>
-      <Logout />
-
     </>
   )
 }
-export default App;
+
+export default App
