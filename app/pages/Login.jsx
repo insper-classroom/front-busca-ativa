@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { Button, TextField, Container, Typography, Alert } from '@mui/material';
 const cookies = new Cookies();
@@ -8,7 +7,6 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
