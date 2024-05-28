@@ -66,11 +66,6 @@ export default function Login() {
                       name="email"
                       label="Email"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Digite seu email"
-                      variant="outlined"
-                      margin="normal"
-                    />
                     <TextField
                       fullWidth
                       type="password"
