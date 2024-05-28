@@ -1,55 +1,37 @@
 import { useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
-import { Link } from 'react-router-dom'
-import { Grid } from '@mui/material'
-import './App.css'
-import { CadastrarNoticias } from '../pages/Noticias/CadastraNoticia'
-import { ListarNoticias } from '../pages/Noticias/ListaNoticia'
-import { EditarNoticias } from '../pages/Noticias/EditaNoticia'
-import { BrowserRouter } from 'react-router-dom'
-import { DeletaNoticias } from '../pages/Noticias/DeletaNoticia'
+import React from 'react'
+import { Route, Routes, Navigate } from 'react-router-dom';
+
+import Home from '../pages/Home'
+import Login from '../pages/Login'
+
+import VerificaToken from '../functions/VerificaToken'
+import RotasProtegidas from '../functions/RotasProtegidas';
+import NaoEncontrado from '../functions/NaoEncontrado';
+
+const isAuthenticated = async () => {
+  return await VerificaToken();
+}
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <Grid container>
-      <Grid item xs={20}>
-          <Grid item xs={12}>
-            <Link to="/">Home</Link>
-          </Grid>
+      <Routes>
+        <Route
+              path="/"
+              element={isAuthenticated() ? <Navigate to="/home" /> : <Navigate to="/login" />}
+            />
 
-          <Grid item xs={12}>
-            <Link to="/cadastrarNoticia">Cadastrar Noticia</Link>
-          </Grid>
+        <Route path="/login" element={<Login />} />
+        <Route element={<RotasProtegidas/>} >
+          <Route path="/home" element={<Home />} />
 
-          <Grid item xs={12}>
-            <Link to="/listarNoticias">Listar Noticias</Link>
-          </Grid>
+        </Route>
 
-          <Grid item xs={12}>
-            <Link to="/editarNoticia">Editar Noticia</Link>
-          </Grid>
+        <Route path="*" element={<NaoEncontrado />} />
 
-          <Grid item xs={12}>
-            <Link to="/deletarNoticia">Deletar Noticia</Link>
-          </Grid>
-
-
-
-        </Grid>
-      
-      
-        <Grid item xs={8}>
-          <Routes>
-            <Route path="/cadastrarNoticia" element={<CadastrarNoticias />} />
-            <Route path="/listarNoticias" element={<ListarNoticias/>} />
-            <Route path="/editarNoticia" element={<EditarNoticias/>} />
-            <Route path="/deletarNoticia" element={<DeletaNoticias/>} />
-          </Routes>
-        </Grid>
-      </Grid>
+        
+      </Routes>
     </>
   )
 }
