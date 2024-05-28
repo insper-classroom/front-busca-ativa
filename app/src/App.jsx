@@ -8,15 +8,18 @@ import HomeAdmin from './pages/Admin/HomeAdmin'
 import HomeProfessor from './pages/Professor/HomeProfessor'
 import HomeAgente from './pages/Agente/HomeAgente'
 
+import VerificaToken from './functions/VerificaToken'
 import EstaAutenticado from './functions/EstaAutenticado';
 import NaoEncontrado from './functions/NaoEncontrado';
 import permissaoUser from './functions/PermissaoUser';
-import Logout from './functions/Logout';
+
+const isAuthenticated = async () => {
+  return await VerificaToken();
+} 
 
 function App() {  
   const [permissao, setPermissao] = useState(null);
   const [verificandoPermissao, setVerificandoPermissao] = useState(true); 
-
   useEffect(() => {
     const verificarPermissao = async () => {
       const permissaoUsuario = await permissaoUser(); 
@@ -26,7 +29,6 @@ function App() {
     };    
     verificarPermissao();
   }, []);
-
   if (verificandoPermissao) {
     return <div></div>;
   }
@@ -45,19 +47,15 @@ function App() {
           {permissao === 'admin' && (
             // Colocar as páginas do admin aqui
             <Route path="/home" element={<HomeAdmin />} />
-
           )}
-
           {permissao === 'professor' && (
             // Colocar as páginas do professor aqui
             <Route path="/home" element={<HomeProfessor />} />
 
           )}
-
           {permissao === 'agente' && (
             // Colocar as páginas do agente aqui  
             <Route path="/home" element={<HomeAgente />} />
-
           )}
 
         </Route>
@@ -69,5 +67,4 @@ function App() {
     </>
   )
 }
-
 export default App;
