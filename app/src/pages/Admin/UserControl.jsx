@@ -12,6 +12,12 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 const columns = [
   { id: 'email', label: 'EMAIL', minWidth: 100, editable: true },
@@ -103,6 +109,7 @@ function UserControl() {
         console.error('Error saving user changes:', error);
       });
   };
+
   const handleEdit = (id, userData) => {
     setEditingUserId(id);
     setEditedUsersData(prevData => ({
@@ -166,6 +173,7 @@ function UserControl() {
                     key={column.id}
                     align={column.align}
                     style={{ minWidth: column.minWidth }}
+                    sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
                   >
                     {column.label}
                   </TableCell>
@@ -179,51 +187,74 @@ function UserControl() {
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                       {columns.map((column) => {
-                      const { id, label, editable } = column;
-                      const value = row[id];
-                      return (
-                        <TableCell key={id} align={column.align}>
-                          {id === 'edit' ? (
-                            isEditing(row.id) ? (
-                              <Button onClick={() => handleSave(row.id)}>Salvar</Button>
+                        const { id, label, editable } = column;
+                        const value = row[id];
+                        return (
+                          <TableCell key={id} align={column.align}>
+                            {id === 'edit' ? (
+                              isEditing(row.id) ? (
+                                <Button onClick={() => handleSave(row.id)}>Salvar</Button>
+                              ) : (
+                                <Button onClick={() => handleEdit(row.id, row)}>Editar</Button> 
+                              )
+                            ) : id === 'delete' ? (
+                              <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
                             ) : (
-                              <Button onClick={() => handleEdit(row.id, row)}>Editar</Button> 
-                            )
-                          ) : id === 'delete' ? (
-                            <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
-                          ) : (
-                            editable ? (
-                              id === 'permissao' ? (
-                                isEditing(row.id) ? (
-                                  <select
-                                    value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
-                                    onChange={(e) => handlePermissionChange(e, row.id)}
-                                  >
-                                    <option value="ADMIN">ADMIN</option>
-                                    <option value="PROFESSOR">PROFESSOR</option>
-                                    <option value="AGENTE">AGENTE</option>
-                                  </select>
+                              editable ? (
+                                id === 'permissao' ? (
+                                  isEditing(row.id) ? (
+                                    <Box sx={{ minWidth: 120 }}>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">PERMISSAO</InputLabel>
+                                            <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            // value={row.permissao}
+                                            label="Permissão"
+                                            value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
+                                            onChange={(e) => handlePermissionChange(e, row.id)}
+                                            >
+                                            <MenuItem value={"AGENT"}>AGENT</MenuItem>
+                                            <MenuItem value={"ADMIN"}>ADMIN</MenuItem>
+                                            <MenuItem value={"PROFESSOR"}>PROFESSOR</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        </Box>
+
+                                  ) : (
+                                    value
+                                  )
                                 ) : (
-                                  value
+                                  isEditing(row.id) ? (
+                                    <Box
+                                        component="form"
+                                        sx={{
+                                        '& > :not(style)': { m: 1, width: '25ch' },
+                                        }}
+                                        noValidate
+                                        autoComplete="on"
+                                    >
+                                        <TextField
+                                        id="filled-basic"
+                                        label="Filled"
+                                        variant="filled"
+                                        value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
+                                        onChange={(e) => handleInputChange(e, id, row.id)}
+                                        />
+                                    </Box>
+
+
+                                  ) : (
+                                    value
+                                  )
                                 )
                               ) : (
-                                isEditing(row.id) ? (
-                                  <input
-                                    type="text"
-                                    value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
-                                    onChange={(e) => handleInputChange(e, id, row.id)} // Passa o id da linha
-                                  />
-                                ) : (
-                                  value
-                                )
+                                value
                               )
-                            ) : (
-                              value
-                            )
-                          )}
-                        </TableCell>
-                      );
-                    })}
+                            )}
+                          </TableCell>
+                        );
+                      })}
                     </TableRow>
                   );
                 })}
@@ -241,7 +272,9 @@ function UserControl() {
         />
       </Paper>
       <div className='button-container'>
-            <Link to='/usuarios/criar' className='create-user'><Button  variant="contained" disableElevation>Criar novo usuário</Button></Link>
+        <Link to='/usuarios/criar' className='create-user'>
+          <Button variant="contained" disableElevation>Criar novo usuário</Button>
+        </Link>
       </div>
     </div>
   );
