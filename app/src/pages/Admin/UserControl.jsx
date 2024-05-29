@@ -10,6 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { Link } from 'react-router-dom';
 
 const columns = [
     { id: 'id', label: 'id', minWidth: 170 },
@@ -51,8 +52,6 @@ function UserControl() {
         });
     }, [token]);
 
-
-
     const handleDelete = (id) => {
         fetch(`http://localhost:8000/usuarios/${id}`, {
             method: 'DELETE',
@@ -72,7 +71,7 @@ function UserControl() {
         });
     };
 
-    const [page, setPage] = React.useState(0);
+  const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleChangePage = (event, newPage) => {
@@ -140,6 +139,7 @@ function UserControl() {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
+    <Link to='/usuarios/criar' className='create-user'>Criar novo usuário</Link>
     </div>
   );
 }

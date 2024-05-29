@@ -2,19 +2,25 @@ import { useState, useEffect } from 'react'
 import React from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom';
 
+// Páginas Gerais
 import Login from './pages/Login'
 
+// Páginas do Admin
 import HomeAdmin from './pages/Admin/HomeAdmin'
-import HomeProfessor from './pages/Professor/HomeProfessor'
-import HomeAgente from './pages/Agente/HomeAgente'
-import Dashboard from './pages/Dashboard'
+import Dashboard from './pages/Admin/Dashboard'
 import UserControl from './pages/Admin/UserControl';
 import Cadastro from './pages/Admin/Cadastro';
 
+// Páginas do Professor
+import HomeProfessor from './pages/Professor/HomeProfessor'
+
+// Páginas do Agente
+import HomeAgente from './pages/Agente/HomeAgente'
+
+// Funções
 import EstaAutenticado from './functions/EstaAutenticado';
 import NaoEncontrado from './functions/NaoEncontrado';
 import permissaoUser from './functions/PermissaoUser';
-import Logout from './functions/Logout';
 
 function App() {  
   const [permissao, setPermissao] = useState(null);
@@ -51,8 +57,8 @@ function App() {
             <Route path="/home" element={<HomeAdmin />} />
             <Route path="/usuarios" element={<UserControl />} />
             <Route path="/usuarios/criar" element={<Cadastro />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             </>
-
           )}
 
           {permissao === 'professor' && (
@@ -71,7 +77,6 @@ function App() {
 
         </Route>
 
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<NaoEncontrado />} />
 
       </Routes>

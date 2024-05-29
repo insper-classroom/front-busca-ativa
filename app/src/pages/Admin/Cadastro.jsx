@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, MenuItem, Typography, Container, Box } from '@mui/material';
 import HeaderAdmin from './HeaderAdmin';
+import { Link } from 'react-router-dom';
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -29,8 +30,8 @@ const RegisterForm = () => {
     const userData = {
       email: formData.email,
       nome: formData.nome,
-      permissoes: formData.permissoes,
-      senha: formData.senha,
+      permissao: formData.permissoes,
+      password: formData.senha,
     };
 
     try {
@@ -49,7 +50,6 @@ const RegisterForm = () => {
       const data = await response.json();
       console.log('Cadastro realizado com sucesso:', data);
       alert('Cadastro realizado com sucesso');
-      // Limpar o formulário após o sucesso
       setFormData({
         email: '',
         nome: '',
@@ -139,7 +139,7 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 >
                 <MenuItem value="professor">Professor</MenuItem>
-                <MenuItem value="adm">Administrador</MenuItem>
+                <MenuItem value="admin">Administrador</MenuItem>
                 <MenuItem value="agente">Agente</MenuItem>
                 </TextField>
                 <Button
@@ -154,6 +154,7 @@ const RegisterForm = () => {
             </Box>
         </Container>
         </div>
+        <Link to='/usuarios' className='create-user'>Voltar</Link>
     </div>
   );
 };

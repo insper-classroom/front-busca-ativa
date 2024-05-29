@@ -1,6 +1,6 @@
 import React from 'react';
 import Cookies from 'universal-cookie';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const cookies = new Cookies();
 
@@ -32,9 +32,7 @@ const Logout = () => {
     };
 
     return (
-        <button className="logout-button" variant='danger' onClick={handleLogout}>
-            Logout
-        </button>
+        <Link to="/logout" onClick={handleLogout}>Logout</Link>
     );
 };
 
