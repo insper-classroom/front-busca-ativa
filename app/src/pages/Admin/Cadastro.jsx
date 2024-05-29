@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
+import Cookies from 'universal-cookie';
 import { TextField, Button, MenuItem, Typography, Container, Box } from '@mui/material';
 import HeaderAdmin from './HeaderAdmin';
 import { Link } from 'react-router-dom';
 
+const cookies = new Cookies();
+
 const RegisterForm = () => {
+  const token = cookies.get('token');
+
   const [formData, setFormData] = useState({
     email: '',
     nome: '',
@@ -39,6 +44,7 @@ const RegisterForm = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(userData),
       });
