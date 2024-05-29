@@ -22,9 +22,6 @@ const columns = [
     return { id, email, nome, permissao };
   }
 
-  
-  
-
 const cookies = new Cookies();
 
 function UserControl() {

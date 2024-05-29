@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Button, TextField, Container, Typography, Alert, Grid, Box } from '@mui/material';
-import Header from './headerLogin'; // ajuste o caminho conforme necessário
+import Header from './HeaderLogin'; // ajuste o caminho conforme necessário
 import { useNavigate } from 'react-router-dom';
 import logo from '../components/img/logo.png';
-import './login.css'; 
+import './static/Login.css'; 
 
 const cookies = new Cookies();
 
