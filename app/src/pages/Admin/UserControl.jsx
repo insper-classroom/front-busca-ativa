@@ -14,12 +14,11 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 
 const columns = [
-  { id: 'id', label: 'id', minWidth: 170, editable: false }, 
-  { id: 'email', label: 'email', minWidth: 100, editable: true },
-  { id: 'nome', label: 'nome', minWidth: 100, editable: true },
-  { id: 'permissao', label: 'permissao', minWidth: 100, editable: true },
-  { id: 'edit', label: 'Editar', minWidth: 100, editable: false },
-  { id: 'delete', label: 'Deletar', minWidth: 100, editable: false },
+  { id: 'email', label: 'EMAIL', minWidth: 100, editable: true },
+  { id: 'nome', label: 'NOME', minWidth: 100, editable: true },
+  { id: 'permissao', label: 'PERMISSÃO', minWidth: 100, editable: true },
+  { id: 'edit', label: 'EDITAR', minWidth: 100, editable: false },
+  { id: 'delete', label: 'DELETAR', minWidth: 100, editable: false },
 ];
 
 function createData(id, email, nome, permissao) {
@@ -186,12 +185,12 @@ function UserControl() {
                         <TableCell key={id} align={column.align}>
                           {id === 'edit' ? (
                             isEditing(row.id) ? (
-                              <button onClick={() => handleSave(row.id)}>Salvar</button>
+                              <Button onClick={() => handleSave(row.id)}>Salvar</Button>
                             ) : (
-                              <button onClick={() => handleEdit(row.id, row)}>Editar</button> 
+                              <Button onClick={() => handleEdit(row.id, row)}>Editar</Button> 
                             )
                           ) : id === 'delete' ? (
-                            <button onClick={() => handleDelete(row.id)}>Deletar</button>
+                            <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
                           ) : (
                             editable ? (
                               id === 'permissao' ? (
@@ -200,9 +199,9 @@ function UserControl() {
                                     value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
                                     onChange={(e) => handlePermissionChange(e, row.id)}
                                   >
-                                    <option value="admin">Admin</option>
-                                    <option value="professor">Professor</option>
-                                    <option value="agente">Agent</option>
+                                    <option value="ADMIN">ADMIN</option>
+                                    <option value="PROFESSOR">PROFESSOR</option>
+                                    <option value="AGENTE">AGENTE</option>
                                   </select>
                                 ) : (
                                   value
