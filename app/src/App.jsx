@@ -10,6 +10,7 @@ import HomeAdmin from './pages/Admin/HomeAdmin'
 import Dashboard from './pages/Admin/Dashboard'
 import UserControl from './pages/Admin/UserControl';
 import Cadastro from './pages/Admin/Cadastro';
+import AlunosAdmin from './pages/Admin/AlunosAdmin';
 
 // Páginas do Professor
 import HomeProfessor from './pages/Professor/HomeProfessor'
@@ -58,6 +59,7 @@ function App() {
             <Route path="/usuarios" element={<UserControl />} />
             <Route path="/usuarios/criar" element={<Cadastro />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/alunos" element={<AlunosAdmin />} />
             </>
           )}
 

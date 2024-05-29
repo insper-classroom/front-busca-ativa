@@ -17,6 +17,9 @@ const HeaderAdmin = () => {
             <Link to="/home">Home</Link>
           </li>
           <li>
+            <Link to="/alunos">Alunos</Link>
+          </li>
+          <li>
             <Link to="/dashboard">Dashboard</Link>
           </li>
           <li>
