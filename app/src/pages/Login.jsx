@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import Cookies from 'universal-cookie';
-import { Button, TextField, Container, Typography, Alert } from '@mui/material';
-import Header from './header'; // ajuste o caminho conforme necessário
+import { Button, TextField, Container, Typography, Alert, Grid, Box } from '@mui/material';
+import Header from './HeaderLogin'; // ajuste o caminho conforme necessário
 import { useNavigate } from 'react-router-dom';
+import logo from '../components/img/logo.png';
+import './static/Login.css'; 
+
 const cookies = new Cookies();
 
 export default function Login() {
@@ -41,48 +44,62 @@ export default function Login() {
 
   return (
     <div>
-      <Header /> {/* Adicione o componente Header aqui */}
-      <Container className='login-container' style={{ marginTop: '20px' }}>
-        <div className='login-wrapper'>
-          <div className='login-text'>
-            <Typography variant="h4" component="h1" id="login-text">Login</Typography>
-            <form onSubmit={handleSubmit}>
-              <TextField
-                fullWidth
-                type="email"
-                name="email"
-                label="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Digite seu email"
-                variant="outlined"
-                margin="normal"
-              />
-              <TextField
-                fullWidth
-                type="password"
-                name="password"
-                label="Senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Digite sua senha"
-                variant="outlined"
-                margin="normal"
-              />
-              <div className='login-button'>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                >
-                  Entrar
-                </Button>
+      <Header />
+      <div className='login-container'>
+        <Grid container spacing={2} className="login-container">
+          <Grid item xs={5} style={{textAlign:'center'}}>
+            <img src={logo} alt="Logo Busca Ativa" style={{  width: 350, height: 300 }} />
+            <Typography variant="h6" component="h6" style={{textAlign: 'justify', paddingLeft:"10%"}}>A Busca Ativa Escolar é uma iniciativa do UNICEF, Undime, Congemas e Conasems que ajuda governos a identificar e reintegrar crianças fora da escola. Utilizando uma metodologia social e uma ferramenta tecnológica, facilita o planejamento de políticas públicas com dados concretos. Reúne áreas como Educação, Saúde e Assistência Social, melhorando a comunicação e o acompanhamento dos casos. A ferramenta é acessível em qualquer dispositivo, auxiliando na gestão das informações sobre cada criança.</Typography>
+          </Grid>
+          <Grid item xs={2} style={{textAlign:'center'}}>
+            <Box className="box-divider"></Box>
+          </Grid>
+          <Grid item xs={5} style={{alignItems:"center", justifyContent:"center", paddingRight:'90px', marginTop: '20px', paddingTop:'15vh'}}>
+            <Container>
+              <div className='login-wrapper'>
+                <div className='login-text'>
+                  <Typography variant="h4" component="h1" id="login-text">Login</Typography>
+                  <form onSubmit={handleSubmit} style={{opacity:"0.9", backgroundColor:"white"}}>
+                    <TextField
+                      fullWidth
+                      type="email"
+                      name="email"
+                      label="Email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Digite seu email"
+                      variant="outlined"
+                      margin="normal"
+                    />
+                    <TextField
+                      fullWidth
+                      type="password"
+                      name="password"
+                      label="Senha"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Digite sua senha"
+                      variant="outlined"
+                      margin="normal"
+                    />
+                    <div className='login-button'>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        style = {{marginTop: '10%'}}
+                      >
+                        Entrar
+                      </Button>
+                    </div>
+                    {error && <Alert severity="error" className='Alert'>{error}</Alert>}
+                  </form>
+                </div>
               </div>
-              {error && <Alert severity="error" className='Alert'>{error}</Alert>}
-            </form>
-          </div>
-        </div>
-      </Container>
+            </Container>
+          </Grid>
+        </Grid>
+      </div>
     </div>
   );
 }

@@ -8,6 +8,8 @@ import HomeAdmin from './pages/Admin/HomeAdmin'
 import HomeProfessor from './pages/Professor/HomeProfessor'
 import HomeAgente from './pages/Agente/HomeAgente'
 import Dashboard from './pages/Dashboard'
+import UserControl from './pages/Admin/UserControl';
+import Cadastro from './pages/Admin/Cadastro';
 
 import EstaAutenticado from './functions/EstaAutenticado';
 import NaoEncontrado from './functions/NaoEncontrado';
@@ -45,29 +47,34 @@ function App() {
         <Route element={<EstaAutenticado/>} >
           {permissao === 'admin' && (
             // Colocar as páginas do admin aqui
+            <>
             <Route path="/home" element={<HomeAdmin />} />
+            <Route path="/usuarios" element={<UserControl />} />
+            <Route path="/usuarios/criar" element={<Cadastro />} />
+            </>
 
           )}
 
           {permissao === 'professor' && (
             // Colocar as páginas do professor aqui
+            <>
             <Route path="/home" element={<HomeProfessor />} />
-
+            </>
           )}
 
           {permissao === 'agente' && (
             // Colocar as páginas do agente aqui  
+            <>
             <Route path="/home" element={<HomeAgente />} />
-
+            </>
           )}
 
         </Route>
 
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<NaoEncontrado />} />
-      </Routes>
-      <Logout />
 
+      </Routes>
     </>
   )
 }

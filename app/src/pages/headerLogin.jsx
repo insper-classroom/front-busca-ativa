@@ -9,13 +9,7 @@ const Header = () => {
         <img src={logoBranco} alt="Logo" className="logo" />
         <h1>Busca Ativa Escolar</h1>
       </div>
-      <nav>
-        <ul>
-          <li>Relatórios</li>
-          <li>Lista de Alunos</li>
-          <li>Admin</li>
-        </ul>
-      </nav>
+
     </header>
   );
 };
