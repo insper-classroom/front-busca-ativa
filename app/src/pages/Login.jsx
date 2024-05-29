@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Button, TextField, Container, Typography, Alert, Grid, Box } from '@mui/material';
-import Header from './HeaderLogin'; // ajuste o caminho conforme necessário
+import HeaderLogin from './HeaderLogin';
 import { useNavigate } from 'react-router-dom';
 import logo from '../components/img/logo.png';
 import './static/Login.css'; 
@@ -44,7 +44,7 @@ export default function Login() {
 
   return (
     <div>
-      <Header />
+      <HeaderLogin />
       <div className='login-container'>
         <Grid container spacing={2} className="login-container">
           <Grid item xs={5} style={{textAlign:'center'}}>
