@@ -2,10 +2,16 @@ import React, { useState } from 'react';
 import { TextField, Button, MenuItem, Typography, Container, Box, Grid } from '@mui/material';
 import HeaderAdmin from './HeaderAdmin';
 import { Link } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './static/Cadastro.css';
 
+const cookies = new Cookies();
+
 const RegisterForm = () => {
+
+  const token = cookies.get('token');
+
   const [formData, setFormData] = useState({
     email: '',
     nome: '',
@@ -41,6 +47,7 @@ const RegisterForm = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(userData),
       });
@@ -171,8 +178,7 @@ const RegisterForm = () => {
           </Container>
         </Grid>
       </Grid>
-        </div>
-        
+      </div>
     </div>
   );
 };

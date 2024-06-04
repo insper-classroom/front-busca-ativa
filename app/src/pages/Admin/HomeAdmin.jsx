@@ -1,11 +1,16 @@
 import React from 'react';
 import HeaderAdmin from './HeaderAdmin';
+import CasosTable from './CasosTable'; // Importando o componente CasosTable
+import './static/HomeAdmin.css';
 
 function HomeAdmin() {
     return (
-        <div>
+        <div className="home-admin">
             <HeaderAdmin />
-            <h1>Hello, admin!</h1>
+            <div className="search-container">
+                <h1>Bem vindo ADMIN</h1>
+                <CasosTable /> {/* Utilizando o componente CasosTable */}
+            </div>
         </div>
     );
 }

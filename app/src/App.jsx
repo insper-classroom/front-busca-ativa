@@ -9,8 +9,9 @@ import Login from './pages/Login'
 import HomeAdmin from './pages/Admin/HomeAdmin'
 import Dashboard from './pages/Admin/Dashboard'
 import UserControl from './pages/Admin/UserControl';
-import Cadastro from './pages/Admin/Cadastro';
+import CadastroUsuario from './pages/Admin/CadastroUsuario';
 import AlunosAdmin from './pages/Admin/AlunosAdmin';
+import CadastroAluno from './pages/Admin/CadastroAluno';
 
 // Páginas do Professor
 import HomeProfessor from './pages/Professor/HomeProfessor'
@@ -59,9 +60,10 @@ function App() {
             <>
             <Route path="/home" element={<HomeAdmin />} />
             <Route path="/usuarios" element={<UserControl />} />
-            <Route path="/usuarios/criar" element={<Cadastro />} />
+            <Route path="/usuarios/criar" element={<CadastroUsuario />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/alunos" element={<AlunosAdmin />} />
+            <Route path="/alunos/criar" element={<CadastroAluno />} />
             <Route path="/paginaAluno" element={<PaginaAluno />} />
             </>
           )}
