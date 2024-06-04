@@ -1,135 +1,141 @@
-    import React, { useEffect, useState } from 'react';
-    import { useNavigate } from 'react-router-dom';
-    import Cookies from 'universal-cookie';
-    import Paper from '@mui/material/Paper';
-    import Table from '@mui/material/Table';
-    import TableBody from '@mui/material/TableBody';
-    import TableCell from '@mui/material/TableCell';
-    import TableContainer from '@mui/material/TableContainer';
-    import TableHead from '@mui/material/TableHead';
-    import TablePagination from '@mui/material/TablePagination';
-    import TableRow from '@mui/material/TableRow';
-    import TextField from '@mui/material/TextField';
-    import MenuItem from '@mui/material/MenuItem';
-    import Select from '@mui/material/Select';
-    import InputLabel from '@mui/material/InputLabel';
-    import FormControl from '@mui/material/FormControl';
-    import Button from '@mui/material/Button';
-    import Dialog from '@mui/material/Dialog';
-    import DialogActions from '@mui/material/DialogActions';
-    import DialogContent from '@mui/material/DialogContent';
-    import DialogTitle from '@mui/material/DialogTitle';
-    import Checkbox from '@mui/material/Checkbox';
-    import FormControlLabel from '@mui/material/FormControlLabel';
-    import './static/AlunosTable.css';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'universal-cookie';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import './static/AlunosTable.css';
 
-    const columns = [
-        { id: 'nome', label: 'Nome', minWidth: 100 },
-        { id: 'turma', label: 'Turma', minWidth: 100 },
-        { id: 'RA', label: 'R.A', minWidth: 100 },
-        { id: 'actions', label: 'Ações', minWidth: 170 }
-    ];
+const columns = [
+    { id: 'nome', label: 'Nome', minWidth: 100 },
+    { id: 'turma', label: 'Turma', minWidth: 100 },
+    { id: 'RA', label: 'R.A', minWidth: 100 },
+    { id: 'adicionarTarefa', label: 'Adicionar Tarefa', minWidth: 170 },
+    { id: 'actions', label: 'Visualizar Aluno/Tarefas', minWidth: 170 }
+];
 
-    function AlunosTable() {
-        const [alunos, setAlunos] = useState([]);
-        const [filteredAlunos, setFilteredAlunos] = useState([]);
-        const [error, setError] = useState(null);
-        const [searchTerm, setSearchTerm] = useState("");
-        const [filterYears, setFilterYears] = useState([]);
-        const [filterClasses, setFilterClasses] = useState([]);
-        const [sortOption, setSortOption] = useState("");
-        const [dialogOpen, setDialogOpen] = useState(false);
-        const cookies = new Cookies();
-        const token = cookies.get('token');
-        const navigate = useNavigate();
+function AlunosTable() {
+    const [alunos, setAlunos] = useState([]);
+    const [filteredAlunos, setFilteredAlunos] = useState([]);
+    const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filterYears, setFilterYears] = useState([]);
+    const [filterClasses, setFilterClasses] = useState([]);
+    const [sortOption, setSortOption] = useState("");
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const cookies = new Cookies();
+    const token = cookies.get('token');
+    const navigate = useNavigate();
 
-        useEffect(() => {
-            fetch('http://localhost:8000/alunosBuscaAtiva', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch alunos');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setAlunos(data);
-                setFilteredAlunos(data);
-            })
-            .catch(error => {
-                setError(error.message);
-            });
-        }, [token]);
-
-        useEffect(() => {
-            let results = alunos.filter(aluno => 
-                aluno.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&
-                (filterYears.length === 0 || filterYears.some(year => aluno.turma.startsWith(year))) &&
-                (filterClasses.length === 0 || filterClasses.some(cls => aluno.turma.endsWith(cls)))
-            );
-
-            if (sortOption === "nameAsc") {
-                results.sort((a, b) => a.nome.localeCompare(b.nome));
-            } else if (sortOption === "nameDesc") {
-                results.sort((a, b) => b.nome.localeCompare(a.nome));
+    useEffect(() => {
+        fetch('http://localhost:8000/alunosBuscaAtiva', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch alunos');
             }
+            return response.json();
+        })
+        .then(data => {
+            setAlunos(data);
+            setFilteredAlunos(data);
+        })
+        .catch(error => {
+            setError(error.message);
+        });
+    }, [token]);
 
-            setFilteredAlunos(results);
-        }, [searchTerm, filterYears, filterClasses, sortOption, alunos]);
+    useEffect(() => {
+        let results = alunos.filter(aluno => 
+            aluno.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            (filterYears.length === 0 || filterYears.some(year => aluno.turma.startsWith(year))) &&
+            (filterClasses.length === 0 || filterClasses.some(cls => aluno.turma.endsWith(cls)))
+        );
 
-        const handleSearchChange = (event) => {
-            setSearchTerm(event.target.value);
-        };
+        if (sortOption === "nameAsc") {
+            results.sort((a, b) => a.nome.localeCompare(b.nome));
+        } else if (sortOption === "nameDesc") {
+            results.sort((a, b) => b.nome.localeCompare(a.nome));
+        }
 
-        const handleYearChange = (event) => {
-            const { value } = event.target;
-            setFilterYears(prev =>
-                prev.includes(value) ? prev.filter(year => year !== value) : [...prev, value]
-            );
-        };
+        setFilteredAlunos(results);
+    }, [searchTerm, filterYears, filterClasses, sortOption, alunos]);
 
-        const handleClassChange = (event) => {
-            const { value } = event.target;
-            setFilterClasses(prev =>
-                prev.includes(value) ? prev.filter(cls => cls !== value) : [...prev, value]
-            );
-        };
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
 
-        const handleSortChange = (event) => {
-            setSortOption(event.target.value);
-        };
+    const handleYearChange = (event) => {
+        const { value } = event.target;
+        setFilterYears(prev =>
+            prev.includes(value) ? prev.filter(year => year !== value) : [...prev, value]
+        );
+    };
 
-        const handleViewClick = (id) => {
-            navigate(`/alunos/${id}`);
-        };
+    const handleClassChange = (event) => {
+        const { value } = event.target;
+        setFilterClasses(prev =>
+            prev.includes(value) ? prev.filter(cls => cls !== value) : [...prev, value]
+        );
+    };
 
-        const handleOpenDialog = () => {
-            setDialogOpen(true);
-        };
+    const handleSortChange = (event) => {
+        setSortOption(event.target.value);
+    };
 
-        const handleCloseDialog = () => {
-            setDialogOpen(false);
-        };
+    const handleViewClick = (id) => {
+        navigate(`/alunos/${id}`);
+    };
 
-        const [page, setPage] = useState(0);
-        const [rowsPerPage, setRowsPerPage] = useState(10);
+    const handleAddTaskClick = (id) => {
+        navigate(`/adicionar-tarefa/${id}`);
+    };
 
-        const handleChangePage = (event, newPage) => {
-            setPage(newPage);
-        };
+    const handleOpenDialog = () => {
+        setDialogOpen(true);
+    };
 
-        const handleChangeRowsPerPage = (event) => {
-            setRowsPerPage(+event.target.value);
-            setPage(0);
-        };
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+    };
 
-        return (
-            <div>
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
+
+    return (
+        <div>
+            <div className="filter-container">
                 <div className="filter-box">
                     <TextField
                         label="Nome"
@@ -160,109 +166,110 @@
                         Filtros
                     </Button>
                 </div>
-                <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-                    <DialogTitle>Filtros</DialogTitle>
-                    <DialogContent>
-                        <FormControl component="fieldset">
-                            <div>
-                                <FormControlLabel
-                                    control={<Checkbox checked={filterYears.includes("5")} onChange={handleYearChange} value="5" />}
-                                    label="5° Ano"
-                                />
-                                <FormControlLabel
-                                    control={<Checkbox checked={filterYears.includes("6")} onChange={handleYearChange} value="6" />}
-                                    label="6° Ano"
-                                />
-                                <FormControlLabel
-                                    control={<Checkbox checked={filterYears.includes("7")} onChange={handleYearChange} value="7" />}
-                                    label="7° Ano"
-                                />
-                                <FormControlLabel
-                                    control={<Checkbox checked={filterYears.includes("8")} onChange={handleYearChange} value="8" />}
-                                    label="8° Ano"
-                                />
-                                <FormControlLabel
-                                    control={<Checkbox checked={filterYears.includes("9")} onChange={handleYearChange} value="9" />}
-                                    label="9° Ano"
-                                />
-                            </div>
-                            <div>
-                                {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map(cls => (
-                                    <FormControlLabel
-                                        key={cls}
-                                        control={<Checkbox checked={filterClasses.includes(cls)} onChange={handleClassChange} value={cls} />}
-                                        label={cls}
-                                    />
-                                ))}
-                            </div>
-                        </FormControl>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseDialog} color="primary">
-                            Fechar
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-                <Paper className="table-container">
-                    <TableContainer sx={{ maxHeight: 440 }}>
-                        <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                <TableRow className="table-header">
-                                    {columns.map((column) => (
-                                        <TableCell
-                                            key={column.id}
-                                            align={column.align}
-                                            style={{ minWidth: column.minWidth }}
-                                        >
-                                            {column.label}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {filteredAlunos
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((aluno, index) => {
-                                        return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={aluno._id} className="table-row">
-                                                {columns.map((column) => {
-                                                    let value = aluno[column.id];
-                                                    if (column.id === 'actions') {
-                                                        value = (
-                                                            <Button
-                                                                variant="contained"
-                                                                color="primary"
-                                                                onClick={() => handleViewClick(aluno._id)}
-                                                                className="button"
-                                                            >
-                                                                Visualizar
-                                                            </Button>
-                                                        );
-                                                    }
-                                                    return (
-                                                        <TableCell key={column.id} align={column.align} className="table-cell">
-                                                            {column.format ? column.format(value) : value}
-                                                        </TableCell>
-                                                    );
-                                                })}
-                                            </TableRow>
-                                        );
-                                    })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <TablePagination
-                        rowsPerPageOptions={[10, 25, 100]}
-                        component="div"
-                        count={filteredAlunos.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                </Paper>
             </div>
-        );
-    }
+            <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+                <DialogTitle>Filtros</DialogTitle>
+                <DialogContent>
+                    <div className="filter-section">
+                        <div className="filter-group">
+                            <h4>Ano:</h4>
+                            {['5', '6', '7', '8', '9'].map(year => (
+                                <FormControlLabel
+                                    key={year}
+                                    control={<Checkbox checked={filterYears.includes(year)} onChange={handleYearChange} value={year} />}
+                                    label={`${year}° Ano`}
+                                />
+                            ))}
+                        </div>
+                        <div className="filter-group">
+                            <h4>Turma:</h4>
+                            {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map(cls => (
+                                <FormControlLabel
+                                    key={cls}
+                                    control={<Checkbox checked={filterClasses.includes(cls)} onChange={handleClassChange} value={cls} />}
+                                    label={cls}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary">
+                        Fechar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Paper className="table-container">
+                <TableContainer sx={{ maxHeight: 440 }}>
+                    <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                            <TableRow className="table-header">
+                                {columns.map((column) => (
+                                    <TableCell
+                                        key={column.id}
+                                        align={column.align}
+                                        style={{ minWidth: column.minWidth }}
+                                    >
+                                        {column.label}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {filteredAlunos
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((aluno, index) => {
+                                    return (
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={aluno._id} className="table-row">
+                                            {columns.map((column) => {
+                                                let value = aluno[column.id];
+                                                if (column.id === 'adicionarTarefa') {
+                                                    value = (
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            onClick={() => handleAddTaskClick(aluno._id)}
+                                                            className="button"
+                                                        >
+                                                            Adicionar Tarefa
+                                                        </Button>
+                                                    );
+                                                } else if (column.id === 'actions') {
+                                                    value = (
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            onClick={() => handleViewClick(aluno._id)}
+                                                            className="button"
+                                                        >
+                                                            Visualizar Aluno/Tarefas
+                                                        </Button>
+                                                    );
+                                                }
+                                                return (
+                                                    <TableCell key={column.id} align={column.align} className="table-cell">
+                                                        {column.format ? column.format(value) : value}
+                                                    </TableCell>
+                                                );
+                                            })}
+                                        </TableRow>
+                                    );
+                                })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[10, 25, 100]}
+                    component="div"
+                    count={filteredAlunos.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </Paper>
+        </div>
+    );
+}
 
-    export default AlunosTable;
+export default AlunosTable;
