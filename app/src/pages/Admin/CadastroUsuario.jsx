@@ -163,7 +163,7 @@ const RegisterForm = () => {
                   >
                   <MenuItem value="professor">Professor</MenuItem>
                   <MenuItem value="admin">Administrador</MenuItem>
-                  <MenuItem value="agente">Agente</MenuItem>
+                  <MenuItem value="agente">Agente/Funcionário</MenuItem>
                   </TextField>
                   <Button
                   type="submit"
