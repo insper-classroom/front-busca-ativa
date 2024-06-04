@@ -1,20 +1,32 @@
-.status-andamento {
-    background-color: red;
+
+.status-dot-finalizado {
+    background-color: #4CAF50;
+    border-radius: 15px;
     padding: 4px;
-    border-radius: 40px;
-    
-    text-align: center; /* Centraliza o texto */
 }
 
-.status-finalizado {
-    background-color: green;
-    padding-top: 10vh;
+.status-dot-andamento {
+    background-color: #F44336;
+    border-radius: 15px;
     padding: 4px;
-    border-radius: 40px;
-    text-align: center; /* Centraliza o texto */
 }
 
-.center-text {
-    text-align: center; /* Centraliza o texto */
+.urgency-dot-media {
+    background-color: #FFC107;
+    border-radius: 15px;
+    padding: 4px;
 }
+
+.urgency-dot-baixa {
+    background-color: #4CAF50;
+    border-radius: 15px;
+    padding: 4px;
+}
+
+.urgency-dot-alta {
+    background-color: #F44336;
+    border-radius: 15px;
+    padding: 4px;
+}
+
 
