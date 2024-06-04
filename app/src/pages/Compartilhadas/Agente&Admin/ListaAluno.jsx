@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
-import HeaderAdmin from './HeaderAdmin';
-import './static/UserControl.css';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,6 +10,9 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import { Link, useNavigate } from 'react-router-dom';
+
+import HeaderAdmin from '../../Admin/HeaderAdmin';
+import HeaderAgente from '../../Agente/HeaderAgente';
 
 const columns = [
   { id: 'nome', label: 'Nome', minWidth: 100, editable: true },
@@ -27,9 +28,10 @@ function createData(id, nome, turma, RA) {
 
 const cookies = new Cookies();
 
-function AlunosAdmin() {
+function ListaAluno() {
   const [users, setUsers] = useState([]);
   const token = cookies.get('token');
+  const permissao = cookies.get('permissao');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -99,61 +101,59 @@ function AlunosAdmin() {
 
   return (
     <div className='user-control'>
-      <HeaderAdmin />
-      <div className="table-wrapper">
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-          <TableContainer sx={{ maxHeight: 440 }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                      sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      {columns.map((column) => {
-                        const { id, editable } = column;
-                        const value = row[id];
-                        return (
-                          <TableCell key={id} align={column.align}>
-                            {id === 'view' ? (
-                              <Button onClick={() => handleView(row.id)}>Visualizar dados</Button>
-                            ) : id === 'delete' ? (
-                              <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
-                            ) : (
-                              value
-                            )}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 100]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      </div>
+      {permissao === 'agente' ? <HeaderAgente /> : <HeaderAdmin />}
+      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                    sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                    {columns.map((column) => {
+                      const { id, editable } = column;
+                      const value = row[id];
+                      return (
+                        <TableCell key={id} align={column.align}>
+                          {id === 'view' ? (
+                            <Button onClick={() => handleView(row.id)}>Visualizar dados</Button>
+                          ) : id === 'delete' ? (
+                            <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
+                          ) : (
+                            value
+                          )}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
       <div className='button-container'>
         <Link to='/alunos/criar' className='create-user'>
           <Button variant="contained" disableElevation>Criar novo aluno</Button>
@@ -163,4 +163,4 @@ function AlunosAdmin() {
   );
 }
 
-export default AlunosAdmin;
+export default ListaAluno;

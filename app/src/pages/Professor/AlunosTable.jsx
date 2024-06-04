@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -22,34 +21,31 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Grid from '@mui/material/Grid';
-import './static/CasosTable.css';
+import './static/AlunosTable.css';
+
 const columns = [
-    { id: 'aluno', label: 'Aluno', minWidth: 100, format: (aluno) => aluno.nome },
+    { id: 'nome', label: 'Nome', minWidth: 100 },
     { id: 'turma', label: 'Turma', minWidth: 100 },
-    { id: 'status', label: 'Status', minWidth: 100 },
-    { id: 'urgencia', label: 'Urgência', minWidth: 100 },
-    { id: 'data', label: 'Data', minWidth: 170, format: (value) => new Date(value).toLocaleString() },
-    { id: 'actions', label: 'Ações', minWidth: 170 }
+    { id: 'RA', label: 'R.A', minWidth: 100 },
+    { id: 'adicionarTarefa', label: 'Adicionar Tarefa', minWidth: 170 },
+    { id: 'actions', label: 'Visualizar Aluno/Tarefas', minWidth: 170 }
 ];
 
-function CasosTable() {
-    const [casos, setCasos] = useState([]);
-    const [filteredCasos, setFilteredCasos] = useState([]);
+function AlunosTable() {
+    const [alunos, setAlunos] = useState([]);
+    const [filteredAlunos, setFilteredAlunos] = useState([]);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
-    const [sortOption, setSortOption] = useState("");
     const [filterYears, setFilterYears] = useState([]);
     const [filterClasses, setFilterClasses] = useState([]);
-    const [filterUrgency, setFilterUrgency] = useState([]);
-    const [filterStatus, setFilterStatus] = useState([]);
+    const [sortOption, setSortOption] = useState("");
     const [dialogOpen, setDialogOpen] = useState(false);
     const cookies = new Cookies();
     const token = cookies.get('token');
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('http://localhost:8000/casos', {
+        fetch('http://localhost:8000/alunoBuscaAtiva', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -58,13 +54,13 @@ function CasosTable() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to fetch cases');
+                throw new Error('Failed to fetch alunos');
             }
             return response.json();
         })
         .then(data => {
-            setCasos(data.caso);
-            setFilteredCasos(data.caso);
+            setAlunos(data);
+            setFilteredAlunos(data);
         })
         .catch(error => {
             setError(error.message);
@@ -72,26 +68,20 @@ function CasosTable() {
     }, [token]);
 
     useEffect(() => {
-        let results = casos.filter(caso => 
-            caso.aluno.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            (filterYears.length === 0 || filterYears.some(year => caso.aluno.turma.startsWith(year))) &&
-            (filterClasses.length === 0 || filterClasses.some(cls => caso.aluno.turma.endsWith(cls))) &&
-            (filterUrgency.length === 0 || filterUrgency.includes(caso.urgencia.toLowerCase())) &&
-            (filterStatus.length === 0 || filterStatus.includes(caso.status.toLowerCase()))
+        let results = alunos.filter(aluno => 
+            aluno.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            (filterYears.length === 0 || filterYears.some(year => aluno.turma.startsWith(year))) &&
+            (filterClasses.length === 0 || filterClasses.some(cls => aluno.turma.endsWith(cls)))
         );
 
         if (sortOption === "nameAsc") {
-            results.sort((a, b) => a.aluno.nome.localeCompare(b.aluno.nome));
+            results.sort((a, b) => a.nome.localeCompare(b.nome));
         } else if (sortOption === "nameDesc") {
-            results.sort((a, b) => b.aluno.nome.localeCompare(a.aluno.nome));
-        } else if (sortOption === "urgencyHighToLow") {
-            results.sort((a, b) => b.urgencia.localeCompare(a.urgencia));
-        } else if (sortOption === "urgencyLowToHigh") {
-            results.sort((a, b) => a.urgencia.localeCompare(b.urgencia));
+            results.sort((a, b) => b.nome.localeCompare(a.nome));
         }
 
-        setFilteredCasos(results);
-    }, [searchTerm, sortOption, filterYears, filterClasses, filterUrgency, filterStatus, casos]);
+        setFilteredAlunos(results);
+    }, [searchTerm, filterYears, filterClasses, sortOption, alunos]);
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -111,26 +101,16 @@ function CasosTable() {
         );
     };
 
-    const handleUrgencyChange = (event) => {
-        const { value } = event.target;
-        setFilterUrgency(prev =>
-            prev.includes(value) ? prev.filter(urgency => urgency !== value) : [...prev, value]
-        );
-    };
-
-    const handleStatusChange = (event) => {
-        const { value } = event.target;
-        setFilterStatus(prev =>
-            prev.includes(value) ? prev.filter(status => status !== value) : [...prev, value]
-        );
-    };
-
     const handleSortChange = (event) => {
         setSortOption(event.target.value);
     };
 
     const handleViewClick = (id) => {
-        navigate(`/casos/${id}`);
+        navigate(`/alunos/${id}`);
+    };
+
+    const handleAddTaskClick = (id) => {
+        navigate(`/adicionar-tarefa/${id}`);
     };
 
     const handleOpenDialog = () => {
@@ -175,8 +155,6 @@ function CasosTable() {
                             <MenuItem value=""><em>Nada</em></MenuItem>
                             <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
                             <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
-                            <MenuItem value="urgencyHighToLow">Prioridade (Alta - Baixa)</MenuItem>
-                            <MenuItem value="urgencyLowToHigh">Prioridade (Baixa - Alta)</MenuItem>
                         </Select>
                     </FormControl>
                     <Button
@@ -213,26 +191,6 @@ function CasosTable() {
                                 />
                             ))}
                         </div>
-                        <div className="filter-group">
-                            <h4>Prioridade:</h4>
-                            {['alta', 'media', 'baixa'].map(urgency => (
-                                <FormControlLabel
-                                    key={urgency}
-                                    control={<Checkbox checked={filterUrgency.includes(urgency)} onChange={handleUrgencyChange} value={urgency} />}
-                                    label={urgency.charAt(0).toUpperCase() + urgency.slice(1)}
-                                />
-                            ))}
-                        </div>
-                        <div className="filter-group">
-                            <h4>Status:</h4>
-                            {['aberto', 'fechado', 'em andamento'].map(status => (
-                                <FormControlLabel
-                                    key={status}
-                                    control={<Checkbox checked={filterStatus.includes(status)} onChange={handleStatusChange} value={status} />}
-                                    label={status.charAt(0).toUpperCase() + status.slice(1)}
-                                />
-                            ))}
-                        </div>
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -241,12 +199,11 @@ function CasosTable() {
                     </Button>
                 </DialogActions>
             </Dialog>
-            {error && <p>{error}</p>}
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <Paper className="table-container">
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
-                            <TableRow>
+                            <TableRow className="table-header">
                                 {columns.map((column) => (
                                     <TableCell
                                         key={column.id}
@@ -259,30 +216,52 @@ function CasosTable() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filteredCasos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((caso) => {
-                                return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={caso.id}>
-                                        {columns.map((column) => {
-                                            const value = caso[column.id];
-                                            return (
-                                                <TableCell key={column.id} align={column.align}>
-                                                    {column.format ? column.format(value) : value}
-                                                </TableCell>
-                                            );
-                                        })}
-                                        <TableCell>
-                                            <Button onClick={() => handleViewClick(caso.id)}>Visualizar</Button>
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
+                            {filteredAlunos
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((aluno, index) => {
+                                    return (
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={aluno._id} className="table-row">
+                                            {columns.map((column) => {
+                                                let value = aluno[column.id];
+                                                if (column.id === 'adicionarTarefa') {
+                                                    value = (
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            onClick={() => handleAddTaskClick(aluno._id)}
+                                                            className="button"
+                                                        >
+                                                            Adicionar Tarefa
+                                                        </Button>
+                                                    );
+                                                } else if (column.id === 'actions') {
+                                                    value = (
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            onClick={() => handleViewClick(aluno._id)}
+                                                            className="button"
+                                                        >
+                                                            Visualizar Aluno/Tarefas
+                                                        </Button>
+                                                    );
+                                                }
+                                                return (
+                                                    <TableCell key={column.id} align={column.align} className="table-cell">
+                                                        {column.format ? column.format(value) : value}
+                                                    </TableCell>
+                                                );
+                                            })}
+                                        </TableRow>
+                                    );
+                                })}
                         </TableBody>
                     </Table>
                 </TableContainer>
                 <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
                     component="div"
-                    count={filteredCasos.length}
+                    count={filteredAlunos.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
@@ -293,4 +272,4 @@ function CasosTable() {
     );
 }
 
-export default CasosTable;
+export default AlunosTable;

@@ -43,7 +43,7 @@ const RegisterForm = () => {
     };
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/usuarios', {
+      const response = await fetch('http://localhost:8000/usuarios', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -163,7 +163,7 @@ const RegisterForm = () => {
                   >
                   <MenuItem value="professor">Professor</MenuItem>
                   <MenuItem value="admin">Administrador</MenuItem>
-                  <MenuItem value="agente">Agente</MenuItem>
+                  <MenuItem value="agente">Agente/Funcionário</MenuItem>
                   </TextField>
                   <Button
                   type="submit"
