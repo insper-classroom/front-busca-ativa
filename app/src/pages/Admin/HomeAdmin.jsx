@@ -8,7 +8,6 @@ function HomeAdmin() {
         <div className="home-admin">
             <HeaderAdmin />
             <div className="search-container">
-                <h1>Bem vindo ADMIN</h1>
                 <CasosTable /> {/* Utilizando o componente CasosTable */}
             </div>
         </div>

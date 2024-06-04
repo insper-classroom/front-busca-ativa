@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
-import HeaderAdmin from './HeaderAdmin';
-import './static/UserControl.css';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,6 +10,9 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import { Link, useNavigate } from 'react-router-dom';
+
+import HeaderAdmin from '../../Admin/HeaderAdmin';
+import HeaderAgente from '../../Agente/HeaderAgente';
 
 const columns = [
   { id: 'nome', label: 'Nome', minWidth: 100, editable: true },
@@ -27,9 +28,10 @@ function createData(id, nome, turma, RA) {
 
 const cookies = new Cookies();
 
-function AlunosAdmin() {
+function ListaAluno() {
   const [users, setUsers] = useState([]);
   const token = cookies.get('token');
+  const permissao = cookies.get('permissao');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -99,7 +101,7 @@ function AlunosAdmin() {
 
   return (
     <div className='user-control'>
-      <HeaderAdmin />
+      {permissao === 'agente' ? <HeaderAgente /> : <HeaderAdmin />}
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
@@ -161,4 +163,4 @@ function AlunosAdmin() {
   );
 }
 
-export default AlunosAdmin;
+export default ListaAluno;
