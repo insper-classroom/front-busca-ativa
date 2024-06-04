@@ -17,6 +17,7 @@ const permissaoUser = async () => {
 
             if (response.ok) {
                 const data = await response.json();
+                cookies.set('permissao', data.permissao);
                 return data.permissao;
             } else {
                 console.error('Erro na resposta da API', response.statusText);

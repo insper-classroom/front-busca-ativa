@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-import HeaderAdmin from './HeaderAdmin';
 import { Grid, TextField, Button, Paper, Box, Typography, Container } from '@mui/material';
-import './static/Cadastro.css';
+
+import HeaderAdmin from '../../Admin/HeaderAdmin';
+import HeaderAgente from '../../Agente/HeaderAgente';
 
 const cookies = new Cookies();
 
-function DadosAlunos() {
+function DadosAluno() {
   const { id } = useParams();
   const [aluno, setAluno] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [editedAluno, setEditedAluno] = useState({});
   const token = cookies.get('token');
+  const permissao = cookies.get('permissao');
 
   useEffect(() => {
     fetchAluno();
@@ -72,13 +74,13 @@ function DadosAlunos() {
 
   return (
     <div>
-      <HeaderAdmin />
+      {permissao === 'agente' ? <HeaderAgente /> : <HeaderAdmin />}
       <br />
       <div className='geral'>
         <Grid container spacing={2} className="login-container">
           <Grid item xs={12} style={{ textAlign: 'center' }}>
-            <Container maxWidth="md">
-              <Paper sx={{ padding: '16px', margin: '16px' }}>
+            <Container maxWidth="md" sx={{marginTop: '6%'}}>
+              <Paper sx={{ padding: '25px', margin: '25px' }}>
                 {aluno ? (
                   <Box component="form" noValidate autoComplete="off">
                     <br/>
@@ -221,4 +223,4 @@ function DadosAlunos() {
   );
 }
 
-export default DadosAlunos;
+export default DadosAluno;

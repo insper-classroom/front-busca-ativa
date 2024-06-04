@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './static/HeaderProfessor.css';
 import logoBranco from '../../components/img/logoBranco.png';
 import Logout from '../../functions/Logout';
 
-const HeaderProfessor = () => {
+const HeaderAgente = () => {
   return (
     <header className="header">
       <div className="logo-container">
@@ -16,6 +15,9 @@ const HeaderProfessor = () => {
           <li>
             <Link to="/home">Home</Link>
           </li>
+            <li>
+                <Link to="/alunos">Alunos</Link>
+            </li>
           <li>
             <Logout />
           </li>
@@ -25,4 +27,4 @@ const HeaderProfessor = () => {
   );
 };
 
-export default HeaderProfessor;
+export default HeaderAgente;

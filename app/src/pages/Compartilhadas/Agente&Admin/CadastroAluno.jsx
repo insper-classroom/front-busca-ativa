@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Container, Box, Grid } from '@mui/material';
-import HeaderAdmin from './HeaderAdmin';
 import Cookies from 'universal-cookie';
-import './static/Cadastro.css';
+
+import HeaderAdmin from '../../Admin/HeaderAdmin';
+import HeaderAgente from '../../Agente/HeaderAgente';
 
 const cookies = new Cookies();
 
-const AlunoForm = () => {
+const CadastroAluno = () => {
   const token = cookies.get('token');
+  const permissao = cookies.get('permissao');
   
   const [formData, setFormData] = useState({
     nome: '',
@@ -77,7 +79,7 @@ const AlunoForm = () => {
 
   return (
     <div>
-      <HeaderAdmin />
+      {permissao === 'agente' ? <HeaderAgente /> : <HeaderAdmin />}
       <br />
       <div className='geral'>
         <Grid container spacing={2} className="login-container">
@@ -220,4 +222,4 @@ const AlunoForm = () => {
   );
 };
 
-export default AlunoForm;
+export default CadastroAluno;

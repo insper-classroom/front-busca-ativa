@@ -10,9 +10,6 @@ import HomeAdmin from './pages/Admin/HomeAdmin'
 import Dashboard from './pages/Admin/Dashboard'
 import UserControl from './pages/Admin/UserControl';
 import CadastroUsuario from './pages/Admin/CadastroUsuario';
-import AlunosAdmin from './pages/Admin/AlunosAdmin';
-import CadastroAluno from './pages/Admin/CadastroAluno';
-import DadosAlunos from './pages/Admin/DadosAlunos';
 
 // Páginas do Professor
 import HomeProfessor from './pages/Professor/HomeProfessor'
@@ -20,11 +17,15 @@ import HomeProfessor from './pages/Professor/HomeProfessor'
 // Páginas do Agente
 import HomeAgente from './pages/Agente/HomeAgente'
 
+// Páginas Compartilhadas
+import CadastroAluno from './pages/Compartilhadas/Agente&Admin/CadastroAluno';
+import ListaAluno from './pages/Compartilhadas/Agente&Admin/ListaAluno';
+import DadosAluno from './pages/Compartilhadas/Agente&Admin/DadosAluno';
+
 // Funções
 import EstaAutenticado from './functions/EstaAutenticado';
 import NaoEncontrado from './functions/NaoEncontrado';
 import permissaoUser from './functions/PermissaoUser';
-import Logout from './functions/Logout';
 import { PaginaAluno } from './pages/PaginaAluno';
 
 function App() {  
@@ -62,9 +63,9 @@ function App() {
             <Route path="/home" element={<HomeAdmin />} />
             <Route path="/usuarios" element={<UserControl />} />
             <Route path="/usuarios/criar" element={<CadastroUsuario />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/alunos" element={<AlunosAdmin />} />
-            <Route path="/alunos/:id" element={<DadosAlunos />} />
+            <Route path="/dashboard" element={<Dashboard />} /> 
+            <Route path="/alunos" element={<ListaAluno />} />
+            <Route path="/alunos/:id" element={<DadosAluno />} />
             <Route path="/alunos/criar" element={<CadastroAluno />} />
             <Route path="/paginaAluno" element={<PaginaAluno />} />
             </>
@@ -81,6 +82,9 @@ function App() {
             // Colocar as páginas do agente aqui  
             <>
             <Route path="/home" element={<HomeAgente />} />
+            <Route path="/alunos" element={<ListaAluno />} />
+            <Route path="/alunos/:id" element={<DadosAluno />} />
+            <Route path="/alunos/criar" element={<CadastroAluno />} />
             </>
           )}
 
