@@ -2,14 +2,23 @@ import { useState, useEffect } from 'react'
 import React from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom';
 
+// Páginas Gerais
 import Login from './pages/Login'
 
+// Páginas do Admin
 import HomeAdmin from './pages/Admin/HomeAdmin'
-import HomeProfessor from './pages/Professor/HomeProfessor'
-import HomeAgente from './pages/Agente/HomeAgente'
-import Dashboard from './pages/Dashboard'
+import Dashboard from './pages/Admin/Dashboard'
 import UserControl from './pages/Admin/UserControl';
+import Cadastro from './pages/Admin/Cadastro';
+import AlunosAdmin from './pages/Admin/AlunosAdmin';
 
+// Páginas do Professor
+import HomeProfessor from './pages/Professor/HomeProfessor'
+
+// Páginas do Agente
+import HomeAgente from './pages/Agente/HomeAgente'
+
+// Funções
 import EstaAutenticado from './functions/EstaAutenticado';
 import NaoEncontrado from './functions/NaoEncontrado';
 import permissaoUser from './functions/PermissaoUser';
@@ -46,13 +55,16 @@ function App() {
 
         <Route element={<EstaAutenticado/>} >
           {permissao === 'ADMIN' && (
+          {permissao === 'ADMIN' && (
             // Colocar as páginas do admin aqui
             <>
             <Route path="/home" element={<HomeAdmin />} />
             <Route path="/usuarios" element={<UserControl />} />
+            <Route path="/usuarios/criar" element={<Cadastro />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/alunos" element={<AlunosAdmin />} />
             <Route path="/paginaAluno" element={<PaginaAluno />} />
             </>
-
           )}
 
           {permissao === 'PROFESSOR' && (
@@ -71,11 +83,9 @@ function App() {
 
         </Route>
 
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<NaoEncontrado />} />
-      </Routes>
-      <Logout />
 
+      </Routes>
     </>
   )
 }

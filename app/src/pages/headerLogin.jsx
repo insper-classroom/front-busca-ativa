@@ -1,8 +1,8 @@
 import React from 'react';
-import './static/header.css';
+import './static/Header.css';
 import logoBranco from '../components/img/logoBranco.png';
 
-const Header = () => {
+const HeaderLogin = () => {
   return (
     <header className="header">
       <div className="logo-container">
@@ -14,4 +14,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderLogin;
