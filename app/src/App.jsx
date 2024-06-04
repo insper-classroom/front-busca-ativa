@@ -55,7 +55,6 @@ function App() {
 
         <Route element={<EstaAutenticado/>} >
           {permissao === 'ADMIN' && (
-          {permissao === 'ADMIN' && (
             // Colocar as páginas do admin aqui
             <>
             <Route path="/home" element={<HomeAdmin />} />
