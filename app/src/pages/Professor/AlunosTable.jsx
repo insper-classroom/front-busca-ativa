@@ -45,7 +45,7 @@ function AlunosTable() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('http://localhost:8000/alunosBuscaAtiva', {
+        fetch('http://localhost:8000/alunoBuscaAtiva', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
