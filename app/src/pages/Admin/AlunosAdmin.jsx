@@ -100,58 +100,60 @@ function AlunosAdmin() {
   return (
     <div className='user-control'>
       <HeaderAdmin />
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                    sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                    {columns.map((column) => {
-                      const { id, editable } = column;
-                      const value = row[id];
-                      return (
-                        <TableCell key={id} align={column.align}>
-                          {id === 'view' ? (
-                            <Button onClick={() => handleView(row.id)}>Visualizar dados</Button>
-                          ) : id === 'delete' ? (
-                            <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
-                          ) : (
-                            value
-                          )}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+      <div className="table-wrapper">
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                      sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                      {columns.map((column) => {
+                        const { id, editable } = column;
+                        const value = row[id];
+                        return (
+                          <TableCell key={id} align={column.align}>
+                            {id === 'view' ? (
+                              <Button onClick={() => handleView(row.id)}>Visualizar dados</Button>
+                            ) : id === 'delete' ? (
+                              <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
+                            ) : (
+                              value
+                            )}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </div>
       <div className='button-container'>
         <Link to='/alunos/criar' className='create-user'>
           <Button variant="contained" disableElevation>Criar novo aluno</Button>

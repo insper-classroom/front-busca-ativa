@@ -15,10 +15,15 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
 import './static/CasosTable.css';
-
 const columns = [
     { id: 'aluno', label: 'Aluno', minWidth: 100, format: (aluno) => aluno.nome },
     { id: 'turma', label: 'Turma', minWidth: 100 },
@@ -34,9 +39,11 @@ function CasosTable() {
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortOption, setSortOption] = useState("");
-    const [filterYear, setFilterYear] = useState("");
-    const [filterClass, setFilterClass] = useState("");
-    const [filterUrgency, setFilterUrgency] = useState("");
+    const [filterYears, setFilterYears] = useState([]);
+    const [filterClasses, setFilterClasses] = useState([]);
+    const [filterUrgency, setFilterUrgency] = useState([]);
+    const [filterStatus, setFilterStatus] = useState([]);
+    const [dialogOpen, setDialogOpen] = useState(false);
     const cookies = new Cookies();
     const token = cookies.get('token');
     const navigate = useNavigate();
@@ -67,9 +74,10 @@ function CasosTable() {
     useEffect(() => {
         let results = casos.filter(caso => 
             caso.aluno.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            (filterYear === "" || caso.aluno.turma.startsWith(filterYear)) &&
-            (filterClass === "" || caso.aluno.turma.endsWith(filterClass)) &&
-            (filterUrgency === "" || caso.urgencia.toLowerCase() === filterUrgency.toLowerCase())
+            (filterYears.length === 0 || filterYears.some(year => caso.aluno.turma.startsWith(year))) &&
+            (filterClasses.length === 0 || filterClasses.some(cls => caso.aluno.turma.endsWith(cls))) &&
+            (filterUrgency.length === 0 || filterUrgency.includes(caso.urgencia.toLowerCase())) &&
+            (filterStatus.length === 0 || filterStatus.includes(caso.status.toLowerCase()))
         );
 
         if (sortOption === "nameAsc") {
@@ -83,30 +91,54 @@ function CasosTable() {
         }
 
         setFilteredCasos(results);
-    }, [searchTerm, sortOption, filterYear, filterClass, filterUrgency, casos]);
+    }, [searchTerm, sortOption, filterYears, filterClasses, filterUrgency, filterStatus, casos]);
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
+    };
+
+    const handleYearChange = (event) => {
+        const { value } = event.target;
+        setFilterYears(prev =>
+            prev.includes(value) ? prev.filter(year => year !== value) : [...prev, value]
+        );
+    };
+
+    const handleClassChange = (event) => {
+        const { value } = event.target;
+        setFilterClasses(prev =>
+            prev.includes(value) ? prev.filter(cls => cls !== value) : [...prev, value]
+        );
+    };
+
+    const handleUrgencyChange = (event) => {
+        const { value } = event.target;
+        setFilterUrgency(prev =>
+            prev.includes(value) ? prev.filter(urgency => urgency !== value) : [...prev, value]
+        );
+    };
+
+    const handleStatusChange = (event) => {
+        const { value } = event.target;
+        setFilterStatus(prev =>
+            prev.includes(value) ? prev.filter(status => status !== value) : [...prev, value]
+        );
     };
 
     const handleSortChange = (event) => {
         setSortOption(event.target.value);
     };
 
-    const handleYearChange = (event) => {
-        setFilterYear(event.target.value);
-    };
-
-    const handleClassChange = (event) => {
-        setFilterClass(event.target.value);
-    };
-
-    const handleUrgencyChange = (event) => {
-        setFilterUrgency(event.target.value);
-    };
-
     const handleViewClick = (id) => {
         navigate(`/casos/${id}`);
+    };
+
+    const handleOpenDialog = () => {
+        setDialogOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
     };
 
     const [page, setPage] = useState(0);
@@ -121,22 +153,19 @@ function CasosTable() {
         setPage(0);
     };
 
-   
     return (
         <div>
-            <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12} sm={6}>
+            <div className="filter-container">
+                <div className="filter-box">
                     <TextField
-                        label="Busque Pelo Nome"
+                        label="Nome"
                         variant="outlined"
-                        fullWidth
-                        margin="normal"
+                        size="small"
                         value={searchTerm}
                         onChange={handleSearchChange}
+                        className="compact-input"
                     />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <FormControl variant="outlined" fullWidth margin="normal">
+                    <FormControl variant="outlined" size="small" className="compact-input">
                         <InputLabel>Ordenar Por</InputLabel>
                         <Select
                             value={sortOption}
@@ -150,55 +179,69 @@ function CasosTable() {
                             <MenuItem value="urgencyLowToHigh">Prioridade (Baixa - Alta)</MenuItem>
                         </Select>
                     </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                    <FormControl variant="outlined" fullWidth margin="normal">
-                        <InputLabel>Ano escolar</InputLabel>
-                        <Select
-                            value={filterYear}
-                            onChange={handleYearChange}
-                            label="Year"
-                        >
-                            <MenuItem value=""><em>Todos</em></MenuItem>
-                            <MenuItem value="5">5° Ano</MenuItem>
-                            <MenuItem value="6">6° Ano</MenuItem>
-                            <MenuItem value="7">7° Ano</MenuItem>
-                            <MenuItem value="8">8° Ano</MenuItem>
-                            <MenuItem value="9">9° Ano</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                    <FormControl variant="outlined" fullWidth margin="normal">
-                        <InputLabel>Classe</InputLabel>
-                        <Select
-                            value={filterClass}
-                            onChange={handleClassChange}
-                            label="Class"
-                        >
-                            <MenuItem value=""><em>Todas</em></MenuItem>
-                            {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map(cls => (
-                                <MenuItem key={cls} value={cls}>{cls}</MenuItem>
+                    <Button
+                        variant="contained"
+                        size="small"
+                        className="button"
+                        onClick={handleOpenDialog}
+                    >
+                        Filtros
+                    </Button>
+                </div>
+            </div>
+            <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+                <DialogTitle>Filtros</DialogTitle>
+                <DialogContent>
+                    <div className="filter-section">
+                        <div className="filter-group">
+                            <h4>Ano:</h4>
+                            {['5', '6', '7', '8', '9'].map(year => (
+                                <FormControlLabel
+                                    key={year}
+                                    control={<Checkbox checked={filterYears.includes(year)} onChange={handleYearChange} value={year} />}
+                                    label={`${year}° Ano`}
+                                />
                             ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                    <FormControl variant="outlined" fullWidth margin="normal">
-                        <InputLabel>Prioridade</InputLabel>
-                        <Select
-                            value={filterUrgency}
-                            onChange={handleUrgencyChange}
-                            label="Urgency"
-                        >
-                            <MenuItem value=""><em>Todas</em></MenuItem>
-                            <MenuItem value="alta">Alta</MenuItem>
-                            <MenuItem value="media">Média</MenuItem>
-                            <MenuItem value="baixa">Baixa</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-            </Grid>
+                        </div>
+                        <div className="filter-group">
+                            <h4>Turma:</h4>
+                            {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map(cls => (
+                                <FormControlLabel
+                                    key={cls}
+                                    control={<Checkbox checked={filterClasses.includes(cls)} onChange={handleClassChange} value={cls} />}
+                                    label={cls}
+                                />
+                            ))}
+                        </div>
+                        <div className="filter-group">
+                            <h4>Prioridade:</h4>
+                            {['alta', 'media', 'baixa'].map(urgency => (
+                                <FormControlLabel
+                                    key={urgency}
+                                    control={<Checkbox checked={filterUrgency.includes(urgency)} onChange={handleUrgencyChange} value={urgency} />}
+                                    label={urgency.charAt(0).toUpperCase() + urgency.slice(1)}
+                                />
+                            ))}
+                        </div>
+                        <div className="filter-group">
+                            <h4>Status:</h4>
+                            {['aberto', 'fechado', 'em andamento'].map(status => (
+                                <FormControlLabel
+                                    key={status}
+                                    control={<Checkbox checked={filterStatus.includes(status)} onChange={handleStatusChange} value={status} />}
+                                    label={status.charAt(0).toUpperCase() + status.slice(1)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary">
+                        Fechar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            {error && <p>{error}</p>}
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
@@ -208,7 +251,7 @@ function CasosTable() {
                                     <TableCell
                                         key={column.id}
                                         align={column.align}
-                                        style={{ minWidth: column.minWidth ,flexDirection: "column", alignItems: "center", justifyContent: 'center', textAlign: 'center'}}
+                                        style={{ minWidth: column.minWidth }}
                                     >
                                         {column.label}
                                     </TableCell>
@@ -216,69 +259,23 @@ function CasosTable() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filteredCasos
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((caso, index) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={caso._id}>
-                                            {columns.map((column, index) => {
-                                                let value;
-                                                if (column.id === 'turma') {
-                                                    value = caso.aluno.turma;
-                                                } else if (column.id === 'actions') {
-                                                    value = (
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            onClick={() => handleViewClick(caso._id)}
-                                                        >
-                                                            Visualizar
-                                                        </Button>
-                                                    );
-                                                } else {
-                                                    value = column.id === 'index' ? index + page * rowsPerPage : caso[column.id];
-                                                }
-
-                                                // Determine class names for status and urgency
-                                                const classNames = [];
-                                                if (column.id === 'status') {
-                                                    classNames.push('status', value.toLowerCase());
-                                                } else if (column.id === 'urgencia') {
-                                                    classNames.push('urgencia', value.toLowerCase());
-                                                } else if (column.id === 'actions') {
-                                                    classNames.push('actions');
-                                                } else if (column.id === 'turma') {
-                                                    classNames.push('turma');
-                                                }
-
-                                                var isStatus = column.id === 'status';
-                                                var isUrgency = column.id === 'urgencia';
-                                                return (
-                                                    <TableCell key={column.id} align="center" className={classNames.join(' ')}>
-                                                        {(() => {
-                                                            if (isStatus && value === 'EM ABERTO') {
-                                                                return <div className="status-dot-andamento">{value}</div>;
-                                                            } else if (isStatus && value === 'FECHADO') {
-                                                                return <div className="status-dot-finalizado">{value}</div>;
-                                                            } else if (isUrgency && value === 'ALTA') {
-                                                                return <div className="urgency-dot-alta">{value}</div>;
-                                                            } else if (isUrgency && value === 'MEDIA') {
-                                                                return <div className="urgency-dot-media">{value}</div>;
-                                                            } else if (isUrgency && value === 'BAIXA') {
-                                                                return <div className="urgency-dot-baixa">{value}</div>;
-                                                            } else if (column.format && typeof value === 'object') {
-                                                                return column.format(value);
-                                                            } else {
-                                                                return value;
-                                                            }
-                                                        })()}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-
-                                    );
-                                })}
+                            {filteredCasos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((caso) => {
+                                return (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={caso.id}>
+                                        {columns.map((column) => {
+                                            const value = caso[column.id];
+                                            return (
+                                                <TableCell key={column.id} align={column.align}>
+                                                    {column.format ? column.format(value) : value}
+                                                </TableCell>
+                                            );
+                                        })}
+                                        <TableCell>
+                                            <Button onClick={() => handleViewClick(caso.id)}>Visualizar</Button>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
                         </TableBody>
                     </Table>
                 </TableContainer>
