@@ -12,6 +12,7 @@ import UserControl from './pages/Admin/UserControl';
 import CadastroUsuario from './pages/Admin/CadastroUsuario';
 import AlunosAdmin from './pages/Admin/AlunosAdmin';
 import CadastroAluno from './pages/Admin/CadastroAluno';
+import DadosAlunos from './pages/Admin/DadosAlunos';
 
 // Páginas do Professor
 import HomeProfessor from './pages/Professor/HomeProfessor'
@@ -61,6 +62,7 @@ function App() {
             <Route path="/usuarios/criar" element={<CadastroUsuario />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/alunos" element={<AlunosAdmin />} />
+            <Route path="/alunos/:id" element={<DadosAlunos />} />
             <Route path="/alunos/criar" element={<CadastroAluno />} />
             </>
           )}
