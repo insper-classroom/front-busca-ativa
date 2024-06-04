@@ -68,14 +68,14 @@ function App() {
             </>
           )}
 
-          {permissao === 'PROFESSOR' && (
+          {permissao === 'professor' && (
             // Colocar as páginas do professor aqui
             <>
             <Route path="/home" element={<HomeProfessor />} />
             </>
           )}
 
-          {permissao === 'AGENTE' && (
+          {permissao === 'agente' && (
             // Colocar as páginas do agente aqui  
             <>
             <Route path="/home" element={<HomeAgente />} />
