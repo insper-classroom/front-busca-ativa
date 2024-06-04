@@ -24,6 +24,8 @@ import HomeAgente from './pages/Agente/HomeAgente'
 import EstaAutenticado from './functions/EstaAutenticado';
 import NaoEncontrado from './functions/NaoEncontrado';
 import permissaoUser from './functions/PermissaoUser';
+import Logout from './functions/Logout';
+import { PaginaAluno } from './pages/PaginaAluno';
 
 function App() {  
   const [permissao, setPermissao] = useState(null);
@@ -64,6 +66,7 @@ function App() {
             <Route path="/alunos" element={<AlunosAdmin />} />
             <Route path="/alunos/:id" element={<DadosAlunos />} />
             <Route path="/alunos/criar" element={<CadastroAluno />} />
+            <Route path="/paginaAluno" element={<PaginaAluno />} />
             </>
           )}
 

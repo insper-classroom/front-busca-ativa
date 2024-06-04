@@ -1,7 +1,6 @@
 {
   "dependencies": {
+    "@mui/icons-material": "^5.15.18",
     "react-router-dom": "^6.23.0"
   }
-  
-  
 }
