@@ -14,7 +14,7 @@ const CadastroAluno = () => {
   const [formData, setFormData] = useState({
     nome: '',
     turma: '',
-    ra: '',
+    RA: '',
     endereco: '',
     telefone: '',
     telefone2: '',
@@ -36,7 +36,7 @@ const CadastroAluno = () => {
     const alunoData = {
       nome: formData.nome,
       turma: formData.turma,
-      ra: formData.ra,
+      RA: formData.RA,
       endereco: formData.endereco,
       telefone: formData.telefone,
       telefone2: formData.telefone2,
@@ -45,7 +45,7 @@ const CadastroAluno = () => {
     };
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/alunosBuscaAtiva', {
+      const response = await fetch('http://localhost:8000/alunoBuscaAtiva', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const CadastroAluno = () => {
       setFormData({
         nome: '',
         turma: '',
-        ra: '',
+        RA: '',
         endereco: '',
         telefone: '',
         telefone2: '',
@@ -124,12 +124,12 @@ const CadastroAluno = () => {
                       margin="normal"
                       required
                       fullWidth
-                      id="ra"
+                      id="RA"
                       label="RA"
-                      name="ra"
+                      name="RA"
                       value={formData.ra}
                       onChange={handleChange}
-                      autoComplete="ra"
+                      autoComplete="RA"
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
