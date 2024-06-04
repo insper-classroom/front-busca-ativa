@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-import './static/UserControl.css';
+
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,6 +17,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import './static/CasosTable.css';
 
 const columns = [
     { id: 'aluno', label: 'Aluno', minWidth: 100, format: (aluno) => aluno.nome },
@@ -120,6 +121,7 @@ function CasosTable() {
         setPage(0);
     };
 
+   
     return (
         <div>
             <Grid container spacing={2} alignItems="center">
@@ -206,7 +208,7 @@ function CasosTable() {
                                     <TableCell
                                         key={column.id}
                                         align={column.align}
-                                        style={{ minWidth: column.minWidth }}
+                                        style={{ minWidth: column.minWidth ,flexDirection: "column", alignItems: "center", justifyContent: 'center', textAlign: 'center'}}
                                     >
                                         {column.label}
                                     </TableCell>
@@ -219,7 +221,7 @@ function CasosTable() {
                                 .map((caso, index) => {
                                     return (
                                         <TableRow hover role="checkbox" tabIndex={-1} key={caso._id}>
-                                            {columns.map((column) => {
+                                            {columns.map((column, index) => {
                                                 let value;
                                                 if (column.id === 'turma') {
                                                     value = caso.aluno.turma;
@@ -236,13 +238,45 @@ function CasosTable() {
                                                 } else {
                                                     value = column.id === 'index' ? index + page * rowsPerPage : caso[column.id];
                                                 }
+
+                                                // Determine class names for status and urgency
+                                                const classNames = [];
+                                                if (column.id === 'status') {
+                                                    classNames.push('status', value.toLowerCase());
+                                                } else if (column.id === 'urgencia') {
+                                                    classNames.push('urgencia', value.toLowerCase());
+                                                } else if (column.id === 'actions') {
+                                                    classNames.push('actions');
+                                                } else if (column.id === 'turma') {
+                                                    classNames.push('turma');
+                                                }
+
+                                                var isStatus = column.id === 'status';
+                                                var isUrgency = column.id === 'urgencia';
                                                 return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'object' ? column.format(value) : value}
+                                                    <TableCell key={column.id} align="center" className={classNames.join(' ')}>
+                                                        {(() => {
+                                                            if (isStatus && value === 'EM ABERTO') {
+                                                                return <div className="status-dot-andamento">{value}</div>;
+                                                            } else if (isStatus && value === 'FECHADO') {
+                                                                return <div className="status-dot-finalizado">{value}</div>;
+                                                            } else if (isUrgency && value === 'ALTA') {
+                                                                return <div className="urgency-dot-alta">{value}</div>;
+                                                            } else if (isUrgency && value === 'MEDIA') {
+                                                                return <div className="urgency-dot-media">{value}</div>;
+                                                            } else if (isUrgency && value === 'BAIXA') {
+                                                                return <div className="urgency-dot-baixa">{value}</div>;
+                                                            } else if (column.format && typeof value === 'object') {
+                                                                return column.format(value);
+                                                            } else {
+                                                                return value;
+                                                            }
+                                                        })()}
                                                     </TableCell>
                                                 );
                                             })}
                                         </TableRow>
+
                                     );
                                 })}
                         </TableBody>
