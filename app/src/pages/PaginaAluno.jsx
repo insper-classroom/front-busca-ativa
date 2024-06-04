@@ -11,8 +11,8 @@ export function PaginaAluno() {
     const [idAluno, setIdAluno] = useState();
     const [dataAluno, setDataAluno] = useState();
     const [dataCasos, setDataCasos] = useState([]);
-    const [urgencia, setUrgencia] = useState();
-    const [status, setStatus] = useState();
+    const [urgencia, setUrgencia] = useState('');
+    const [status, setStatus] = useState('');
     const cookies = new Cookies();
     const token = cookies.get('token');
 
@@ -28,11 +28,10 @@ export function PaginaAluno() {
         loadCasos();
     }, []);
 
-    
 
     function loadAluno() {
         //TODO pegar o id do aluno  
-        fetch('http://localhost:8000/alunoBuscaAtiva/66550f9be52fb814fe1fef1f', {
+        fetch('http://localhost:8000/alunoBuscaAtiva/665f7299a799887b997bcb72', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,7 +50,7 @@ export function PaginaAluno() {
 
     function loadCasos() {
         //TODO pegar o id do aluno
-        fetch('http://localhost:8000/casos?aluno_id=66550f9be52fb814fe1fef1f', {
+        fetch('http://localhost:8000/casos?aluno_id=665f7299a799887b997bcb72', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +59,10 @@ export function PaginaAluno() {
         })
             .then(response => response.json())
             .then(data => {
+                console.log(data.caso.urgencia)
                 setDataCasos(data.caso);
+                setStatus(data.caso.status)
+                setUrgencia(data.caso.urgencia)
             })
             .catch(response => {
                 alert('Erro ao achar os casos do aluno!');
@@ -82,11 +84,15 @@ export function PaginaAluno() {
     }
 
     const handleChangeStatus = (event) => {
-        setStatus(event.target.value);
+        const newStatus = event.target.value;
+        setStatus(newStatus);
+        clickSU(newStatus, urgencia);
     };
 
     const handleChangeUrgencia = (event) => {
-        setUrgencia(event.target.value);
+        const newUrgencia = event.target.value
+        setUrgencia(newUrgencia);
+        clickSU(status, newUrgencia)
     };
 
     const handleChange = (e) => {
@@ -104,10 +110,10 @@ export function PaginaAluno() {
         });
     };
 
-    function clickSU() {
-        let casoData = {
-            urgencia: urgencia,
-            status: status,
+    function clickSU(newStatus, newUrgencia) {
+        const casoData = {
+            urgencia: newUrgencia,
+            status: newStatus,
         }
    
 
@@ -140,13 +146,13 @@ export function PaginaAluno() {
             telefone: formData.telefone,
             observacao: formData.observacao,
             //TODO pegar o id do aluno
-            aluno: "66550f9be52fb814fe1fef1f",
+            aluno: "665f7299a799887b997bcb72",
             ligacao: true,
             visita: false,
 
         };
         try {
-            const response = await fetch('http://127.0.0.1:8000/casos', {
+            const response = await fetch('http://127.0.0.1:8000/casos' + dataCasos._id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -182,7 +188,7 @@ export function PaginaAluno() {
             data: formData.data,
             observacao: formData.observacao,
             //TODO pegar o id do aluno
-            aluno: "66550f9be52fb814fe1fef1f",
+            aluno: "665f7299a799887b997bcb72",
             ligacao: false,
             visita: true,
 
@@ -243,11 +249,12 @@ export function PaginaAluno() {
                                     labelId="status-select-label"
                                     id="status-select"
                                     label="Status"
-                                    value={formData.status}
+                                    value={status}
                                     onChange={handleChangeStatus}
+                                    defaultValue={dataCasos.status}
                                 >
                                     <MenuItem value={"FINALIZADO"}>Finalizado</MenuItem>
-                                    <MenuItem value={"ANDAMENTO"}>Andamento</MenuItem>
+                                    <MenuItem value={"EM ABERTO"}>Em aberto</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -258,20 +265,17 @@ export function PaginaAluno() {
                                     labelId="urgencia-select-label"
                                     id="urgencia-select"
                                     label="Urgência"
-                                    value={formData.urgencia}
+                                    value={urgencia}
                                     onChange={handleChangeUrgencia}
+                                    defaultValue={dataCasos.urgencia}
                                 >
                                     <MenuItem value={"BAIXA"}>Baixa</MenuItem>
                                     <MenuItem value={"MEDIA"}>Média</MenuItem>
                                     <MenuItem value={"ALTA"}>Alta</MenuItem>
+                                    <MenuItem value={"NAO INFORMADO"}>Não Informado</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
-                            <Button onClick={clickSU}> Salvar Mudanças</Button>
-                        </Grid>
-                        <Grid item xs={12} style={{ textAlign: "center" }}>Histórico da Busca Ativa</Grid>
-                        <Grid item xs={12}>Ligações</Grid>
                         <Grid item xs={6}>
                             <Button onClick={clickLigacao}>Adicionar Ligação</Button>
                         </Grid>
@@ -397,7 +401,9 @@ export function PaginaAluno() {
                                 </Box>
                             </Popper>
                         </Grid>
+                        <Grid item xs={12} style={{ textAlign: "center" }}>Histórico da Busca Ativa</Grid>
                     </Grid>
+                    
                 </Grid>
             </Grid>
         </div>

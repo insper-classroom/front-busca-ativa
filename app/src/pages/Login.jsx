@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Button, TextField, Container, Typography, Alert, Grid, Box } from '@mui/material';
-import HeaderLogin from './HeaderLogin';
+import HeaderLogin from './headerLogin';
 import { useNavigate } from 'react-router-dom';
 import logo from '../components/img/logo.png';
 import './static/Login.css'; 
