@@ -1,0 +1,32 @@
+
+.status-dot-finalizado {
+    background-color: #4CAF50;
+    border-radius: 15px;
+    padding: 4px;
+}
+
+.status-dot-andamento {
+    background-color: #F44336;
+    border-radius: 15px;
+    padding: 4px;
+}
+
+.urgency-dot-media {
+    background-color: #FFC107;
+    border-radius: 15px;
+    padding: 4px;
+}
+
+.urgency-dot-baixa {
+    background-color: #4CAF50;
+    border-radius: 15px;
+    padding: 4px;
+}
+
+.urgency-dot-alta {
+    background-color: #F44336;
+    border-radius: 15px;
+    padding: 4px;
+}
+
+
