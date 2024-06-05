@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import HeaderProfessor from './HeaderProfessor';
 import Cookies from 'universal-cookie';
-import { TextField, Button, Container, Typography, Card, CardContent, CardActions, IconButton } from '@mui/material';
+import { TextField, Button, Container, Typography, Card, CardContent, CardActions, IconButton, Select } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 
 const cookies = new Cookies();
 
@@ -13,18 +16,23 @@ function Tarefas() {
     const [tarefas, setTarefas] = useState([]);
     const [titulo, setTitulo] = useState('');
     const [observacoes, setObservacoes] = useState('');
+    const [status, setStatus] = useState('');
     const [showAddTask, setShowAddTask] = useState(false);
+    const [editingTaskId, setEditingTaskId] = useState(null);
     const token = cookies.get('token');
     const { id } = useParams();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        adicionarTarefa();
+        if (editingTaskId) {
+            editarTarefa();
+        } else {
+            adicionarTarefa();
+        }
     };
 
     useEffect(() => {
         fetchAluno();
-
     }, [id]);
 
     const fetchAluno = () => {
@@ -74,10 +82,47 @@ function Tarefas() {
             setTarefas([...tarefas, data]);
             setTitulo('');
             setObservacoes('');
+            setStatus('Em andamento');
             setShowAddTask(false);
+            fetchAluno();
         })
         .catch(error => {
             console.error('Error adding task:', error);
+        });
+    };
+
+    const editarTarefa = () => {
+        const tarefaAtualizada = {
+            titulo: titulo,
+            observacoes: observacoes,
+            status: status
+        };
+
+        fetch(`http://localhost:8000/tarefas/${id}/${editingTaskId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(tarefaAtualizada)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update task');
+            }
+            return response.json();
+        })
+        .then(data => {
+            setTarefas(tarefas.map(tarefa => tarefa._id === editingTaskId ? data : tarefa));
+            setTitulo('');
+            setObservacoes('');
+            setStatus('Em andamento');
+            setEditingTaskId(null);
+            setShowAddTask(false);
+            fetchAluno();
+        })
+        .catch(error => {
+            console.error('Error updating task:', error);
         });
     };
 
@@ -96,11 +141,28 @@ function Tarefas() {
             return response.json();
         })
         .then(data => {
-            setTarefas(tarefas.filter(tarefa => tarefa._id !== tarefaId));
+            console.log(data.message);
+            fetchAluno();
         })
         .catch(error => {
             console.error('Error deleting tarefa:', error);
         });
+    };
+
+    const startEditing = (tarefa) => {
+        setTitulo(tarefa.titulo);
+        setObservacoes(tarefa.observacoes);
+        setStatus(tarefa.status);
+        setEditingTaskId(tarefa._id);
+        setShowAddTask(true);
+    };
+
+    const cancelEditing = () => {
+        setTitulo('');
+        setObservacoes('');
+        setStatus('');
+        setEditingTaskId(null);
+        setShowAddTask(false);
     };
 
     return (
@@ -133,7 +195,13 @@ function Tarefas() {
                         variant="contained"
                         color="primary"
                         startIcon={<AddIcon />}
-                        onClick={() => setShowAddTask(!showAddTask)}
+                        onClick={() => {
+                            if (editingTaskId) {
+                                cancelEditing();
+                            } else {
+                                setShowAddTask(!showAddTask);
+                            }
+                        }}
                         style={{ marginBottom: '20px' }}
                     >
                         {showAddTask ? 'Cancelar' : 'Adicionar Tarefa'}
@@ -159,8 +227,24 @@ function Tarefas() {
                                 onChange={(e) => setObservacoes(e.target.value)}
                                 style={{ marginBottom: '20px' }}
                             />
-                            <Button type="submit" variant="contained" color="primary">
-                                Enviar
+                            {
+                                editingTaskId && (
+                                    <Select
+                                        label="Status"
+                                        variant="outlined"
+                                        fullWidth
+                                        multiline
+                                        value={status}
+                                        onChange={(e) => setStatus(e.target.value)}
+                                        style={{ marginBottom: '20px' }}
+                                    >
+                                        <MenuItem value="Em andamento">Em andamento</MenuItem>
+                                        <MenuItem value="Finalizado">Finalizado</MenuItem>
+                                    </Select>
+                                )
+                            }
+                            <Button type="submit" variant="contained" color="primary" startIcon={editingTaskId ? <SaveIcon /> : null}>
+                                {editingTaskId ? 'Salvar' : 'Enviar'}
                             </Button>
                         </form>
                     )}
@@ -173,14 +257,18 @@ function Tarefas() {
                                     <Typography variant='h6'>Status: {tarefa.status}</Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button
-                                        variant='contained'
-                                        color='secondary'
-                                        startIcon={<DeleteIcon />}
+                                    <IconButton
+                                        color="primary"
+                                        onClick={() => startEditing(tarefa)}
+                                    >
+                                        <EditIcon />
+                                    </IconButton>
+                                    <IconButton
+                                        color="secondary"
                                         onClick={() => deleteTarefa(tarefa._id)}
                                     >
-                                        Deletar
-                                    </Button>
+                                        <DeleteIcon />
+                                    </IconButton>
                                 </CardActions>
                             </Card>
                         ))

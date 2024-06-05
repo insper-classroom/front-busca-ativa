@@ -27,8 +27,7 @@ const columns = [
     { id: 'nome', label: 'Nome', minWidth: 100 },
     { id: 'turma', label: 'Turma', minWidth: 100 },
     { id: 'RA', label: 'R.A', minWidth: 100 },
-    { id: 'adicionarTarefa', label: 'Adicionar Tarefa', minWidth: 170 },
-    { id: 'actions', label: 'Visualizar Aluno/Tarefas', minWidth: 170 }
+    { id: 'tarefas', label: 'Tarefas', minWidth: 170 },
 ];
 
 function AlunosTable() {
@@ -223,7 +222,7 @@ function AlunosTable() {
                                         <TableRow hover role="checkbox" tabIndex={-1} key={aluno._id} className="table-row">
                                             {columns.map((column) => {
                                                 let value = aluno[column.id];
-                                                if (column.id === 'adicionarTarefa') {
+                                                if (column.id === 'tarefas') {
                                                     value = (
                                                         <Button
                                                             variant="contained"
@@ -231,21 +230,10 @@ function AlunosTable() {
                                                             onClick={() => handleAddTaskClick(aluno._id)}
                                                             className="button"
                                                         >
-                                                            Adicionar Tarefa
+                                                            Visualizar e Adicionar
                                                         </Button>
                                                     );
-                                                } else if (column.id === 'actions') {
-                                                    value = (
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            onClick={() => handleViewClick(aluno._id)}
-                                                            className="button"
-                                                        >
-                                                            Visualizar Aluno/Tarefas
-                                                        </Button>
-                                                    );
-                                                }
+                                                } 
                                                 return (
                                                     <TableCell key={column.id} align={column.align} className="table-cell">
                                                         {column.format ? column.format(value) : value}

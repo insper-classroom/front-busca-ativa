@@ -10,9 +10,8 @@ function HomeProfessor() {
             <div>
                 <HeaderProfessor />
             </div>
-            <div className="search-container">
-            <h1 className="ola">Hello, professor!</h1>
-            <AlunosTable />
+            <div className="user-control">
+                <AlunosTable />
             </div>
         </div>
     );
