@@ -13,6 +13,7 @@ import CadastroUsuario from './pages/Admin/CadastroUsuario';
 
 // Páginas do Professor
 import HomeProfessor from './pages/Professor/HomeProfessor'
+import AdicionarTarefa from './pages/Professor/AdicionarTarefa'
 
 // Páginas do Agente
 import HomeAgente from './pages/Agente/HomeAgente'
@@ -71,14 +72,15 @@ function App() {
             </>
           )}
 
-          {permissao === 'professor' && (
+          {permissao === 'PROFESSOR' && (
             // Colocar as páginas do professor aqui
             <>
             <Route path="/home" element={<HomeProfessor />} />
+            <Route path="/tarefas/adicionar/:id" element={<AdicionarTarefa />} />
             </>
           )}
 
-          {permissao === 'agente' && (
+          {permissao === 'AGENTE' && (
             // Colocar as páginas do agente aqui  
             <>
             <Route path="/home" element={<HomeAgente />} />
@@ -89,6 +91,7 @@ function App() {
           )}
 
         </Route>
+
 
         <Route path="*" element={<NaoEncontrado />} />
 
