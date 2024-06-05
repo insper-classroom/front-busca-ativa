@@ -21,6 +21,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Link, useNavigate } from 'react-router-dom';
+import { Typography } from '@mui/material';
 
 import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
@@ -167,8 +168,25 @@ function ListaAluno() {
   return (
     <div className='user-control'>
       {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
-      <div className="filter-container">
+      <div className='title' style={{display:"flex", justifyContent:"space-between"}}>
+      <Typography 
+          variant="h4" 
+          component="h4" 
+          style={{ 
+            marginBottom: '10px', 
+            textAlign: 'center', // Alinhando o texto ao centro
+            fontFamily: 'Roboto, sans-serif', 
+            fontWeight: 'bold', // Definindo o peso da fonte como negrito
+            textTransform: 'uppercase', // Transformando o texto em maiúsculas
+            paddingLeft: "2%"
+          }}
+        >
+          Controle de Alunos
+        </Typography>
+      <div className="filter-container" style={{}}>
+      
         <div className="filter-box">
+        
           <TextField
             label="Busque pelo nome ou RA"
             variant="outlined"
@@ -198,6 +216,7 @@ function ListaAluno() {
             Filtros
           </Button>
         </div>
+      </div>
       </div>
       <Dialog className='tabela-aluno' open={dialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>Filtros</DialogTitle>
