@@ -11,32 +11,44 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { Link } from 'react-router-dom';
+
+import IconButton from '@mui/material/IconButton';
+import CreateIcon from '@mui/icons-material/Create';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Typography } from '@mui/material';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import EmailIcon from '@mui/icons-material/Email';
+import BadgeIcon from '@mui/icons-material/Badge';
 
 const columns = [
-  { id: 'email', label: 'EMAIL', minWidth: 100, editable: true },
-  { id: 'nome', label: 'NOME', minWidth: 100, editable: true },
-  { id: 'permissao', label: 'PERMISSÃO', minWidth: 100, editable: true },
-  { id: 'edit', label: 'EDITAR', minWidth: 100, editable: false },
-  { id: 'delete', label: 'DELETAR', minWidth: 100, editable: false },
+  { id: 'email', label: 'EMAIL', minWidth: 100 },
+  { id: 'nome', label: 'NOME', minWidth: 100 },
+  { id: 'permissao', label: 'PERMISSÃO', minWidth: 100 },
+  { id: 'edit', label: 'EDITAR', minWidth: 100 },
+  { id: 'delete', label: 'DELETAR', minWidth: 100 },
 ];
-
-function createData(id, email, nome, permissao) {
-  return { id, email, nome, permissao };
-}
 
 const cookies = new Cookies();
 
 function UserControl() {
   const [users, setUsers] = useState([]);
-  const [editingUserId, setEditingUserId] = useState(null);
-  const [editedUsersData, setEditedUsersData] = useState({});
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterPermissions, setFilterPermissions] = useState([]);
+  const [sortOption, setSortOption] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
   const token = cookies.get('token');
 
   useEffect(() => {
@@ -59,10 +71,41 @@ function UserControl() {
       })
       .then(data => {
         setUsers(data);
+        setFilteredUsers(data);
       })
       .catch(error => {
         console.error('Error fetching users:', error);
       });
+  };
+
+  useEffect(() => {
+    let results = users.filter(user =>
+      (user.nome.toLowerCase().includes(searchTerm.toLowerCase()) || user.email.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (filterPermissions.length === 0 || filterPermissions.includes(user.permissao))
+    );
+
+    if (sortOption === "nameAsc") {
+      results.sort((a, b) => a.nome.localeCompare(b.nome));
+    } else if (sortOption === "nameDesc") {
+      results.sort((a, b) => b.nome.localeCompare(a.nome));
+    }
+
+    setFilteredUsers(results);
+  }, [searchTerm, filterPermissions, sortOption, users]);
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handlePermissionChange = (event) => {
+    const { value } = event.target;
+    setFilterPermissions(prev =>
+      prev.includes(value) ? prev.filter(perm => perm !== value) : [...prev, value]
+    );
+  };
+
+  const handleSortChange = (event) => {
+    setSortOption(event.target.value);
   };
 
   const handleDelete = (id) => {
@@ -83,69 +126,9 @@ function UserControl() {
         console.error('Error deleting user:', error);
       });
   };
-  
-  const handleSave = (id) => {
-    fetch(`http://localhost:8000/usuarios/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(editedUsersData[id]),
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to save user changes');
-        }
-        setEditingUserId(null);
-        setEditedUsersData(prevData => {
-          const newData = { ...prevData };
-          delete newData[id]; 
-          return newData;
-        });
-        fetchUsers();
-      })
-      .catch(error => {
-        console.error('Error saving user changes:', error);
-      });
-  };
 
-  const handleEdit = (id, userData) => {
-    setEditingUserId(id);
-    setEditedUsersData(prevData => ({
-      ...prevData,
-      [id]: { ...userData },
-    }));
-  };
-
-  const isEditing = (id) => {
-    return id === editingUserId;
-  };
-
-  const handleInputChange = (e, field, id) => {
-    const { value } = e.target;
-    setEditedUsersData(prevData => ({
-      ...prevData,
-      [id]: {
-        ...prevData[id],
-        [field]: value,
-      },
-    }));
-  };
-
-  const handlePermissionChange = (e, id) => {
-    const { value } = e.target;
-    setEditedUsersData(prevData => ({
-      ...prevData,
-      [id]: {
-        ...prevData[id],
-        permissao: value,
-      },
-    }));
-  };
-
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -156,129 +139,173 @@ function UserControl() {
     setPage(0);
   };
 
-  const rows = users.map(user => {
-    return createData(user._id, user.email, user.nome, user.permissao);
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+
+  const rows = filteredUsers.map(user => {
+    return { id: user._id, email: user.email, nome: user.nome, permissao: user.permissao };
   });
 
   return (
     <div className='user-control'>
       <HeaderAdmin />
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      <div className='title' style={{display:"flex", justifyContent:"space-between"}}>
+      <Typography 
+        variant="h4" 
+        component="h4" 
+        style={{ 
+          marginBottom: '10px', 
+          textAlign: 'center', // Alinhando o texto ao centro
+          fontFamily: 'Roboto, sans-serif', 
+          fontWeight: 'bold', // Definindo o peso da fonte como negrito
+          textTransform: 'uppercase', // Transformando o texto em maiúsculas
+          paddingLeft: "2%"
+        }}
+      >
+        Controle de Usuários
+      </Typography>
+      <div className="filter-container">
+      
+        <div className="filter-box">
+          <TextField
+            label="Busque pelo nome ou email"
+            variant="outlined"
+            size="small"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="compact-input"
+          />
+          <FormControl variant="outlined" size="small" className="compact-input">
+            <InputLabel>Ordenar Por</InputLabel>
+            <Select
+              value={sortOption}
+              onChange={handleSortChange}
+              label="Ordenar Por"
+            >
+              <MenuItem value=""><em>Nada</em></MenuItem>
+              <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
+              <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            size="small"
+            className="button"
+            onClick={handleOpenDialog}
+          >
+            Filtros
+          </Button>
+        </div>
+        </div>
+      </div>
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Filtros</DialogTitle>
+        <DialogContent>
+          <div className="filter-section">
+            <div className="filter-group">
+              <h4>Permissão:</h4>
+              {['ADMIN', 'AGENTE', 'PROFESSOR'].map(permission => (
+                <FormControlLabel
+                  key={permission}
+                  control={<Checkbox checked={filterPermissions.includes(permission)} onChange={handlePermissionChange} value={permission} />}
+                  label={permission}
+                />
+              ))}
+            </div>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Fechar
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Paper className="tabela-usuarios">
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                    sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
+          <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                  align={column.align}
+                  style={{ minWidth: column.minWidth }}
+                  sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333', alignItems: 'center' }}
+                >
+                  {column.id === 'permissao' ? ( // Verifique se a coluna é a coluna de permissão
+                    <div className='icon-admin' style={{ paddingTop: "4px", display: "flex" }}>
+                      <SupervisorAccountIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : column.id === "email" ? ( // Verifique se a coluna é a coluna de e-mail
+                    <div className="icon-email" style={{ paddingTop: "4px", display: "flex" }}>
+                      <EmailIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : column.id === "nome" ? ( // Verifique se a coluna é a coluna de nome
+                    <div className="icon-nome" style={{ paddingTop: "4px", display: "flex" }}>
+                      <BadgeIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : column.id === "edit" ? ( // Verifique se a coluna é a coluna de editar
+                    <div className="icon-edit" style={{ paddingTop: "4px", display: "flex" }}>
+                      <CreateIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : column.id === "delete" ? ( // Verifique se a coluna é a coluna de deletar
+                    <div className="icon-delete" style={{ paddingTop: "4px", display: "flex" }}>
+                      <DeleteIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : (
+                    column.label
+                  )}
+                </TableCell>
+              
+              
+              ))}
+            </TableRow>
+          </TableHead>
+
             <TableBody>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      {columns.map((column) => {
-                        const { id, label, editable } = column;
-                        const value = row[id];
-                        return (
-                          <TableCell key={id} align={column.align}>
-                            {id === 'edit' ? (
-                              isEditing(row.id) ? (
-                                // <Button onClick={() => handleSave(row.id)}>Salvar</Button>
-                                <Button
-                                  variant="contained"
-                                  color="primary"
-                                  onClick={() => handleSave(row.id)}
-                                >
-                                  Salvar
-                                </Button>
-                              ) : (
-                                // <Button onClick={() => handleEdit(row.id, row)}>Editar</Button>
-                                <Button
-                                  variant="contained"
-                                  color="primary"
-                                  onClick={() => handleEdit(row.id, row)}
-                                >
-                                  Editar
-                                </Button> 
-                              )
-                            ) : id === 'delete' ? (
-                              // <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
-                              <Button
-                                  variant="contained"
-                                  color="primary"
-                                  onClick={() => handleDelete(row.id)}
-                                >
-                                  Deletar
-                              </Button>
-                            ) : (
-                              editable ? (
-                                id === 'permissao' ? (
-                                  isEditing(row.id) ? (
-                                    <Box sx={{ minWidth: 120 }}>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">PERMISSAO</InputLabel>
-                                            <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            // value={row.permissao}
-                                            label="Permissão"
-                                            value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
-                                            onChange={(e) => handlePermissionChange(e, row.id)}
-                                            >
-                                            <MenuItem value={"AGENT"}>AGENT</MenuItem>
-                                            <MenuItem value={"ADMIN"}>ADMIN</MenuItem>
-                                            <MenuItem value={"PROFESSOR"}>PROFESSOR</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                        </Box>
-
-                                  ) : (
-                                    value
-                                  )
-                                ) : (
-                                  isEditing(row.id) ? (
-                                    <Box
-                                        component="form"
-                                        sx={{
-                                        '& > :not(style)': { m: 1, width: '25ch' },
-                                        }}
-                                        noValidate
-                                        autoComplete="on"
-                                    >
-                                        <TextField
-                                        id="filled-basic"
-                                        label="Filled"
-                                        variant="filled"
-                                        value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
-                                        onChange={(e) => handleInputChange(e, id, row.id)}
-                                        />
-                                    </Box>
-
-
-                                  ) : (
-                                    value
-                                  )
-                                )
-                              ) : (
-                                value
-                              )
-                            )}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
+                .map((row, index) => (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id} sx={{ backgroundColor: index % 2 === 0 ? 'white' : '#f0f0f0' }}>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align} style={{fontFamily:'Roboto, sans-serif'}}>
+                          {column.id === 'edit' ? (
+                            <Button
+                              variant="contained"
+                              sx={{ backgroundColor: '#007bff', color: 'white' }}
+                              startIcon={<CreateIcon />}
+                            >
+                              Editar
+                            </Button>
+                          ) : column.id === 'delete' ? (
+                            <Button
+                              variant="contained"
+                              sx={{ backgroundColor: 'red', color: 'white' }}
+                              startIcon={<DeleteIcon />}
+                              onClick={() => handleDelete(row.id)}
+                            >
+                              Deletar
+                            </Button>
+                          ) : (
+                            value
+                          )}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

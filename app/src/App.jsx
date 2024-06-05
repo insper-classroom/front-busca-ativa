@@ -13,6 +13,7 @@ import CadastroUsuario from './pages/Admin/CadastroUsuario';
 
 // Páginas do Professor
 import HomeProfessor from './pages/Professor/HomeProfessor'
+import AdicionarTarefa from './pages/Professor/Tarefas'
 
 // Páginas do Agente
 import HomeAgente from './pages/Agente/HomeAgente'
@@ -75,6 +76,7 @@ function App() {
             // Colocar as páginas do professor aqui
             <>
             <Route path="/home" element={<HomeProfessor />} />
+            <Route path="/tarefas/adicionar/:id" element={<AdicionarTarefa />} />
             </>
           )}
 
@@ -89,6 +91,7 @@ function App() {
           )}
 
         </Route>
+
 
         <Route path="*" element={<NaoEncontrado />} />
 

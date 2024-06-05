@@ -1,11 +1,15 @@
 import React from 'react';
 import HeaderAgente from './HeaderAgente';
+import CasosTable from './CasosTable'; // Importando o componente CasosTable
+import './static/HomeAgente.css';
 
 function HomeAgente() {
     return (
-        <div>
+        <div className="home-Agente">
             <HeaderAgente />
-            <h1>Hello, agente!</h1>
+            <div className="search-container">
+                <CasosTable /> {/* Utilizando o componente CasosTable */}
+            </div>
         </div>
     );
 }

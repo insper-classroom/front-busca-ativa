@@ -24,15 +24,15 @@
     justify-content: flex-end;
     gap: 10px;
     align-items: center;
-    margin-right: auto;
-    margin-right: 5%;
+    /* margin-right: auto; */
+    margin-right: 2.5%;
 
 
 }
 
 .table-container {
     margin: 0 auto;
-    width: 90%;
+    width: 95%;
 }
 
 .filter-section {

@@ -7,3 +7,30 @@
     justify-content: center;
     margin-top: 20px;
 }
+
+.tabela-usuarios {
+    margin: 0 auto;
+    width: 95%;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 0 20px;
+}
+
+.filter-box {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group {
+    margin-bottom: 10px;
+}
