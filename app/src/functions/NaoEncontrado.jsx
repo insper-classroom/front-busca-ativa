@@ -1,5 +1,5 @@
 import React from 'react';
-import HeaderLogin from '../pages/headerLogin';
+import HeaderLogin from '../pages/HeaderLogin';
 import './static/NaoEncontrado.css';
 
 const NaoEncontrado = () => {
