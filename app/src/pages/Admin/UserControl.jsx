@@ -151,8 +151,8 @@ function UserControl() {
   return (
     <div className='user-control'>
       <HeaderAdmin />
-      <div className="filter-container">
-      <Typography 
+      <div className='title' style={{display:"flex", justifyContent:"space-between"}}>
+        <Typography 
         variant="h4" 
         component="h4" 
         style={{ 
@@ -161,11 +161,13 @@ function UserControl() {
           fontFamily: 'Roboto, sans-serif', 
           fontWeight: 'bold', // Definindo o peso da fonte como negrito
           textTransform: 'uppercase', // Transformando o texto em maiúsculas
-          paddingRight: "41%"
+          paddingLeft: "2%"
         }}
       >
         Controle de Usuários
       </Typography>
+      <div className="filter-container">
+      
         <div className="filter-box">
           <TextField
             label="Busque pelo nome ou email"
@@ -195,6 +197,7 @@ function UserControl() {
           >
             Filtros
           </Button>
+        </div>
         </div>
       </div>
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
