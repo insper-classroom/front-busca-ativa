@@ -6,6 +6,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/pt-br';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import dayjs from 'dayjs';
+import { DataGrid } from '@mui/x-data-grid'
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import Tab from '@mui/material/Tab';
+
 
 export function PaginaAluno() {
     const [idAluno, setIdAluno] = useState();
@@ -13,6 +19,8 @@ export function PaginaAluno() {
     const [dataCasos, setDataCasos] = useState([]);
     const [urgencia, setUrgencia] = useState('');
     const [status, setStatus] = useState('');
+    const [ligacoes, setLigacoes] = useState([])
+    const [visitas, setVisitas] = useState([])
     const cookies = new Cookies();
     const token = cookies.get('token');
 
@@ -21,6 +29,8 @@ export function PaginaAluno() {
         data: dayjs(),
         telefone: '',
         observacao: '',
+        func: '',
+        responsavel: '',
     });
 
     useEffect(() => {
@@ -63,6 +73,9 @@ export function PaginaAluno() {
                 setDataCasos(data.caso);
                 setStatus(data.caso.status)
                 setUrgencia(data.caso.urgencia)
+                setLigacoes(data.caso.ligacoes)
+                setVisitas(data.caso.visitas)
+
             })
             .catch(response => {
                 alert('Erro ao achar os casos do aluno!');
@@ -72,8 +85,15 @@ export function PaginaAluno() {
 
     const [anchorLig, setAnchorLig] = useState(null);
     const [anchorVis, setAnchorVis] = useState(null);
+    const [anchorAtendimento, setAnchorAtendimento] = useState(null);
     const openLig = Boolean(anchorLig);
     const openVis = Boolean(anchorVis);
+    const openAtendimento = Boolean(anchorAtendimento);
+
+    function clickAtendimento(event) {
+        setAnchorAtendimento(anchorAtendimento ? null : event.currentTarget);
+    }
+
 
     function clickLigacao(event) {
         setAnchorLig(anchorLig ? null : event.currentTarget);
@@ -145,14 +165,12 @@ export function PaginaAluno() {
             data: formData.data,
             telefone: formData.telefone,
             observacao: formData.observacao,
-            //TODO pegar o id do aluno
-            aluno: "665f7299a799887b997bcb72",
             ligacao: true,
             visita: false,
 
         };
         try {
-            const response = await fetch('http://127.0.0.1:8000/casos' + dataCasos._id, {
+            const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -175,6 +193,8 @@ export function PaginaAluno() {
                 observacao: '',
 
             });
+            loadAluno()
+            loadCasos()
         } catch (error) {
             console.error('Erro:', error);
             alert('Erro ao salvar o caso');
@@ -187,15 +207,13 @@ export function PaginaAluno() {
             abae: formData.abae,
             data: formData.data,
             observacao: formData.observacao,
-            //TODO pegar o id do aluno
-            aluno: "665f7299a799887b997bcb72",
-            ligacao: false,
             visita: true,
+            ligacao:false
 
         };
         try {
-            const response = await fetch('http://127.0.0.1:8000/casos', {
-                method: 'POST',
+            const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -213,15 +231,94 @@ export function PaginaAluno() {
             setFormData({
                 abae: '',
                 data: dayjs(),
-                telefone: '',
                 observacao: '',
 
             });
+            loadCasos()
+            loadAlunos()
         } catch (error) {
             console.error('Erro:', error);
             alert('Erro ao salvar o caso');
         }
     };
+
+    const handleSubmitAtendimento = async (e) => {
+        e.preventDefault();
+        const casoData = {
+            func: formData.func,
+            data: formData.data,
+            responsavel: formData.responsavel,
+            observacao: formData.observacao,
+            atendimento: true,
+        };
+        try {
+            const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(casoData),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Erro no cadastramento do caso');
+            }
+    
+            const data = await response.json();
+            console.log('Cadastro realizado com sucesso:', data);
+            alert('Cadastro realizado com sucesso');
+            setFormData({
+                abae: '',
+                data: dayjs(),
+                observacao: '',
+            });
+            loadAluno();
+            loadCasos();
+        } catch (error) {
+            console.error('Erro:', error);
+            alert('Erro ao salvar o caso');
+        }
+    };
+    
+
+
+
+    const columnsLig = [
+        { field: 'data', headerName: 'Data', width: 200 },
+        { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
+        { field: 'telefone', headerName: 'Telefone', width: 200 },
+        { field: 'observacao', headerName: 'Observações', width: 200 },
+      ];
+      
+      const rowsLig = ligacoes.map((lig, index) => ({
+        id: index,
+        data: lig.data,
+        abae: lig.abae,
+        telefone: lig.telefone,
+        observacao:lig.observacao
+    }));
+
+    const columnsVis = [
+        { field: 'data', headerName: 'Data', width: 200 },
+        { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
+        { field: 'observacao', headerName: 'Observações', width: 200 },
+      ];
+      
+      const rowsVis = visitas.map((vis, index) => ({
+        id: index,
+        data: vis.data,
+        abae: vis.abae,
+        observacao:vis.observacao
+    }));
+
+
+
+    const [valueTabs, setValueTabs] = useState(0);
+
+    const handleChangeTabs = (event, newValue) => {
+      setValueTabs(newValue);
+    }
 
     return (
         <div className='card'>
@@ -276,12 +373,16 @@ export function PaginaAluno() {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <Button onClick={clickLigacao}>Adicionar Ligação</Button>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <Button onClick={clickVisita}>Adicionar Visita</Button>
                         </Grid>
+                        <Grid item xs={4}>
+                            <Button onClick={clickAtendimento}>Adicionar Atendimento aos Pais</Button>
+                        </Grid>
+
                         <Grid item xs={12}>
                             <Popper open={openLig} anchorEl={anchorLig} placement="bottom" modifiers={[{ name: 'offset', options: { offset: [0, 40] } }]} >
                                 <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} style={{borderRadius:"10px"}}>
@@ -401,7 +502,94 @@ export function PaginaAluno() {
                                 </Box>
                             </Popper>
                         </Grid>
+                        <Grid item xs={12}>
+                            <Popper open={openAtendimento} anchorEl={anchorAtendimento} placement="bottom" modifiers={[{ name: 'offset', options: { offset: [0, 40] } }]} >
+                                <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} style={{borderRadius:"10px"}}>
+                                    <Grid container item xs={12} style={{ alignContent: "rigth", background: "lightgrey", borderRadius: "10px", padding: "10px" }}>
+                                        <Container maxWidth="xs">
+                                            <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                <Typography component="h1" variant="h5">
+                                                    Informações sobre o Atendimento aos Pais
+                                                </Typography>
+                                                <Box component="form" onSubmit={handleSubmitAtendimento} sx={{ mt: 3 }}>
+                                                    <TextField
+                                                        margin="normal"
+                                                        required
+                                                        fullWidth
+                                                        id="func"
+                                                        label="Atendimento feito por"
+                                                        name="func"
+                                                        value={formData.func}
+                                                        onChange={handleChange}
+                                                        autoComplete="Atendimento feito por"
+                                                    />
+                                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+                                                        <DateField
+                                                            label="Data do Atendimento"
+                                                            value={formData.data}
+                                                            onChange={(newDate) => handleDateChange(newDate)}
+                                                        />
+                                                    </LocalizationProvider>
+                                                    <TextField
+                                                        margin="normal"
+                                                        required
+                                                        fullWidth
+                                                        id="responsavel"
+                                                        label="Responsável Presente"
+                                                        name="responsavel"
+                                                        value={formData.responsavel}
+                                                        onChange={handleChange}
+                                                        autoComplete="Responsável Presente"
+                                                    />
+                                                    <TextField
+                                                        margin="normal"
+                                                        required
+                                                        fullWidth
+                                                        id="observacao"
+                                                        label="Observação"
+                                                        name="observacao"
+                                                        value={formData.observacao}
+                                                        onChange={handleChange}
+                                                        autoComplete="Observação"
+                                                    />
+                                                    <Button
+                                                        type="submit"
+                                                        fullWidth
+                                                        variant="contained"
+                                                        sx={{ mt: 3, mb: 2 }}
+                                                    >
+                                                        Salvar
+                                                    </Button>
+                                                </Box>
+                                            </Box>
+                                        </Container>
+                                    </Grid>
+                                </Box>
+                            </Popper>
+                        </Grid>
+
                         <Grid item xs={12} style={{ textAlign: "center" }}>Histórico da Busca Ativa</Grid>
+                        
+                        <Grid container item xs={12} >
+                            <TabContext value={valueTabs} style={{alignItems:"rigth"}}>
+                                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                                <TabList onChange={handleChangeTabs} aria-label="tabs example">
+                                    <Tab label="Ligação" value="0" />
+                                    <Tab label="Visita" value="1" />
+                                </TabList>
+                                </Box>
+                                <TabPanel value="0" >
+                                    <Box sx={{ height: 400, width: "100%"}}>
+                                        <DataGrid rows={rowsLig} columns={columnsLig} pageSize={5} checkboxSelection/>
+                                    </Box>
+                                </TabPanel>
+                                <TabPanel value="1">
+                                    <Box sx={{ height: 400, width: "100%"}}>
+                                        <DataGrid rows={rowsVis} columns={columnsVis} pageSize={5} checkboxSelection/>
+                                    </Box>
+                                </TabPanel>
+                            </TabContext>
+                        </Grid>
                     </Grid>
                     
                 </Grid>
