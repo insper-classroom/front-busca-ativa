@@ -23,6 +23,16 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { Link, useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
 
+import IconButton from '@mui/material/IconButton';
+import CreateIcon from '@mui/icons-material/Create';
+import DeleteIcon from '@mui/icons-material/Delete';
+import GroupsIcon from '@mui/icons-material/Groups';
+import EmailIcon from '@mui/icons-material/Email';
+import BadgeIcon from '@mui/icons-material/Badge';
+import ContactsIcon from '@mui/icons-material/Contacts';
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+
+
 import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
 import './static/ListaAluno.css';
@@ -262,7 +272,36 @@ function ListaAluno() {
                     style={{ minWidth: column.minWidth }}
                     sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
                   >
-                    {column.label}
+                    
+                    {column.id === 'RA' ? ( // Verifique se a coluna é a coluna de permissão
+                    <div className='icon-admin' style={{ paddingTop: "4px", display: "flex" }}>
+                      <ContactsIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : column.id === "turma" ? ( // Verifique se a coluna é a coluna de e-mail
+                    <div className="icon-email" style={{ paddingTop: "4px", display: "flex" }}>
+                      <GroupsIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : column.id === "nome" ? ( // Verifique se a coluna é a coluna de nome
+                    <div className="icon-nome" style={{ paddingTop: "4px", display: "flex" }}>
+                      <BadgeIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : column.id === "view" ? ( // Verifique se a coluna é a coluna de editar
+                    <div className="icon-edit" style={{ paddingTop: "4px", display: "flex" }}>
+                      <TextSnippetIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : column.id === "delete" ? ( // Verifique se a coluna é a coluna de deletar
+                    <div className="icon-delete" style={{ paddingTop: "4px", display: "flex" }}>
+                      <DeleteIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : (
+                    column.label
+                  )}
+
                   </TableCell>
                 ))}
               </TableRow>
