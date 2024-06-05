@@ -9,17 +9,29 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { Link, useNavigate } from 'react-router-dom';
 
 import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
+import './static/ListaAluno.css';
 
 const columns = [
-  { id: 'nome', label: 'Nome', minWidth: 100, editable: true },
-  { id: 'turma', label: 'Turma', minWidth: 100, editable: true },
-  { id: 'RA', label: 'RA', minWidth: 100, editable: false },
-  { id: 'view', label: 'VISUALIZAR DADOS', minWidth: 150, editable: false },
-  { id: 'delete', label: 'DELETAR', minWidth: 100, editable: false },
+  { id: 'nome', label: 'Nome', minWidth: 100 },
+  { id: 'turma', label: 'Turma', minWidth: 100 },
+  { id: 'RA', label: 'RA', minWidth: 100 },
+  { id: 'view', label: 'VISUALIZAR DADOS', minWidth: 150 },
+  { id: 'delete', label: 'DELETAR', minWidth: 100 },
 ];
 
 function createData(id, nome, turma, RA) {
@@ -30,6 +42,12 @@ const cookies = new Cookies();
 
 function ListaAluno() {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterYears, setFilterYears] = useState([]);
+  const [filterClasses, setFilterClasses] = useState([]);
+  const [sortOption, setSortOption] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
   const token = cookies.get('token');
   const permissao = cookies.get('permissao');
   const navigate = useNavigate();
@@ -54,10 +72,53 @@ function ListaAluno() {
       })
       .then(data => {
         setUsers(data);
+        setFilteredUsers(data);
       })
       .catch(error => {
         console.error('Error fetching users:', error);
       });
+  };
+
+  useEffect(() => {
+    let results = users.filter(user =>
+      (user.nome.toLowerCase().includes(searchTerm.toLowerCase()) || user.RA.includes(searchTerm)) &&
+      (filterYears.length === 0 || filterYears.some(year => user.turma.startsWith(year))) &&
+      (filterClasses.length === 0 || filterClasses.some(cls => user.turma.endsWith(cls)))
+    );
+
+    if (sortOption === "nameAsc") {
+      results.sort((a, b) => a.nome.localeCompare(b.nome));
+    } else if (sortOption === "nameDesc") {
+      results.sort((a, b) => b.nome.localeCompare(a.nome));
+    }
+
+    setFilteredUsers(results);
+  }, [searchTerm, filterYears, filterClasses, sortOption, users]);
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleYearChange = (event) => {
+    const { value } = event.target;
+    setFilterYears(prev =>
+      prev.includes(value) ? prev.filter(year => year !== value) : [...prev, value]
+    );
+  };
+
+  const handleClassChange = (event) => {
+    const { value } = event.target;
+    setFilterClasses(prev =>
+      prev.includes(value) ? prev.filter(cls => cls !== value) : [...prev, value]
+    );
+  };
+
+  const handleSortChange = (event) => {
+    setSortOption(event.target.value);
+  };
+
+  const handleView = (id) => {
+    navigate(`/alunos/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -79,8 +140,12 @@ function ListaAluno() {
       });
   };
 
-  const handleView = (id) => {
-    navigate(`/alunos/${id}`);
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
   };
 
   const [page, setPage] = useState(0);
@@ -95,14 +160,78 @@ function ListaAluno() {
     setPage(0);
   };
 
-  const rows = users.map(user => {
+  const rows = filteredUsers.map(user => {
     return createData(user._id, user.nome, user.turma, user.RA);
   });
 
   return (
     <div className='user-control'>
       {permissao === 'agente' ? <HeaderAgente /> : <HeaderAdmin />}
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      <div className="filter-container">
+        <div className="filter-box">
+          <TextField
+            label="Busque pelo nome ou RA"
+            variant="outlined"
+            size="small"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="compact-input"
+          />
+          <FormControl variant="outlined" size="small" className="compact-input">
+            <InputLabel>Ordenar Por</InputLabel>
+            <Select
+              value={sortOption}
+              onChange={handleSortChange}
+              label="Ordenar Por"
+            >
+              <MenuItem value=""><em>Nada</em></MenuItem>
+              <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
+              <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            size="small"
+            className="button"
+            onClick={handleOpenDialog}
+          >
+            Filtros
+          </Button>
+        </div>
+      </div>
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Filtros</DialogTitle>
+        <DialogContent>
+          <div className="filter-section">
+            <div className="filter-group">
+              <h4>Ano:</h4>
+              {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(year => (
+                <FormControlLabel
+                  key={year}
+                  control={<Checkbox checked={filterYears.includes(year)} onChange={handleYearChange} value={year} />}
+                  label={`${year}° Ano`}
+                />
+              ))}
+            </div>
+            <div className="filter-group">
+              <h4>Turma:</h4>
+              {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map(cls => (
+                <FormControlLabel
+                  key={cls}
+                  control={<Checkbox checked={filterClasses.includes(cls)} onChange={handleClassChange} value={cls} />}
+                  label={cls}
+                />
+              ))}
+            </div>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Fechar
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Paper className="tabela-aluno">
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -122,11 +251,16 @@ function ListaAluno() {
             <TableBody>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                .map((row, index) => (
+                  <TableRow 
+                    hover 
+                    role="checkbox" 
+                    tabIndex={-1} 
+                    key={row.id} 
+                    sx={{ backgroundColor: index % 2 === 0 ? 'white' : '#f0f0f0' }}
+                  >
                     {columns.map((column) => {
-                      const { id, editable } = column;
-                      const value = row[id];
+                      const value = row[column.id];
                       return (
                         <TableCell key={id} align={column.align}>
                           {id === 'view' ? (

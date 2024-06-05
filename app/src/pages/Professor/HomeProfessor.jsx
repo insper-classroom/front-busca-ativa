@@ -11,7 +11,7 @@ function HomeProfessor() {
                 <HeaderProfessor />
             </div>
             <div className="search-container">
-            <h1>Hello, professor!</h1>
+            <h1 className="ola">Hello, professor!</h1>
             <AlunosTable />
             </div>
         </div>
