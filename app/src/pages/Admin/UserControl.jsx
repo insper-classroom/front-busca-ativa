@@ -193,12 +193,33 @@ function UserControl() {
                           <TableCell key={id} align={column.align}>
                             {id === 'edit' ? (
                               isEditing(row.id) ? (
-                                <Button onClick={() => handleSave(row.id)}>Salvar</Button>
+                                // <Button onClick={() => handleSave(row.id)}>Salvar</Button>
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() => handleSave(row.id)}
+                                >
+                                  Salvar
+                                </Button>
                               ) : (
-                                <Button onClick={() => handleEdit(row.id, row)}>Editar</Button> 
+                                // <Button onClick={() => handleEdit(row.id, row)}>Editar</Button>
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() => handleEdit(row.id, row)}
+                                >
+                                  Editar
+                                </Button> 
                               )
                             ) : id === 'delete' ? (
-                              <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
+                              // <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
+                              <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() => handleDelete(row.id)}
+                                >
+                                  Deletar
+                              </Button>
                             ) : (
                               editable ? (
                                 id === 'permissao' ? (
