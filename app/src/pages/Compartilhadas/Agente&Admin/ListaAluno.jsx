@@ -166,7 +166,7 @@ function ListaAluno() {
 
   return (
     <div className='user-control'>
-      {permissao === 'agente' ? <HeaderAgente /> : <HeaderAdmin />}
+      {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
       <div className="filter-container">
         <div className="filter-box">
           <TextField
