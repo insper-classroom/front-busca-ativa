@@ -23,10 +23,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Link } from 'react-router-dom';
-import CreateIcon from '@mui/icons-material/Create';
+
 import IconButton from '@mui/material/IconButton';
+import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Typography } from '@mui/material';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import EmailIcon from '@mui/icons-material/Email';
+import BadgeIcon from '@mui/icons-material/Badge';
 
 const columns = [
   { id: 'email', label: 'EMAIL', minWidth: 100 },
@@ -224,20 +228,50 @@ function UserControl() {
       <Paper className="tabela-usuarios">
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                    sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
+          <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                  align={column.align}
+                  style={{ minWidth: column.minWidth }}
+                  sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333', alignItems: 'center' }}
+                >
+                  {column.id === 'permissao' ? ( // Verifique se a coluna é a coluna de permissão
+                    <div className='icon-admin' style={{ paddingTop: "4px", display: "flex" }}>
+                      <SupervisorAccountIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : column.id === "email" ? ( // Verifique se a coluna é a coluna de e-mail
+                    <div className="icon-email" style={{ paddingTop: "4px", display: "flex" }}>
+                      <EmailIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : column.id === "nome" ? ( // Verifique se a coluna é a coluna de nome
+                    <div className="icon-nome" style={{ paddingTop: "4px", display: "flex" }}>
+                      <BadgeIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : column.id === "edit" ? ( // Verifique se a coluna é a coluna de editar
+                    <div className="icon-edit" style={{ paddingTop: "4px", display: "flex" }}>
+                      <CreateIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : column.id === "delete" ? ( // Verifique se a coluna é a coluna de deletar
+                    <div className="icon-delete" style={{ paddingTop: "4px", display: "flex" }}>
+                      <DeleteIcon style={{ paddingRight: "3px" }} />
+                      {column.label}
+                    </div>
+                  ) : (
+                    column.label
+                  )}
+                </TableCell>
+              
+              
+              ))}
+            </TableRow>
+          </TableHead>
+
             <TableBody>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
