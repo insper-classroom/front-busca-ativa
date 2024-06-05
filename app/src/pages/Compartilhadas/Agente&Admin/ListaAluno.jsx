@@ -130,9 +130,23 @@ function ListaAluno() {
                       return (
                         <TableCell key={id} align={column.align}>
                           {id === 'view' ? (
-                            <Button onClick={() => handleView(row.id)}>Visualizar dados</Button>
+                            
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => handleView(row.id)}
+                              >
+                                VISUALIZAR DADOS
+                              </Button>
                           ) : id === 'delete' ? (
-                            <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
+                            
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => handleDelete(row.id)}
+                              >
+                                DELETAR
+                              </Button>
                           ) : (
                             value
                           )}

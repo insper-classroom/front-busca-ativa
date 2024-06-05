@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import Cookies from 'universal-cookie';
 import { Button, TextField, Container, Typography, Alert, Grid, Box } from '@mui/material';
-import HeaderLogin from './HeaderLogin';
+import HeaderLogin from './headerLogin';
 import { useNavigate } from 'react-router-dom';
 import logo from '../components/img/logo.png';
 import './static/Login.css'; 
 
-const cookies = new Cookies();
+
 
 export default function Login() {
+  const cookies = new Cookies();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
