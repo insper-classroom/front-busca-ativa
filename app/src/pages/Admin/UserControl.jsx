@@ -155,7 +155,7 @@ function UserControl() {
     <div className='user-control'>
       <HeaderAdmin />
       <div className='title' style={{display:"flex", justifyContent:"space-between"}}>
-        <Typography 
+      <Typography 
         variant="h4" 
         component="h4" 
         style={{ 
@@ -280,7 +280,7 @@ function UserControl() {
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell key={column.id} align={column.align} style={{fontFamily:'Roboto, sans-serif'}}>
                           {column.id === 'edit' ? (
                             <Button
                               variant="contained"
