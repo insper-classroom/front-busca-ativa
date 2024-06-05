@@ -242,7 +242,7 @@ function CasosTable() {
                 </DialogActions>
             </Dialog>
             {error && <p>{error}</p>}
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <Paper  className="tabela">
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
