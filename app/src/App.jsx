@@ -13,7 +13,7 @@ import CadastroUsuario from './pages/Admin/CadastroUsuario';
 
 // Páginas do Professor
 import HomeProfessor from './pages/Professor/HomeProfessor'
-import AdicionarTarefa from './pages/Professor/AdicionarTarefa'
+import AdicionarTarefa from './pages/Professor/Tarefas'
 
 // Páginas do Agente
 import HomeAgente from './pages/Agente/HomeAgente'
