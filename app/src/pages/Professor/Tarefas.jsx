@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import HeaderProfessor from './HeaderProfessor';
 import Cookies from 'universal-cookie';
-import { TextField, Button, Container, Typography, Card, CardContent, CardActions, IconButton, Select } from '@mui/material';
+import { TextField, Button, Container, Typography, Card, CardContent, CardActions, IconButton, Select, MenuItem, InputLabel } from '@mui/material';
+
 import AddIcon from '@mui/icons-material/Add';
-import MenuItem from '@mui/material/MenuItem';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
@@ -208,48 +209,48 @@ function Tarefas() {
                     </Button>
                     {showAddTask && (
                         <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
-                            <TextField
-                                label="Tarefa"
-                                variant="outlined"
-                                fullWidth
-                                required
-                                value={titulo}
-                                onChange={(e) => setTitulo(e.target.value)}
-                                style={{ marginBottom: '20px' }}
-                            />
-                            <TextField
-                                label="Observações"
-                                variant="outlined"
-                                fullWidth
-                                multiline
-                                rows={4}
-                                value={observacoes}
-                                onChange={(e) => setObservacoes(e.target.value)}
-                                style={{ marginBottom: '20px' }}
-                            />
-                            {
-                                editingTaskId && (
-                                    <Select
-                                        label="Status"
-                                        variant="outlined"
-                                        fullWidth
-                                        multiline
-                                        value={status}
-                                        onChange={(e) => setStatus(e.target.value)}
-                                        style={{ marginBottom: '20px' }}
-                                    >
-                                        <MenuItem value="Em andamento">Em andamento</MenuItem>
-                                        <MenuItem value="Finalizado">Finalizado</MenuItem>
-                                    </Select>
-                                )
-                            }
-                            <Button type="submit" variant="contained" color="primary" startIcon={editingTaskId ? <SaveIcon /> : null}>
-                                {editingTaskId ? 'Salvar' : 'Enviar'}
-                            </Button>
-                        </form>
+                        <TextField
+                            label="Tarefa"
+                            variant="outlined"
+                            fullWidth
+                            required
+                            value={titulo}
+                            onChange={(e) => setTitulo(e.target.value)}
+                            style={{ marginBottom: '20px' }}
+                        />
+                        <TextField
+                            label="Observações"
+                            variant="outlined"
+                            fullWidth
+                            multiline
+                            rows={4}
+                            value={observacoes}
+                            onChange={(e) => setObservacoes(e.target.value)}
+                            style={{ marginBottom: '20px' }}
+                        />
+                        {editingTaskId && (
+                            <>
+                                <InputLabel id="status-label">Status</InputLabel>
+                                <Select
+                                    labelId="status-label"
+                                    value={status}
+                                    onChange={(e) => setStatus(e.target.value)}
+                                    fullWidth
+                                    displayEmpty
+                                    style={{ marginBottom: '20px' }}
+                                >
+                                    <MenuItem value="Em andamento">Em andamento</MenuItem>
+                                    <MenuItem value="Finalizado">Finalizado</MenuItem>
+                                </Select>
+                            </>
+                        )}
+                        <Button type="submit" variant="contained" color="primary" startIcon={editingTaskId ? <SaveIcon /> : null}>
+                            {editingTaskId ? 'Salvar' : 'Enviar'}
+                        </Button>
+                    </form>
                     )}
                     {tarefas.length > 0 ? (
-                        tarefas.map((tarefa, index) => (
+                        tarefas.slice().reverse().map((tarefa, index) => (
                             <Card key={index} style={{ marginBottom: '20px' }}>
                                 <CardContent>
                                     <Typography variant='h6'>Tarefa: {tarefa.titulo}</Typography>
