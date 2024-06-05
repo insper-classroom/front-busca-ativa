@@ -23,7 +23,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import DeleteIcon from '@mui/icons-material/Delete';
+import ComputerIcon from '@mui/icons-material/Computer';
 import GroupsIcon from '@mui/icons-material/Groups';
 import BadgeIcon from '@mui/icons-material/Badge';
 import ContactsIcon from '@mui/icons-material/Contacts';
@@ -35,10 +35,9 @@ const columns = [
     { id: 'nome', label: 'Nome', minWidth: 100 },
     { id: 'turma', label: 'Turma', minWidth: 100 },
     { id: 'RA', label: 'R.A', minWidth: 100 },
-    { id: 'tarefas', label: 'Tarefas', minWidth: 170 },
+    { id: 'tarefas', label: 'TAREFAS', minWidth: 170 },
+    { id: 'actions', label: 'VISUALIZAR ALUNO/TAREFAS', minWidth: 170 }
 ];
-
-
 
 function AlunosTable() {
     const [alunos, setAlunos] = useState([]);
@@ -217,11 +216,8 @@ function AlunosTable() {
                                     <TableCell
                                         key={column.id}
                                         align={column.align}
-                                        style={{ minWidth: column.minWidth }}
+                                        style={{ minWidth: column.minWidth, backgroundColor: '#f0f0f0', fontWeight: 'bold' }}
                                     >
-                                        
-
-
                                         {column.id === 'RA' ? (
                                         <div className='icon-admin' style={{ paddingTop: "4px", display: "flex" }}>
                                             <ContactsIcon style={{ paddingRight: "3px" }} />
@@ -237,22 +233,21 @@ function AlunosTable() {
                                             <BadgeIcon style={{ paddingRight: "3px" }} />
                                             {column.label}
                                         </div>
-                                        ) : column.id === "adicionarTarefa" ? (
+                                        ) : column.id === "tarefas" ? (
                                         <div className="icon-edit" style={{ paddingTop: "4px", display: "flex" }}>
-                                            <AssignmentIcon style={{ paddingRight: "3px" }} />
+                                            <ComputerIcon style={{ paddingRight: "3px" }} />
                                             {column.label}
                                         </div>
                                         ) : column.id === "actions" ? (
                                         <div className="icon-delete" style={{ paddingTop: "4px", display: "flex" }}>
-                                            <AssignmentIcon style={{ paddingRight: "3px" }} />
+                                            <AssignmentIndIcon style={{ paddingRight: "3px" }} />
                                             {column.label}
                                         </div>
                                         ) : (
                                         column.label
                                         )}
                                     </TableCell>
-                                        ))}
-                                
+                                ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -260,7 +255,14 @@ function AlunosTable() {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((aluno, index) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={aluno._id} className="table-row">
+                                        <TableRow 
+                                            hover 
+                                            role="checkbox" 
+                                            tabIndex={-1} 
+                                            key={aluno._id} 
+                                            className="table-row" 
+                                            sx={{ backgroundColor: index % 2 === 0 ? 'white' : '#f0f0f0' }}
+                                        >
                                             {columns.map((column) => {
                                                 let value = aluno[column.id];
                                                 if (column.id === 'tarefas') {
@@ -270,15 +272,29 @@ function AlunosTable() {
                                                             color="primary"
                                                             onClick={() => handleAddTaskClick(aluno._id)}
                                                             className="button"
+                                                            style={{ backgroundColor: 'blue', color: 'white' }}
+                                                            startIcon={<ComputerIcon />}
                                                         >
-                                                            Visualizar e Adicionar
+                                                            TAREFAS
                                                         </Button>
                                                     );
-                                                } 
+                                                } else if (column.id === 'actions') {
+                                                    value = (
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            onClick={() => handleViewClick(aluno._id)}
+                                                            className="button"
+                                                            style={{ backgroundColor: 'green', color: 'white' }}
+                                                            startIcon={<AssignmentIndIcon />}
+                                                        >
+                                                            Visualizar
+                                                        </Button>
+                                                    );
+                                                }
                                                 return (
                                                     <TableCell key={column.id} align={column.align} className="table-cell">
                                                         {column.format ? column.format(value) : value}
-                                                        
                                                     </TableCell>
                                                 );
                                             })}
