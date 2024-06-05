@@ -5,7 +5,6 @@ import Cookies from 'universal-cookie';
 import { TextField, Button, Container, Typography } from '@mui/material';
 
 const cookies = new Cookies();
-
 function AdicionarTarefa() {
     const [aluno, setAluno] = useState({});
     const [titulo, setTitulo] = useState('');
@@ -82,6 +81,9 @@ function AdicionarTarefa() {
             <HeaderProfessor />
             <div className='user-control'>
                 <Container>
+                <Button variant="contained" color="secondary" onClick={() => window.history.back()}>
+                    Voltar
+                </Button>
                     <Typography variant="h4" component="h1" gutterBottom>
                         Adicionar Tarefa
                     </Typography>
