@@ -32,6 +32,8 @@ const columns = [
     { id: 'actions', label: 'AÇÕES', minWidth: 170 }
 ];
 
+const urgencyOrder = { 'BAIXA': 1, 'MEDIA': 2, 'ALTA': 3, 'NÃO INFORMADO': 0 };
+
 function CasosTable() {
     const [casos, setCasos] = useState([]);
     const [filteredCasos, setFilteredCasos] = useState([]);
@@ -82,9 +84,9 @@ function CasosTable() {
         } else if (sortOption === "nameDesc") {
             results.sort((a, b) => b.aluno.nome.localeCompare(a.aluno.nome));
         } else if (sortOption === "urgencyHighToLow") {
-            results.sort((a, b) => b.urgencia.localeCompare(a.urgencia));
+            results.sort((a, b) => urgencyOrder[b.urgencia] - urgencyOrder[a.urgencia]);
         } else if (sortOption === "urgencyLowToHigh") {
-            results.sort((a, b) => a.urgencia.localeCompare(b.urgencia));
+            results.sort((a, b) => urgencyOrder[a.urgencia] - urgencyOrder[b.urgencia]);
         }
 
         setFilteredCasos(results);
@@ -205,7 +207,7 @@ function CasosTable() {
                         </div>
                         <div className="filter-group">
                             <h4>Prioridade:</h4>
-                            {['baixa', 'media', 'alta'].map(urgency => (
+                            {['BAIXA', 'MEDIA', 'ALTA', 'NÃO INFORMADO'].map(urgency => (
                                 <FormControlLabel
                                     key={urgency}
                                     control={<Checkbox checked={filterUrgency.includes(urgency)} onChange={handleUrgencyChange} value={urgency} />}
@@ -290,6 +292,9 @@ function CasosTable() {
                                                                 return <div className="urgency-dot-media">{value}</div>;
                                                             } else if (isUrgency && value === 'BAIXA') {
                                                                 return <div className="urgency-dot-baixa">{value}</div>;
+                                                            } else if (isUrgency && value === 'NÃO INFORMADO') {
+                                                                return <div className="urgency-dot-nao-informado">{value}</div>;
+
                                                             } else if (column.format && typeof value === 'object') {
                                                                 return column.format(value);
                                                             } else {

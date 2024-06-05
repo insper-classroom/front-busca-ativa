@@ -27,11 +27,10 @@ import IconButton from '@mui/material/IconButton';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
 import GroupsIcon from '@mui/icons-material/Groups';
-import EmailIcon from '@mui/icons-material/Email';
 import BadgeIcon from '@mui/icons-material/Badge';
 import ContactsIcon from '@mui/icons-material/Contacts';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-
+import ComputerIcon from '@mui/icons-material/Computer';
 
 import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
@@ -178,55 +177,53 @@ function ListaAluno() {
   return (
     <div className='user-control'>
       {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
-      <div className='title' style={{display:"flex", justifyContent:"space-between"}}>
-      <Typography 
+      <div className='title' style={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography 
           variant="h4" 
           component="h4" 
           style={{ 
             marginBottom: '10px', 
-            textAlign: 'center', // Alinhando o texto ao centro
+            textAlign: 'center', 
             fontFamily: 'Roboto, sans-serif', 
-            fontWeight: 'bold', // Definindo o peso da fonte como negrito
-            textTransform: 'uppercase', // Transformando o texto em maiúsculas
+            fontWeight: 'bold', 
+            textTransform: 'uppercase', 
             paddingLeft: "2%"
           }}
         >
           Controle de Alunos
         </Typography>
-      <div className="filter-container" style={{}}>
-      
-        <div className="filter-box">
-        
-          <TextField
-            label="Busque pelo nome ou RA"
-            variant="outlined"
-            size="small"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="compact-input"
-          />
-          <FormControl variant="outlined" size="small" className="compact-input">
-            <InputLabel>Ordenar Por</InputLabel>
-            <Select
-              value={sortOption}
-              onChange={handleSortChange}
-              label="Ordenar Por"
+        <div className="filter-container">
+          <div className="filter-box">
+            <TextField
+              label="Busque pelo nome ou RA"
+              variant="outlined"
+              size="small"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="compact-input"
+            />
+            <FormControl variant="outlined" size="small" className="compact-input">
+              <InputLabel>Ordenar Por</InputLabel>
+              <Select
+                value={sortOption}
+                onChange={handleSortChange}
+                label="Ordenar Por"
+              >
+                <MenuItem value=""><em>Nada</em></MenuItem>
+                <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
+                <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
+              </Select>
+            </FormControl>
+            <Button
+              variant="contained"
+              size="small"
+              className="button"
+              onClick={handleOpenDialog}
             >
-              <MenuItem value=""><em>Nada</em></MenuItem>
-              <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
-              <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
-            </Select>
-          </FormControl>
-          <Button
-            variant="contained"
-            size="small"
-            className="button"
-            onClick={handleOpenDialog}
-          >
-            Filtros
-          </Button>
+              Filtros
+            </Button>
+          </div>
         </div>
-      </div>
       </div>
       <Dialog className='tabela-aluno' open={dialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>Filtros</DialogTitle>
@@ -272,36 +269,34 @@ function ListaAluno() {
                     style={{ minWidth: column.minWidth }}
                     sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
                   >
-                    
-                    {column.id === 'RA' ? ( // Verifique se a coluna é a coluna de permissão
-                    <div className='icon-admin' style={{ paddingTop: "4px", display: "flex" }}>
-                      <ContactsIcon style={{ paddingRight: "3px" }} />
-                      {column.label}
-                    </div>
-                  ) : column.id === "turma" ? ( // Verifique se a coluna é a coluna de e-mail
-                    <div className="icon-email" style={{ paddingTop: "4px", display: "flex" }}>
-                      <GroupsIcon style={{ paddingRight: "3px" }} />
-                      {column.label}
-                    </div>
-                  ) : column.id === "nome" ? ( // Verifique se a coluna é a coluna de nome
-                    <div className="icon-nome" style={{ paddingTop: "4px", display: "flex" }}>
-                      <BadgeIcon style={{ paddingRight: "3px" }} />
-                      {column.label}
-                    </div>
-                  ) : column.id === "view" ? ( // Verifique se a coluna é a coluna de editar
-                    <div className="icon-edit" style={{ paddingTop: "4px", display: "flex" }}>
-                      <TextSnippetIcon style={{ paddingRight: "3px" }} />
-                      {column.label}
-                    </div>
-                  ) : column.id === "delete" ? ( // Verifique se a coluna é a coluna de deletar
-                    <div className="icon-delete" style={{ paddingTop: "4px", display: "flex" }}>
-                      <DeleteIcon style={{ paddingRight: "3px" }} />
-                      {column.label}
-                    </div>
-                  ) : (
-                    column.label
-                  )}
-
+                    {column.id === 'RA' ? (
+                      <div className='icon-admin' style={{ paddingTop: "4px", display: "flex" }}>
+                        <ContactsIcon style={{ paddingRight: "3px" }} />
+                        {column.label}
+                      </div>
+                    ) : column.id === "turma" ? (
+                      <div className="icon-email" style={{ paddingTop: "4px", display: "flex" }}>
+                        <GroupsIcon style={{ paddingRight: "3px" }} />
+                        {column.label}
+                      </div>
+                    ) : column.id === "nome" ? (
+                      <div className="icon-nome" style={{ paddingTop: "4px", display: "flex" }}>
+                        <BadgeIcon style={{ paddingRight: "3px" }} />
+                        {column.label}
+                      </div>
+                    ) : column.id === "view" ? (
+                      <div className="icon-edit" style={{ paddingTop: "4px", display: "flex" }}>
+                        <TextSnippetIcon style={{ paddingRight: "3px" }} />
+                        {column.label}
+                      </div>
+                    ) : column.id === "delete" ? (
+                      <div className="icon-delete" style={{ paddingTop: "4px", display: "flex" }}>
+                        <DeleteIcon style={{ paddingRight: "3px" }} />
+                        {column.label}
+                      </div>
+                    ) : (
+                      column.label
+                    )}
                   </TableCell>
                 ))}
               </TableRow>
@@ -322,9 +317,25 @@ function ListaAluno() {
                       return (
                         <TableCell key={column.id} align={column.align}>
                           {column.id === 'view' ? (
-                            <Button onClick={() => handleView(row.id)}>Visualizar dados</Button>
+                            <Button 
+                              variant="contained" 
+                              color="primary" 
+                              style={{ backgroundColor: '#007bff', color: 'white' }}
+                              startIcon={<ComputerIcon />}
+                              onClick={() => handleView(row.id)}
+                            >
+                              Visualizar dados
+                            </Button>
                           ) : column.id === 'delete' ? (
-                            <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
+                            <Button 
+                              variant="contained" 
+                              color="secondary" 
+                              style={{ backgroundColor: 'red', color: 'white' }}
+                              startIcon={<DeleteIcon />}
+                              onClick={() => handleDelete(row.id)}
+                            >
+                              Deletar
+                            </Button>
                           ) : (
                             value
                           )}

@@ -4,13 +4,13 @@
     border-radius: 10px;
 }
 .status-dot-finalizado {
-    background-color: #b82424;
+    background-color: red;
     padding: 4px;
     border-radius: 10px;
 }
 
 .urgency-dot-alta {
-    background-color: #b82424;
+    background-color: red;
     padding: 4px;
     border-radius: 10px;
 }
@@ -21,6 +21,12 @@
 }
 .urgency-dot-baixa {
     background-color: #1ea500;
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.urgency-dot-nao-informado {
+    background-color: #9ead9a;
     padding: 4px;
     border-radius: 10px;
 }
