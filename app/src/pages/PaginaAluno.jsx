@@ -28,6 +28,59 @@ export function PaginaAluno() {
     const [selectedRowsVis, setSelectedRowsVis] = useState([]);
     const [selectedRowsAtendimento, setSelectedRowsAtendimento] = useState([]);
     const [usuario, setUsuario] = useState('');
+    const [anchorLig, setAnchorLig] = useState(null);
+    const [anchorVis, setAnchorVis] = useState(null);
+    const [anchorAtendimento, setAnchorAtendimento] = useState(null);
+    const openLig = Boolean(anchorLig);
+    const openVis = Boolean(anchorVis);
+    const openAtendimento = Boolean(anchorAtendimento);
+
+    const columnsLig = [
+        { field: 'data', headerName: 'Data', width: 200 },
+        { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
+        { field: 'telefone', headerName: 'Telefone', width: 200 },
+        { field: 'observacao', headerName: 'Observações', width: 200 },
+      ];
+      
+      const rowsLig = ligacoes.map((lig, index) => ({
+        id: index,
+        data: lig.data,
+        abae: lig.abae,
+        telefone: lig.telefone,
+        observacao:lig.observacao
+    }));
+
+    const columnsVis = [
+        { field: 'data', headerName: 'Data', width: 200 },
+        { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
+        { field: 'observacao', headerName: 'Observações', width: 200 },
+      ];
+      
+      const rowsVis = visitas.map((vis, index) => ({
+        id: index,
+        data: vis.data,
+        abae: vis.abae,
+        observacao:vis.observacao
+    }));
+
+
+    const columnsAtendimento = [
+        { field: 'data', headerName: 'Data', width: 200 },
+        { field: 'func', headerName: 'Feito por', width: 200 },
+        { field: 'responsavel', headerName: 'Responsável', width: 200 },
+        { field: 'observacao', headerName: 'Observações', width: 200 },
+    ];
+    
+    const rowsAtendimento = atendimentos.map((atendimento, index) => ({
+        id: index,
+        data: atendimento.data,
+        func: atendimento.func,
+        responsavel: atendimento.responsavel,
+        observacao: atendimento.observacao,
+    }));
+
+    const [valueTabs, setValueTabs] = useState(0);
+
 
     const [formData, setFormData] = useState({
         abae: '',
@@ -90,7 +143,6 @@ export function PaginaAluno() {
             });
     }
 
-    //#TODO função para pegar o usuario logado
     function lodaUsuario(){
 
         fetch('http://localhost:8000/usuarios-dados', {
@@ -107,77 +159,7 @@ export function PaginaAluno() {
 
     }
 
-    const [anchorLig, setAnchorLig] = useState(null);
-    const [anchorVis, setAnchorVis] = useState(null);
-    const [anchorAtendimento, setAnchorAtendimento] = useState(null);
-    const openLig = Boolean(anchorLig);
-    const openVis = Boolean(anchorVis);
-    const openAtendimento = Boolean(anchorAtendimento);
 
-    function clickAtendimento(event) {
-        setAnchorAtendimento(anchorAtendimento ? null : event.currentTarget);
-    }
-
-
-    function clickLigacao(event) {
-        setAnchorLig(anchorLig ? null : event.currentTarget);
-    }
-
-    function clickVisita(event) {
-        setAnchorVis(anchorVis ? null : event.currentTarget);
-    }
-
-    const handleChangeStatus = (event) => {
-        const newStatus = event.target.value;
-        setStatus(newStatus);
-        clickSU(newStatus, urgencia);
-    };
-
-    const handleChangeUrgencia = (event) => {
-        const newUrgencia = event.target.value
-        setUrgencia(newUrgencia);
-        clickSU(status, newUrgencia)
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
-    const handleDateChange = (date) => {
-        setFormData({
-            ...formData,
-            data: date,
-        });
-    };
-
-    // function gerarRealatorio(){
-    //     lodaUsuario()
-    //     fetch('http://localhost:8000/casos/gerar-relatorio', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Authorization': `Bearer ${token}`
-    //         },
-    //         body: JSON.stringify(
-    //         {"dre": "DRE-IP",
-    //         "unidade_escolar": "EMEF - LUIZ GONZAGA DO NASCIMENTO JUNIOR - GONZAGUINHA",
-    //         "endereco": "Das Laranjeiras, 1029 - IPIRANGA",
-    //         "contato": dataAluno.telefone,
-    //         "turma": dataAluno.turma,
-    //         "estudante": dataAluno.nome,
-    //         "ra": dataAluno.RA,
-    //         "usuario": usuario,
-    //         "ligacoes": selectedRowsLig,
-    //         "visitas": selectedRowsVis,
-    //         "atendimentos": selectedRowsAtendimento}
-    //         )    
-    //     })
-
-    //     }
 
     function gerarRealatorio() {
         lodaUsuario();
@@ -380,52 +362,47 @@ export function PaginaAluno() {
 
 
 
-    const columnsLig = [
-        { field: 'data', headerName: 'Data', width: 200 },
-        { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
-        { field: 'telefone', headerName: 'Telefone', width: 200 },
-        { field: 'observacao', headerName: 'Observações', width: 200 },
-      ];
-      
-      const rowsLig = ligacoes.map((lig, index) => ({
-        id: index,
-        data: lig.data,
-        abae: lig.abae,
-        telefone: lig.telefone,
-        observacao:lig.observacao
-    }));
-
-    const columnsVis = [
-        { field: 'data', headerName: 'Data', width: 200 },
-        { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
-        { field: 'observacao', headerName: 'Observações', width: 200 },
-      ];
-      
-      const rowsVis = visitas.map((vis, index) => ({
-        id: index,
-        data: vis.data,
-        abae: vis.abae,
-        observacao:vis.observacao
-    }));
+    function clickAtendimento(event) {
+        setAnchorAtendimento(anchorAtendimento ? null : event.currentTarget);
+    }
 
 
-    const columnsAtendimento = [
-        { field: 'data', headerName: 'Data', width: 200 },
-        { field: 'func', headerName: 'Feito por', width: 200 },
-        { field: 'responsavel', headerName: 'Responsável', width: 200 },
-        { field: 'observacao', headerName: 'Observações', width: 200 },
-    ];
+    function clickLigacao(event) {
+        setAnchorLig(anchorLig ? null : event.currentTarget);
+    }
+
+    function clickVisita(event) {
+        setAnchorVis(anchorVis ? null : event.currentTarget);
+    }
+
+    const handleChangeStatus = (event) => {
+        const newStatus = event.target.value;
+        setStatus(newStatus);
+        clickSU(newStatus, urgencia);
+    };
+
+    const handleChangeUrgencia = (event) => {
+        const newUrgencia = event.target.value
+        setUrgencia(newUrgencia);
+        clickSU(status, newUrgencia)
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleDateChange = (date) => {
+        setFormData({
+            ...formData,
+            data: date,
+        });
+    };
+
     
-    const rowsAtendimento = atendimentos.map((atendimento, index) => ({
-        id: index,
-        data: atendimento.data,
-        func: atendimento.func,
-        responsavel: atendimento.responsavel,
-        observacao: atendimento.observacao,
-    }));
-
-    const [valueTabs, setValueTabs] = useState(0);
-
     const handleChangeTabs = (event, newValue) => {
       setValueTabs(newValue);
     }
