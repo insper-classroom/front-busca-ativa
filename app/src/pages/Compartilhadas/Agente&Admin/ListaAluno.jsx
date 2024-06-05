@@ -263,11 +263,25 @@ function ListaAluno() {
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.id === 'view' ? (
-                            <Button onClick={() => handleView(row.id)}>Visualizar dados</Button>
-                          ) : column.id === 'delete' ? (
-                            <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
+                        <TableCell key={id} align={column.align}>
+                          {id === 'view' ? (
+                            
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => handleView(row.id)}
+                              >
+                                VISUALIZAR DADOS
+                              </Button>
+                          ) : id === 'delete' ? (
+                            
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => handleDelete(row.id)}
+                              >
+                                DELETAR
+                              </Button>
                           ) : (
                             value
                           )}

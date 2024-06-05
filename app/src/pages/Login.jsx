@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../components/img/logo.png';
 import './static/Login.css'; 
 
-const cookies = new Cookies();
+
 
 export default function Login() {
+  const cookies = new Cookies();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);

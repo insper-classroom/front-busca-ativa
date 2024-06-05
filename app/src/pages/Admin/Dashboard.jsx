@@ -1,122 +1,102 @@
-import React from 'react';
-import { Container, Typography, Grid, Paper, AppBar, Toolbar } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Container, Typography, Grid, Paper } from '@mui/material';
 import { PieChart, Pie, Tooltip, Cell, Legend } from 'recharts';
-import { BarChart } from '@mui/x-charts/BarChart';
-import { LineChart } from '@mui/x-charts/LineChart';
 import HeaderAdmin from './HeaderAdmin';
+import Cookies from 'universal-cookie';
+
 import './static/Dashboard.css';
 
 export default function Dashboard() {
-  const data = [
-    { id: "a", value: 10, name: 'series A' },
-    { id: "b", value: 15, name: 'series B' },
-    { id: "c", value: 20, name: 'series C' },
-  ];
+  const [casos, setCasos] = useState([]);
+  const [statusData, setStatusData] = useState([]);
+  const [urgenciaData, setUrgenciaData] = useState([]);
+  const [error, setError] = useState(null);
+  const cookies = new Cookies();
+  const token = cookies.get('token');  // Obtenha o token após inicializar `Cookies`
+
+  useEffect(() => {
+    fetch('http://localhost:8000/casos', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch cases');
+      }
+      return response.json();
+    })
+    .then(data => {
+      setCasos(data.caso);
+      processCaseData(data.caso);
+    })
+    .catch(error => {
+      setError(error.message);
+    });
+  }, [token]);
+
+  const processCaseData = (casos) => {
+    const statusCounts = { 'EM ABERTO': 0, 'FINALIZADO': 0 };
+    const urgenciaCounts = { 'ALTA': 0, 'MEDIA': 0, 'BAIXA': 0 };
+
+    casos.forEach(caso => {
+      statusCounts[caso.status]++;
+      urgenciaCounts[caso.urgencia]++;
+    });
+
+    const statusData = Object.keys(statusCounts).map(key => ({
+      name: key,
+      value: statusCounts[key]
+    }));
+
+    const urgenciaData = Object.keys(urgenciaCounts).map(key => ({
+      name: key,
+      value: urgenciaCounts[key]
+    }));
+
+    setStatusData(statusData);
+    setUrgenciaData(urgenciaData);
+  };
+
+  const COLORS = ['#8884d8', '#82ca9d', '#ffc658'];
 
   return (
     <div>
       <HeaderAdmin />
       <Container className='dashboard'>
         <Grid container spacing={2}>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <Paper elevation={3} style={{ padding: 16 }}>
               <Typography variant="h4" component="h4">
                 Status
               </Typography>
               <PieChart width={400} height={300}>
-                <Pie dataKey="value" data={data} cx={200} cy={150} outerRadius={60} label={(entry) => entry.name}>
-                  {data.map((entry, index) => (
-                    <Cell key={`cell-${entry.id}`} fill={['#8884d8', '#82ca9d', '#ffc658'][index % 3]} />
+                <Pie dataKey="value" data={statusData} cx={200} cy={150} outerRadius={60} label={(entry) => entry.name}>
+                  {statusData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
-                <Legend 
-                  align="center" 
-                  verticalAlign="bottom" 
-                  layout="horizontal" 
-                  iconType="circle" 
-                  wrapperStyle={{ paddingTop: 10 }} 
-                />
+                <Legend align="center" verticalAlign="bottom" layout="horizontal" iconType="circle" wrapperStyle={{ paddingTop: 10 }} />
               </PieChart>
             </Paper>
           </Grid>
-
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <Paper elevation={3} style={{ padding: 16 }}>
               <Typography variant="h4" component="h4">
                 Prioridade
               </Typography>
               <PieChart width={400} height={300}>
-                <Pie dataKey="value" data={data} cx={200} cy={150} outerRadius={60} label={(entry) => entry.name}>
-                  {data.map((entry, index) => (
-                    <Cell key={`cell-${entry.id}`} fill={['#8884d8', '#82ca9d', '#ffc658'][index % 3]} />
+                <Pie dataKey="value" data={urgenciaData} cx={200} cy={150} outerRadius={60} label={(entry) => entry.name}>
+                  {urgenciaData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
-                <Legend 
-                  align="center" 
-                  verticalAlign="bottom" 
-                  layout="horizontal" 
-                  iconType="circle" 
-                  wrapperStyle={{ paddingTop: 10 }} 
-                />
+                <Legend align="center" verticalAlign="bottom" layout="horizontal" iconType="circle" wrapperStyle={{ paddingTop: 10 }} />
               </PieChart>
-            </Paper>
-          </Grid>
-
-          <Grid item xs={4}>
-            <Paper elevation={3} style={{ padding: 16 }}>
-              <Typography variant="h4" component="h4">
-                Status
-              </Typography>
-              <PieChart width={400} height={300}>
-                <Pie dataKey="value" data={data} cx={200} cy={150} outerRadius={60} label={(entry) => entry.name}>
-                  {data.map((entry, index) => (
-                    <Cell key={`cell-${entry.id}`} fill={['#8884d8', '#82ca9d', '#ffc658'][index % 3]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend 
-                  align="center" 
-                  verticalAlign="bottom" 
-                  layout="horizontal" 
-                  iconType="circle" 
-                  wrapperStyle={{ paddingTop: 10 }} 
-                />
-              </PieChart>
-            </Paper>
-          </Grid>
-        </Grid>
-        <br />
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <Paper elevation={3} style={{ padding: 16 }}>
-              <Typography variant="h4" component="h4">
-                Buscas Ativas por turma
-              </Typography>
-              <BarChart
-                xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
-                series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
-                width={500}
-                height={300}
-              />
-            </Paper>
-          </Grid>
-          <Grid item xs={6}>
-            <Paper elevation={3} style={{ padding: 16 }}>
-              <Typography variant="h4" component="h4">
-                Buscas bem sucessidas
-              </Typography>
-              <LineChart
-                xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                series={[
-                  {
-                    data: [2, 5.5, 2, 8.5, 1.5, 5],
-                  },
-                ]}
-                width={500}
-                height={300}
-              />
             </Paper>
           </Grid>
         </Grid>
