@@ -1,16 +1,29 @@
-/* .filter-section {
-    display: flex;
-    flex-direction: column;
+.status-dot-aberto {
+    background-color: #1ea500;
+    padding: 4px;
+    border-radius: 10px;
+}
+.status-dot-finalizado {
+    background-color: #b82424;
+    padding: 4px;
+    border-radius: 10px;
 }
 
-.filter-group {
-    margin-bottom: 10px;
+.urgency-dot-alta {
+    background-color: #b82424;
+    padding: 4px;
+    border-radius: 10px;
 }
-
-.filter-group h4 {
-    margin: 0 0 5px 0;
+.urgency-dot-media {
+    background-color: #ff8c00;
+    padding: 4px;
+    border-radius: 10px;
 }
- */
+.urgency-dot-baixa {
+    background-color: #1ea500;
+    padding: 4px;
+    border-radius: 10px;
+}
 
 .filter-container {
     display: flex;
@@ -43,4 +56,14 @@
 .filter-group {
     margin-bottom: 10px;
 }   
+
+/* CasosTable.css */
+.header-cell {
+    font-weight: bold;
+    background-color: #f5f5f5;
+    text-align: center;
+    color: #333;
+    padding: 10px;
+}
+
 

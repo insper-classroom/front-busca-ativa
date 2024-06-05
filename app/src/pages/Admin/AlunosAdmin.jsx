@@ -14,8 +14,8 @@ import Button from '@mui/material/Button';
 import { Link, useNavigate } from 'react-router-dom';
 
 const columns = [
-  { id: 'nome', label: 'Nome', minWidth: 100, editable: true },
-  { id: 'turma', label: 'Turma', minWidth: 100, editable: true },
+  { id: 'nome', label: 'NOME', minWidth: 100, editable: true },
+  { id: 'turma', label: 'TURMA', minWidth: 100, editable: true },
   { id: 'RA', label: 'RA', minWidth: 100, editable: false },
   { id: 'view', label: 'VISUALIZAR DADOS', minWidth: 150, editable: false },
   { id: 'delete', label: 'DELETAR', minWidth: 100, editable: false },
@@ -127,15 +127,28 @@ function AlunosAdmin() {
                         const { id, editable } = column;
                         const value = row[id];
                         return (
-                          <TableCell key={id} align={column.align}>
+                            <TableCell key={id} align={column.align}>
                             {id === 'view' ? (
-                              <Button onClick={() => handleView(row.id)}>Visualizar dados</Button>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => handleView(row.id)}
+                              >
+                                Visualizar dados
+                              </Button>
                             ) : id === 'delete' ? (
-                              <Button onClick={() => handleDelete(row.id)}>Deletar</Button>
+                              <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => handleDelete(row.id)}
+                              >
+                                Deletar
+                              </Button>
                             ) : (
                               value
                             )}
                           </TableCell>
+                          
                         );
                       })}
                     </TableRow>
