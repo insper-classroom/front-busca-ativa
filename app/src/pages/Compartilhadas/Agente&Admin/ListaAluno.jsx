@@ -199,7 +199,7 @@ function ListaAluno() {
           </Button>
         </div>
       </div>
-      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+      <Dialog className='tabela-aluno' open={dialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>Filtros</DialogTitle>
         <DialogContent>
           <div className="filter-section">

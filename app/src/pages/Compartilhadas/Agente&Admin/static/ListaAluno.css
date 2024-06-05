@@ -35,18 +35,9 @@
     color: #333;
     padding: 10px;
   }
-
-.tabela-aluno{
+  
+.tabela-aluno {
     margin: 0 auto;
     width: 95%;
-
-}
-
-.table-row:nth-of-type(odd) {
-    background-color: white;
-  }
-  
-  .table-row:nth-of-type(even) {
-    background-color: #f0f0f0;
   }
   
