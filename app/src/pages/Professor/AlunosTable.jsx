@@ -22,7 +22,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import HeaderProfessor from './HeaderProfessor';
 import ComputerIcon from '@mui/icons-material/Computer';
 import GroupsIcon from '@mui/icons-material/Groups';
 import BadgeIcon from '@mui/icons-material/Badge';
@@ -36,7 +36,6 @@ const columns = [
     { id: 'turma', label: 'Turma', minWidth: 100 },
     { id: 'RA', label: 'R.A', minWidth: 100 },
     { id: 'tarefas', label: 'TAREFAS', minWidth: 170 },
-    { id: 'actions', label: 'VISUALIZAR ALUNO/TAREFAS', minWidth: 170 }
 ];
 
 function AlunosTable() {
@@ -143,6 +142,7 @@ function AlunosTable() {
 
     return (
         <div>
+            <HeaderProfessor />
             <div className="filter-container">
                 <div className="filter-box">
                     <TextField
@@ -170,6 +170,7 @@ function AlunosTable() {
                         size="small"
                         className="button"
                         onClick={handleOpenDialog}
+                        style={{ color: 'white', width: '170px', height: '37px'}}
                     >
                         Filtros
                     </Button>
@@ -272,7 +273,7 @@ function AlunosTable() {
                                                             color="primary"
                                                             onClick={() => handleAddTaskClick(aluno._id)}
                                                             className="button"
-                                                            style={{ backgroundColor: 'blue', color: 'white' }}
+                                                            style={{ backgroundColor: 'blue', color: 'white', width: '200px'}}
                                                             startIcon={<ComputerIcon />}
                                                         >
                                                             TAREFAS
