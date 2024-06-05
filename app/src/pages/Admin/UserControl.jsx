@@ -23,6 +23,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Link } from 'react-router-dom';
+import CreateIcon from '@mui/icons-material/Create';
+import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Typography } from '@mui/material';
 
 const columns = [
   { id: 'email', label: 'EMAIL', minWidth: 100 },
@@ -147,6 +152,20 @@ function UserControl() {
     <div className='user-control'>
       <HeaderAdmin />
       <div className="filter-container">
+      <Typography 
+        variant="h4" 
+        component="h4" 
+        style={{ 
+          marginBottom: '10px', 
+          textAlign: 'center', // Alinhando o texto ao centro
+          fontFamily: 'Roboto, sans-serif', 
+          fontWeight: 'bold', // Definindo o peso da fonte como negrito
+          textTransform: 'uppercase', // Transformando o texto em maiúsculas
+          paddingRight: "41%"
+        }}
+      >
+        Controle de Usuários
+      </Typography>
         <div className="filter-box">
           <TextField
             label="Busque pelo nome ou email"
@@ -227,9 +246,34 @@ function UserControl() {
                       return (
                         <TableCell key={column.id} align={column.align}>
                           {column.id === 'edit' ? (
-                            <Button variant="contained" color="primary">Editar</Button>
+                            <Button variant="contained" color="primary">
+                              Editar
+                              <CreateIcon 
+                                  aria-label="delete" 
+                                  size="small" 
+                                  onClick={() => handleEdit(row.id)} // Adicionando uma função de exclusão ao clique do ícone
+                                  style={{ color: 'white', paddingLeft:"5px"  }} // Definindo a cor do ícone como branco usando estilos inline
+                                >
+                                  <DeleteIcon fontSize="small" />
+                                </CreateIcon>
+                            </Button>
                           ) : column.id === 'delete' ? (
-                            <Button variant="contained" color="primary" onClick={() => handleDelete(row.id)}>Deletar</Button>
+                            <Button 
+                              variant="contained" 
+                              color="primary" 
+                              onClick={() => handleDelete(row.id)}
+                              size="small" // Definindo o tamanho do botão como "small"
+                            >
+                              Deletar
+                              <IconButton 
+                                aria-label="delete" 
+                                size="small" 
+                                onClick={() => handleDelete(row.id)} 
+                                style={{ color: 'white' }} 
+                              >
+                                <DeleteIcon fontSize="small" />
+                              </IconButton>
+                            </Button>
                           ) : (
                             value
                           )}
