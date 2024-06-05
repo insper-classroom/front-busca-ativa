@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
-
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,8 +14,13 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import './static/CasosTable.css';
 
 const columns = [
@@ -33,10 +37,11 @@ function CasosTable() {
     const [filteredCasos, setFilteredCasos] = useState([]);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
+    const [filterYears, setFilterYears] = useState([]);
+    const [filterClasses, setFilterClasses] = useState([]);
+    const [filterUrgency, setFilterUrgency] = useState([]);
     const [sortOption, setSortOption] = useState("");
-    const [filterYear, setFilterYear] = useState("");
-    const [filterClass, setFilterClass] = useState("");
-    const [filterUrgency, setFilterUrgency] = useState("");
+    const [dialogOpen, setDialogOpen] = useState(false);
     const cookies = new Cookies();
     const token = cookies.get('token');
     const navigate = useNavigate();
@@ -67,9 +72,9 @@ function CasosTable() {
     useEffect(() => {
         let results = casos.filter(caso => 
             caso.aluno.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            (filterYear === "" || caso.aluno.turma.startsWith(filterYear)) &&
-            (filterClass === "" || caso.aluno.turma.endsWith(filterClass)) &&
-            (filterUrgency === "" || caso.urgencia.toLowerCase() === filterUrgency.toLowerCase())
+            (filterYears.length === 0 || filterYears.some(year => caso.aluno.turma.startsWith(year))) &&
+            (filterClasses.length === 0 || filterClasses.some(cls => caso.aluno.turma.endsWith(cls))) &&
+            (filterUrgency.length === 0 || filterUrgency.some(urgency => caso.urgencia.toLowerCase() === urgency.toLowerCase()))
         );
 
         if (sortOption === "nameAsc") {
@@ -83,7 +88,7 @@ function CasosTable() {
         }
 
         setFilteredCasos(results);
-    }, [searchTerm, sortOption, filterYear, filterClass, filterUrgency, casos]);
+    }, [searchTerm, sortOption, filterYears, filterClasses, filterUrgency, casos]);
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -94,19 +99,36 @@ function CasosTable() {
     };
 
     const handleYearChange = (event) => {
-        setFilterYear(event.target.value);
+        const { value } = event.target;
+        setFilterYears(prev =>
+            prev.includes(value) ? prev.filter(year => year !== value) : [...prev, value]
+        );
     };
 
     const handleClassChange = (event) => {
-        setFilterClass(event.target.value);
+        const { value } = event.target;
+        setFilterClasses(prev =>
+            prev.includes(value) ? prev.filter(cls => cls !== value) : [...prev, value]
+        );
     };
 
     const handleUrgencyChange = (event) => {
-        setFilterUrgency(event.target.value);
+        const { value } = event.target;
+        setFilterUrgency(prev =>
+            prev.includes(value) ? prev.filter(urgency => urgency !== value) : [...prev, value]
+        );
     };
 
     const handleViewClick = (id) => {
         navigate(`/casos/${id}`);
+    };
+
+    const handleOpenDialog = () => {
+        setDialogOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
     };
 
     const [page, setPage] = useState(0);
@@ -123,19 +145,17 @@ function CasosTable() {
 
     return (
         <div>
-            <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12} sm={6}>
+            <div className="filter-container">
+                <div className="filter-box">
                     <TextField
                         label="Busque Pelo Nome"
                         variant="outlined"
-                        fullWidth
-                        margin="normal"
+                        size="small"
                         value={searchTerm}
                         onChange={handleSearchChange}
+                        className="compact-input"
                     />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <FormControl variant="outlined" fullWidth margin="normal">
+                    <FormControl variant="outlined" size="small" className="compact-input">
                         <InputLabel>Ordenar Por</InputLabel>
                         <Select
                             value={sortOption}
@@ -149,60 +169,63 @@ function CasosTable() {
                             <MenuItem value="urgencyLowToHigh">Prioridade (Baixa - Alta)</MenuItem>
                         </Select>
                     </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                    <FormControl variant="outlined" fullWidth margin="normal">
-                        <InputLabel>Ano escolar</InputLabel>
-                        <Select
-                            value={filterYear}
-                            onChange={handleYearChange}
-                            label="Year"
-                        >
-                            <MenuItem value=""><em>Todos</em></MenuItem>
-                            <MenuItem value="5">5° Ano</MenuItem>
-                            <MenuItem value="6">6° Ano</MenuItem>
-                            <MenuItem value="7">7° Ano</MenuItem>
-                            <MenuItem value="8">8° Ano</MenuItem>
-                            <MenuItem value="9">9° Ano</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                    <FormControl variant="outlined" fullWidth margin="normal">
-                        <InputLabel>Classe</InputLabel>
-                        <Select
-                            value={filterClass}
-                            onChange={handleClassChange}
-                            label="Class"
-                        >
-                            <MenuItem value=""><em>Todas</em></MenuItem>
-                            {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map(cls => (
-                                <MenuItem key={cls} value={cls}>{cls}</MenuItem>
+                    <Button
+                        variant="contained"
+                        size="small"
+                        className="button"
+                        onClick={handleOpenDialog}
+                    >
+                        Filtros
+                    </Button>
+                </div>
+            </div>
+            <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+                <DialogTitle>Filtros</DialogTitle>
+                <DialogContent>
+                    <div className="filter-section">
+                        <div className="filter-group">
+                            <h4>Ano:</h4>
+                            {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(year => (
+                                <FormControlLabel
+                                    key={year}
+                                    control={<Checkbox checked={filterYears.includes(year)} onChange={handleYearChange} value={year} />}
+                                    label={`${year}° Ano`}
+                                />
                             ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                    <FormControl variant="outlined" fullWidth margin="normal">
-                        <InputLabel>Prioridade</InputLabel>
-                        <Select
-                            value={filterUrgency}
-                            onChange={handleUrgencyChange}
-                            label="Urgency"
-                        >
-                            <MenuItem value=""><em>Todas</em></MenuItem>
-                            <MenuItem value="alta">Alta</MenuItem>
-                            <MenuItem value="media">Média</MenuItem>
-                            <MenuItem value="baixa">Baixa</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-            </Grid>
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                        </div>
+                        <div className="filter-group">
+                            <h4>Turma:</h4>
+                            {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map(cls => (
+                                <FormControlLabel
+                                    key={cls}
+                                    control={<Checkbox checked={filterClasses.includes(cls)} onChange={handleClassChange} value={cls} />}
+                                    label={cls}
+                                />
+                            ))}
+                        </div>
+                        <div className="filter-group">
+                            <h4>Prioridade:</h4>
+                            {['baixa', 'media', 'alta'].map(urgency => (
+                                <FormControlLabel
+                                    key={urgency}
+                                    control={<Checkbox checked={filterUrgency.includes(urgency)} onChange={handleUrgencyChange} value={urgency} />}
+                                    label={urgency.charAt(0).toUpperCase() + urgency.slice(1)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary">
+                        Fechar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Paper className="table-container">
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
-                            <TableRow>
+                            <TableRow className="table-header">
                                 {columns.map((column) => (
                                     <TableCell
                                         key={column.id}
