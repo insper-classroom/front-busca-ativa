@@ -21,8 +21,13 @@ export function PaginaAluno() {
     const [status, setStatus] = useState('');
     const [ligacoes, setLigacoes] = useState([])
     const [visitas, setVisitas] = useState([])
+    const [atendimentos, setAtendimentos] = useState([])
     const cookies = new Cookies();
     const token = cookies.get('token');
+    const [selectedRowsLig, setSelectedRowsLig] = useState([]);
+    const [selectedRowsVis, setSelectedRowsVis] = useState([]);
+    const [selectedRowsAtendimento, setSelectedRowsAtendimento] = useState([]);
+    const [usuario, setUsuario] = useState('');
 
     const [formData, setFormData] = useState({
         abae: '',
@@ -36,6 +41,7 @@ export function PaginaAluno() {
     useEffect(() => {
         loadAluno();
         loadCasos();
+        lodaUsuario();
     }, []);
 
 
@@ -69,18 +75,36 @@ export function PaginaAluno() {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data.caso.urgencia)
+                console.log(data.caso.atendimentos)
                 setDataCasos(data.caso);
                 setStatus(data.caso.status)
                 setUrgencia(data.caso.urgencia)
                 setLigacoes(data.caso.ligacoes)
                 setVisitas(data.caso.visitas)
+                setAtendimentos(data.caso.atendimentos)
 
             })
             .catch(response => {
                 alert('Erro ao achar os casos do aluno!');
                 alert(response.status);
             });
+    }
+
+    //#TODO função para pegar o usuario logado
+    function lodaUsuario(){
+
+        fetch('http://localhost:8000/usuarios-dados', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body:   JSON.stringify({"token": token})
+        }).then(response => response.json())
+        .then(data => {
+            setUsuario(data.nome)
+        })
+
     }
 
     const [anchorLig, setAnchorLig] = useState(null);
@@ -130,6 +154,78 @@ export function PaginaAluno() {
         });
     };
 
+    // function gerarRealatorio(){
+    //     lodaUsuario()
+    //     fetch('http://localhost:8000/casos/gerar-relatorio', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${token}`
+    //         },
+    //         body: JSON.stringify(
+    //         {"dre": "DRE-IP",
+    //         "unidade_escolar": "EMEF - LUIZ GONZAGA DO NASCIMENTO JUNIOR - GONZAGUINHA",
+    //         "endereco": "Das Laranjeiras, 1029 - IPIRANGA",
+    //         "contato": dataAluno.telefone,
+    //         "turma": dataAluno.turma,
+    //         "estudante": dataAluno.nome,
+    //         "ra": dataAluno.RA,
+    //         "usuario": usuario,
+    //         "ligacoes": selectedRowsLig,
+    //         "visitas": selectedRowsVis,
+    //         "atendimentos": selectedRowsAtendimento}
+    //         )    
+    //     })
+
+    //     }
+
+    function gerarRealatorio() {
+        lodaUsuario();
+        fetch('http://localhost:8000/casos/gerar-relatorio', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                "dre": "DRE-IP",
+                "unidade_escolar": "EMEF - LUIZ GONZAGA DO NASCIMENTO JUNIOR - GONZAGUINHA",
+                "endereco": "Das Laranjeiras, 1029 - IPIRANGA",
+                "contato": dataAluno.telefone,
+                "turma": dataAluno.turma,
+                "estudante": dataAluno.nome,
+                "ra": dataAluno.RA,
+                "usuario": usuario,
+                "ligacoes": selectedRowsLig,
+                "visitas": selectedRowsVis,
+                "atendimentos": selectedRowsAtendimento
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'relatorio.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+        setSelectedRowsLig([]);
+        setSelectedRowsVis([]);
+        setSelectedRowsAtendimento([]);
+    }
+    
+
+    
     function clickSU(newStatus, newUrgencia) {
         const casoData = {
             urgencia: newUrgencia,
@@ -313,12 +409,30 @@ export function PaginaAluno() {
     }));
 
 
+    const columnsAtendimento = [
+        { field: 'data', headerName: 'Data', width: 200 },
+        { field: 'func', headerName: 'Feito por', width: 200 },
+        { field: 'responsavel', headerName: 'Responsável', width: 200 },
+        { field: 'observacao', headerName: 'Observações', width: 200 },
+    ];
+    
+    const rowsAtendimento = atendimentos.map((atendimento, index) => ({
+        id: index,
+        data: atendimento.data,
+        func: atendimento.func,
+        responsavel: atendimento.responsavel,
+        observacao: atendimento.observacao,
+    }));
 
     const [valueTabs, setValueTabs] = useState(0);
 
     const handleChangeTabs = (event, newValue) => {
       setValueTabs(newValue);
     }
+
+    
+    
+
 
     return (
         <div className='card'>
@@ -570,22 +684,56 @@ export function PaginaAluno() {
 
                         <Grid item xs={12} style={{ textAlign: "center" }}>Histórico da Busca Ativa</Grid>
                         
+                        <Grid item xs={12} style={{ textAlign: "center" }}>
+                            <Button onClick={gerarRealatorio}>Gerar Relatório</Button>
+                        </Grid>
+
                         <Grid container item xs={12} >
                             <TabContext value={valueTabs} style={{alignItems:"rigth"}}>
                                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                                 <TabList onChange={handleChangeTabs} aria-label="tabs example">
                                     <Tab label="Ligação" value="0" />
                                     <Tab label="Visita" value="1" />
+                                    <Tab label="Atendimento aos Pais" value="2" />
                                 </TabList>
                                 </Box>
                                 <TabPanel value="0" >
+                                    
                                     <Box sx={{ height: 400, width: "100%"}}>
-                                        <DataGrid rows={rowsLig} columns={columnsLig} pageSize={5} checkboxSelection/>
+                                        <DataGrid rows={rowsLig} columns={columnsLig} pageSize={5} checkboxSelection
+                                        onRowSelectionModelChange={(ids) => {
+                                            const auxselectedRowsLig = (ids.map((id) => rowsLig.find((row) => row.id === id)));
+                                            setSelectedRowsLig(auxselectedRowsLig);
+[]                                          }}
+                                        rowSelectionModel={selectedRowsLig.map((row) => row.id)}
+                                        />
                                     </Box>
                                 </TabPanel>
                                 <TabPanel value="1">
+                                
                                     <Box sx={{ height: 400, width: "100%"}}>
-                                        <DataGrid rows={rowsVis} columns={columnsVis} pageSize={5} checkboxSelection/>
+                                        <DataGrid rows={rowsVis} columns={columnsVis} pageSize={5} checkboxSelection
+                                        onRowSelectionModelChange={(ids) => {
+                                            const auxselectedRowsVis = ids.map((id) => rowsVis.find((row) => row.id === id));
+                                            setSelectedRowsVis(auxselectedRowsVis);
+                                            console.log(selectedRowsVis);
+[]                                          }}
+                                            rowSelectionModel={selectedRowsVis.map((row) => row.id)}
+                                        />
+                                    </Box>
+                                </TabPanel>
+                                <TabPanel value="2">
+                                    
+                                    <Box sx={{ height: 400, width: "100%" }}>
+                                        <DataGrid rows={rowsAtendimento} columns={columnsAtendimento} pageSize={5} checkboxSelection
+                                        onRowSelectionModelChange={(ids) => {
+                                            const auxselectedRowsAtendimento= ids.map((id) => rowsAtendimento.find((row) => row.id === id));
+                                            setSelectedRowsAtendimento(auxselectedRowsAtendimento);
+                                            console.log(selectedRowsAtendimento);
+[]                                          }}
+                                            rowSelectionModel={selectedRowsAtendimento.map((row) => row.id)}
+                                         />
+                                         
                                     </Box>
                                 </TabPanel>
                             </TabContext>
