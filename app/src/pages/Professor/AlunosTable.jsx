@@ -110,7 +110,7 @@ function AlunosTable() {
     };
 
     const handleAddTaskClick = (id) => {
-        navigate(`/adicionar-tarefa/${id}`);
+        navigate(`/tarefas/adicionar/${id}`);
     };
 
     const handleOpenDialog = () => {
