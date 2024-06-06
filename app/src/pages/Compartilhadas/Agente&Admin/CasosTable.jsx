@@ -16,20 +16,26 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import Typography from '@mui/material/Typography';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import './static/CasosTable.css';
+import { Icon } from '@mui/material';
+import GroupsIcon from '@mui/icons-material/Groups';
+import ContactsIcon from '@mui/icons-material/Contacts';
+import WarningIcon from '@mui/icons-material/Warning';
+import ArticleIcon from '@mui/icons-material/Article';
+import FeedbackIcon from '@mui/icons-material/Feedback';
+import Typography from '@mui/material/Typography';
 
 const columns = [
-    { id: 'aluno', label: 'ALUNO', minWidth: 100, format: (aluno) => aluno.nome.toUpperCase() },
-    { id: 'turma', label: 'TURMA', minWidth: 100 },
-    { id: 'status', label: 'STATUS', minWidth: 100 },
-    { id: 'urgencia', label: 'PRIORIDADE', minWidth: 100 },
-    { id: 'actions', label: 'AÇÕES', minWidth: 170 }
+    { id: 'aluno', label: 'ALUNO', minWidth: 100, format: (aluno) => aluno.nome.toUpperCase(), Icon: ContactsIcon },
+    { id: 'turma', label: 'TURMA', minWidth: 100, Icon: GroupsIcon },
+    { id: 'status', label: 'STATUS', minWidth: 100,  Icon: FeedbackIcon},
+    { id: 'urgencia', label: 'PRIORIDADE', minWidth: 100,  Icon: WarningIcon },
+    { id: 'actions', label: 'AÇÕES', minWidth: 170 , Icon: ArticleIcon}
 ];
 
 const urgencyOrder = { 'BAIXA': 1, 'MEDIA': 2, 'ALTA': 3, 'NÃO INFORMADO': 0 };
@@ -147,55 +153,55 @@ function CasosTable() {
 
     return (
         <div>
-            <div className='title' style={{display:"flex", justifyContent:"space-between"}}>
+            <div className='title' style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography 
-                    variant="h4" 
-                    component="h4" 
-                    style={{ 
+                variant="h4" 
+                component="h4" 
+                style={{ 
                     marginBottom: '10px', 
-                    textAlign: 'center', // Alinhando o texto ao centro
+                    textAlign: 'center', 
                     fontFamily: 'Roboto, sans-serif', 
-                    fontWeight: 'bold', // Definindo o peso da fonte como negrito
-                    textTransform: 'uppercase', // Transformando o texto em maiúsculas
+                    fontWeight: 'bold', 
+                    textTransform: 'uppercase', 
                     paddingLeft: "2%"
-                    }}
+                }}
                 >
-                    Casos
+                Controle de Casos
                 </Typography>
-            <div className="filter-container">
-                <div className="filter-box">
-                    <TextField
-                        label="Busque Pelo Nome"
-                        variant="outlined"
-                        size="small"
-                        value={searchTerm}
-                        onChange={handleSearchChange}
-                        className="compact-input"
-                    />
-                    <FormControl variant="outlined" size="small" className="compact-input">
-                        <InputLabel>Ordenar Por</InputLabel>
-                        <Select
-                            value={sortOption}
-                            onChange={handleSortChange}
-                            label="Ordenar Por"
+                <div className="filter-container">
+                    <div className="filter-box">
+                        <TextField
+                            label="Busque Pelo Nome"
+                            variant="outlined"
+                            size="small"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className="compact-input"
+                        />
+                        <FormControl variant="outlined" size="small" className="compact-input">
+                            <InputLabel>Ordenar Por</InputLabel>
+                            <Select
+                                value={sortOption}
+                                onChange={handleSortChange}
+                                label="Ordenar Por"
+                            >
+                                <MenuItem value=""><em>Nada</em></MenuItem>
+                                <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
+                                <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
+                                <MenuItem value="urgencyHighToLow">Prioridade (Alta - Baixa)</MenuItem>
+                                <MenuItem value="urgencyLowToHigh">Prioridade (Baixa - Alta)</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Button
+                            variant="contained"
+                            size="small"
+                            className="button"
+                            onClick={handleOpenDialog}
                         >
-                            <MenuItem value=""><em>Nada</em></MenuItem>
-                            <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
-                            <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
-                            <MenuItem value="urgencyHighToLow">Prioridade (Alta - Baixa)</MenuItem>
-                            <MenuItem value="urgencyLowToHigh">Prioridade (Baixa - Alta)</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Button
-                        variant="contained"
-                        size="small"
-                        className="button"
-                        onClick={handleOpenDialog}
-                    >
-                        Filtros
-                    </Button>
+                            Filtros
+                        </Button>
+                    </div>
                 </div>
-            </div>
             </div>
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <DialogTitle>Filtros</DialogTitle>
@@ -242,21 +248,34 @@ function CasosTable() {
             <Paper className="table-container">
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow className="table-header">
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align="center"
-                                        style={{ minWidth: column.minWidth }}
-                                        className="header-cell"
-                                        sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
+                    
+                    <TableHead>
+                        <TableRow className="table-header">
+                            {columns.map((column) => (
+                                <TableCell
+                                    key={column.id}
+                                    align="center"
+                                    style={{ minWidth: column.minWidth }}
+                                    className="header-cell"
+                                    sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
+                                >
+                                    <div className="icon-label" style={{ paddingTop: "4px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                        <div className='icon' style={{ paddingRight: "3px", lineHeight: "0" }}>
+                                            {column.Icon && <Icon component={column.Icon} sx={{ fontSize: 18 }} />}
+                                        </div>
+                                        <div>{column.label}</div>
+                                    </div>
+                                    {column.items && column.items.length > 0 && (
+                                        <div className="column-items">
+                                            {column.items.map(item => (
+                                                <div key={item}>{item}</div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
                         <TableBody>
                             {filteredCasos
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -274,7 +293,7 @@ function CasosTable() {
                                                             color="primary"
                                                             onClick={() => handleViewClick(caso._id)}
                                                         >
-                                                            Visualizar
+                                                            Visualizar ficha
                                                         </Button>
                                                     );
                                                 } else {
