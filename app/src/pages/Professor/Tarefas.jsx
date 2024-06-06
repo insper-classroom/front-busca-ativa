@@ -186,9 +186,10 @@ function Tarefas() {
     };
 
     const filteredTarefas = tarefas.filter(tarefa => 
-        tarefa.titulo.toLowerCase().includes(search.toLowerCase()) &&
+        tarefa.titulo && tarefa.titulo.toLowerCase().includes(search.toLowerCase()) &&
         (statusFilter.length === 0 || statusFilter.includes(tarefa.status))
     );
+    
 
     return (
         <div>
