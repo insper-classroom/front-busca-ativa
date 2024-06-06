@@ -85,7 +85,7 @@ const CadastroAluno = () => {
       <br />
       <div className='geral'>
         <Grid container spacing={2} className="login-container">
-          <Grid item xs={1} style={{paddingLeft:"40px", paddingTop:"60px" }}>
+          <Grid item xs={1} style={{paddingLeft:"40px", paddingTop:"3%" }}>
             <Link to="/usuarios" style={{ textDecoration: 'none', color:"#007bff" }}>
               <ArrowBackIcon className="back-arrow" />
             </Link>
