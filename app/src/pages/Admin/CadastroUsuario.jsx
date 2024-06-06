@@ -79,14 +79,12 @@ const RegisterForm = () => {
       
       <div className='geral'>
       <Grid container spacing={2} className="login-container">
-        <Grid item xs={4} style={{textAlign:'center'}}>
-          <Box sx={{paddingRight:"80%"}}>
-            <Link to="/usuarios" className='ArrowBackIcon'>
-              <ArrowBackIcon />
+          <Grid item xs={1} style={{paddingLeft:"40px", paddingTop:"3%" }}>
+            <Link to="/usuarios" style={{ textDecoration: 'none', color:"#007bff" }}>
+              <ArrowBackIcon className="back-arrow" />
             </Link>
-          </Box>
-        </Grid>
-        <Grid item xs={8} style={{textAlign:'center', paddingRight:"35%"}}>
+          </Grid>
+        <Grid item xs={10} style={{textAlign:'center'}}>
           <br/>
           
           <Container maxWidth="xs">

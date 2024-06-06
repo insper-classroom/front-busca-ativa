@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Container, Box, Grid } from '@mui/material';
 import Cookies from 'universal-cookie';
+import { Link } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
@@ -83,7 +85,12 @@ const CadastroAluno = () => {
       <br />
       <div className='geral'>
         <Grid container spacing={2} className="login-container">
-          <Grid item xs={12} style={{ textAlign: 'center' }}>
+          <Grid item xs={1} style={{paddingLeft:"40px", paddingTop:"3%" }}>
+            <Link to="/usuarios" style={{ textDecoration: 'none', color:"#007bff" }}>
+              <ArrowBackIcon className="back-arrow" />
+            </Link>
+          </Grid>
+          <Grid item xs={10} style={{ textAlign: 'center' }}>
             <Container maxWidth="md">
               <Box component="form" onSubmit={handleSubmit} className="form-container">
                 <Typography component="h1" variant="h5" className="form-title">
