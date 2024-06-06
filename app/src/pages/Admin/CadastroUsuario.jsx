@@ -96,8 +96,6 @@ const RegisterForm = () => {
                   alignItems: 'center',
               }}
               >
-              
-
               <Typography component="h1" variant="h5">
                   Cadastro
               </Typography>
