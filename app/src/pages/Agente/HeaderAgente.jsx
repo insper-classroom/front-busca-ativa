@@ -4,6 +4,11 @@ import logoBranco from '../../components/img/logoBranco.png';
 import Logout from '../../functions/Logout';
 
 const HeaderAgente = () => {
+
+  const getLinkClass = (path) => {
+    return location.pathname === path ? 'active' : '';
+  };
+
   return (
     <header className="header">
       <div className="logo-container">
@@ -12,15 +17,15 @@ const HeaderAgente = () => {
       </div>
       <nav>
         <ul>
-          <li>
-            <Link to="/home">Home</Link>
-          </li>
-            <li>
-                <Link to="/alunos">Alunos</Link>
-            </li>
-          <li>
-            <Logout />
-          </li>
+        <li className={getLinkClass('/home')}>
+          <Link to="/home">Home</Link>
+        </li>
+        <li className={getLinkClass('/alunos')}>
+            <Link to="/alunos">Alunos</Link>
+        </li>
+        <li>
+          <Logout />
+        </li>
         </ul>
       </nav>
     </header>

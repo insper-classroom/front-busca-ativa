@@ -5,6 +5,11 @@ import logoBranco from '../../components/img/logoBranco.png';
 import Logout from '../../functions/Logout';
 
 const HeaderProfessor = () => {
+
+  const getLinkClass = (path) => {
+    return location.pathname === path ? 'active' : '';
+  };
+
   return (
     <header className="header">
       <div className="logo-container">
@@ -13,7 +18,7 @@ const HeaderProfessor = () => {
       </div>
       <nav>
         <ul>
-          <li>
+          <li className={getLinkClass('/home')}>
             <Link to="/home">Home</Link>
           </li>
           <li>

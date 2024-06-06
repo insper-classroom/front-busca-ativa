@@ -76,7 +76,7 @@ function DadosAluno() {
 
   return (
     <div>
-      {permissao === 'agente' ? <HeaderAgente /> : <HeaderAdmin />}
+      {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
       <br />
       <div className='geral'>
         <Grid container spacing={2} className="login-container">
