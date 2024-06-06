@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Container, Box, Grid } from '@mui/material';
 import Cookies from 'universal-cookie';
-
+import { Link, useNavigate } from 'react-router-dom'; // Adicione useNavigate
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
 
@@ -10,7 +11,8 @@ const cookies = new Cookies();
 const CadastroAluno = () => {
   const token = cookies.get('token');
   const permissao = cookies.get('permissao');
-  
+  const navigate = useNavigate(); // Use useNavigate
+
   const [formData, setFormData] = useState({
     nome: '',
     turma: '',
@@ -71,6 +73,8 @@ const CadastroAluno = () => {
         responsavel: '',
         responsavel2: '',
       });
+
+      navigate('/alunos'); // Redireciona após o cadastro bem-sucedido
     } catch (error) {
       console.error('Erro:', error);
       alert('Erro ao realizar cadastro');
@@ -83,7 +87,12 @@ const CadastroAluno = () => {
       <br />
       <div className='geral'>
         <Grid container spacing={2} className="login-container">
-          <Grid item xs={12} style={{ textAlign: 'center' }}>
+          <Grid item xs={1} style={{paddingLeft:"40px", paddingTop:"3%" }}>
+            <Link to="/usuarios" style={{ textDecoration: 'none', color:"#007bff" }}>
+              <ArrowBackIcon className="back-arrow" />
+            </Link>
+          </Grid>
+          <Grid item xs={10} style={{ textAlign: 'center' }}>
             <Container maxWidth="md">
               <Box component="form" onSubmit={handleSubmit} className="form-container">
                 <Typography component="h1" variant="h5" className="form-title">
@@ -120,9 +129,9 @@ const CadastroAluno = () => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
+                      required = {true}
                       className="form-field"
                       margin="normal"
-                      required
                       fullWidth
                       id="RA"
                       label="RA"

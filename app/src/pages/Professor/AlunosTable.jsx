@@ -21,6 +21,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { Typography } from '@mui/material';
 
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import ComputerIcon from '@mui/icons-material/Computer';
@@ -143,38 +144,55 @@ function AlunosTable() {
 
     return (
         <div>
-            <div className="filter-container">
-                <div className="filter-box">
-                    <TextField
-                        label="Nome"
-                        variant="outlined"
-                        size="small"
-                        value={searchTerm}
-                        onChange={handleSearchChange}
-                        className="compact-input"
-                    />
-                    <FormControl variant="outlined" size="small" className="compact-input">
-                        <InputLabel>Ordenar Por</InputLabel>
-                        <Select
-                            value={sortOption}
-                            onChange={handleSortChange}
-                            label="Ordenar Por"
-                        >
-                            <MenuItem value=""><em>Nada</em></MenuItem>
-                            <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
-                            <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Button
-                        variant="contained"
-                        size="small"
-                        className="button"
-                        onClick={handleOpenDialog}
-                    >
-                        Filtros
-                    </Button>
-                </div>
-            </div>
+            <div className="filter-container" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+    <div className='title'>
+        <Typography 
+            variant="h4" 
+            component="h4" 
+            style={{ 
+                marginBottom: '10px', 
+                fontFamily: 'Roboto, sans-serif', 
+                fontWeight: 'bold', 
+                textTransform: 'uppercase',
+                whiteSpace: 'nowrap',  // Ensure the text stays on one line
+                paddingLeft: '20px'  // Add some padding to the left
+            }}
+        >
+            Controle de Tarefas
+        </Typography>
+    </div>
+    <div className="filter-box" style={{ display: "flex", alignItems: "center" }}>
+        <TextField
+            label="Nome"
+            variant="outlined"
+            size="small"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="compact-input"
+            style={{ marginRight: '10px' }}  // Add some spacing between inputs
+        />
+        <FormControl variant="outlined" size="small" className="compact-input" style={{ marginRight: '10px' }}>
+            <InputLabel>Ordenar Por</InputLabel>
+            <Select
+                value={sortOption}
+                onChange={handleSortChange}
+                label="Ordenar Por"
+            >
+                <MenuItem value=""><em>Nada</em></MenuItem>
+                <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
+                <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
+            </Select>
+        </FormControl>
+        <Button
+            variant="contained"
+            size="small"
+            className="button"
+            onClick={handleOpenDialog}
+        >
+            Filtros
+        </Button>
+    </div>
+</div>
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <DialogTitle>Filtros</DialogTitle>
                 <DialogContent>
@@ -272,7 +290,7 @@ function AlunosTable() {
                                                             color="primary"
                                                             onClick={() => handleAddTaskClick(aluno._id)}
                                                             className="button"
-                                                            style={{ backgroundColor: 'blue', color: 'white' }}
+                                                            style={{ backgroundColor: '#007bff', color: 'white' }}
                                                             startIcon={<ComputerIcon />}
                                                         >
                                                             TAREFAS
