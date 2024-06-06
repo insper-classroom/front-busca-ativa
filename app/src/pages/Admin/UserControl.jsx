@@ -181,6 +181,13 @@ function UserControl() {
     }));
   };
 
+  const handleFilterPermissionChange = (event) => {
+    const { value } = event.target;
+    setFilterPermissions(prev =>
+      prev.includes(value) ? prev.filter(perm => perm !== value) : [...prev, value]
+    );
+  };
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -266,7 +273,7 @@ function UserControl() {
               {['ADMIN', 'AGENTE', 'PROFESSOR'].map(permission => (
                 <FormControlLabel
                   key={permission}
-                  control={<Checkbox checked={filterPermissions.includes(permission)} onChange={handlePermissionChange} value={permission} />}
+                  control={<Checkbox checked={filterPermissions.includes(permission)} onChange={handleFilterPermissionChange} value={permission} />}
                   label={permission}
                 />
               ))}

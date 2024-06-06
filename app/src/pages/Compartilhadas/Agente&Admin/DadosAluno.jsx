@@ -6,6 +6,8 @@ import { Grid, TextField, Button, Paper, Box, Typography, Container } from '@mui
 import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
 
+import './static/DadosAluno.css';
+
 const cookies = new Cookies();
 
 function DadosAluno() {
@@ -74,7 +76,7 @@ function DadosAluno() {
 
   return (
     <div>
-      {permissao === 'agente' ? <HeaderAgente /> : <HeaderAdmin />}
+      {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
       <br />
       <div className='geral'>
         <Grid container spacing={2} className="login-container">

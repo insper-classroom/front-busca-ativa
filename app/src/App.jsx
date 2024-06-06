@@ -22,12 +22,12 @@ import HomeAgente from './pages/Agente/HomeAgente'
 import CadastroAluno from './pages/Compartilhadas/Agente&Admin/CadastroAluno';
 import ListaAluno from './pages/Compartilhadas/Agente&Admin/ListaAluno';
 import DadosAluno from './pages/Compartilhadas/Agente&Admin/DadosAluno';
+import Casos from './pages/Compartilhadas/Agente&Admin/Casos';
 
 // Funções
 import EstaAutenticado from './functions/EstaAutenticado';
 import NaoEncontrado from './functions/NaoEncontrado';
 import permissaoUser from './functions/PermissaoUser';
-import { PaginaAluno } from './pages/PaginaAluno';
 
 function App() {  
   const [permissao, setPermissao] = useState(null);
@@ -68,7 +68,7 @@ function App() {
             <Route path="/alunos" element={<ListaAluno />} />
             <Route path="/alunos/:id" element={<DadosAluno />} />
             <Route path="/alunos/criar" element={<CadastroAluno />} />
-            <Route path="/paginaAluno/:id" element={<PaginaAluno />} />
+            <Route path="/casos/:id" element={<Casos />} />
             </>
           )}
 
@@ -87,6 +87,7 @@ function App() {
             <Route path="/alunos" element={<ListaAluno />} />
             <Route path="/alunos/:id" element={<DadosAluno />} />
             <Route path="/alunos/criar" element={<CadastroAluno />} />
+            <Route path="/casos/:id" element={<Casos />} />
             </>
           )}
 
