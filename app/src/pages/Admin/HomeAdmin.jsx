@@ -1,6 +1,6 @@
 import React from 'react';
 import HeaderAdmin from './HeaderAdmin';
-import CasosTable from './CasosTable'; // Importando o componente CasosTable
+import CasosTable from '../Compartilhadas/Agente&Admin/CasosTable'
 import './static/HomeAdmin.css';
 
 function HomeAdmin() {

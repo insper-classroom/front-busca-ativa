@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Container, Box, Grid } from '@mui/material';
 import Cookies from 'universal-cookie';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Adicione useNavigate
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
 import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
 
@@ -12,7 +11,8 @@ const cookies = new Cookies();
 const CadastroAluno = () => {
   const token = cookies.get('token');
   const permissao = cookies.get('permissao');
-  
+  const navigate = useNavigate(); // Use useNavigate
+
   const [formData, setFormData] = useState({
     nome: '',
     turma: '',
@@ -73,6 +73,8 @@ const CadastroAluno = () => {
         responsavel: '',
         responsavel2: '',
       });
+
+      navigate('/alunos'); // Redireciona após o cadastro bem-sucedido
     } catch (error) {
       console.error('Erro:', error);
       alert('Erro ao realizar cadastro');
@@ -127,9 +129,9 @@ const CadastroAluno = () => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
+                      required = {true}
                       className="form-field"
                       margin="normal"
-                      required
                       fullWidth
                       id="RA"
                       label="RA"
