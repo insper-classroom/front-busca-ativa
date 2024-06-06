@@ -314,8 +314,8 @@ export function PaginaAluno() {
                 observacao: '',
 
             });
-            // loadCasos()
-            // loadAluno()
+            loadCasos()
+            loadAluno()
         } catch (error) {
             console.error('Erro:', error);
             alert('Erro ao salvar o caso');
@@ -394,8 +394,8 @@ export function PaginaAluno() {
                 data: dayjs(),
                 observacao: '',
             });
-            // loadCasos();
-            // loadAluno();
+            loadCasos();
+            loadAluno();
         } catch (error) {
             console.error('Erro:', error);
             alert('Erro ao salvar o caso');
