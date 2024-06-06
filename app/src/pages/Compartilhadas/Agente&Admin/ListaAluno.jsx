@@ -23,8 +23,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { Link, useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
 
-import IconButton from '@mui/material/IconButton';
-import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
 import GroupsIcon from '@mui/icons-material/Groups';
 import BadgeIcon from '@mui/icons-material/Badge';
@@ -37,8 +35,8 @@ import HeaderAgente from '../../Agente/HeaderAgente';
 import './static/ListaAluno.css';
 
 const columns = [
-  { id: 'nome', label: 'Nome', minWidth: 100 },
-  { id: 'turma', label: 'Turma', minWidth: 100 },
+  { id: 'nome', label: 'NOME', minWidth: 100 },
+  { id: 'turma', label: 'TURMA', minWidth: 100 },
   { id: 'RA', label: 'RA', minWidth: 100 },
   { id: 'view', label: 'VISUALIZAR DADOS', minWidth: 150 },
   { id: 'delete', label: 'DELETAR', minWidth: 100 },
@@ -177,7 +175,7 @@ function ListaAluno() {
   return (
     <div className='user-control'>
       {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
-      <div className='title' style={{ display: "flex", justifyContent: "space-between" }}>
+      <div className='title'>
         <Typography 
           variant="h4" 
           component="h4" 
@@ -270,28 +268,28 @@ function ListaAluno() {
                     sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
                   >
                     {column.id === 'RA' ? (
-                      <div className='icon-admin' style={{ paddingTop: "4px", display: "flex" }}>
-                        <ContactsIcon style={{ paddingRight: "3px" }} />
+                      <div className='icon-admin'>
+                        <ContactsIcon />
                         {column.label}
                       </div>
                     ) : column.id === "turma" ? (
-                      <div className="icon-email" style={{ paddingTop: "4px", display: "flex" }}>
-                        <GroupsIcon style={{ paddingRight: "3px" }} />
+                      <div className="icon-email">
+                        <GroupsIcon />
                         {column.label}
                       </div>
                     ) : column.id === "nome" ? (
-                      <div className="icon-nome" style={{ paddingTop: "4px", display: "flex" }}>
-                        <BadgeIcon style={{ paddingRight: "3px" }} />
+                      <div className="icon-nome">
+                        <BadgeIcon />
                         {column.label}
                       </div>
                     ) : column.id === "view" ? (
-                      <div className="icon-edit" style={{ paddingTop: "4px", display: "flex" }}>
-                        <TextSnippetIcon style={{ paddingRight: "3px" }} />
+                      <div className="icon-edit">
+                        <TextSnippetIcon />
                         {column.label}
                       </div>
                     ) : column.id === "delete" ? (
-                      <div className="icon-delete" style={{ paddingTop: "4px", display: "flex" }}>
-                        <DeleteIcon style={{ paddingRight: "3px" }} />
+                      <div className="icon-delete">
+                        <DeleteIcon />
                         {column.label}
                       </div>
                     ) : (
@@ -329,10 +327,10 @@ function ListaAluno() {
                           ) : column.id === 'delete' ? (
                             <Button 
                               variant="contained" 
-                              color="secondary" 
-                              style={{ backgroundColor: 'red', color: 'white' }}
+                              className='delete-button'
                               startIcon={<DeleteIcon />}
                               onClick={() => handleDelete(row.id)}
+                              sx = {{ backgroundColor: 'red', color: 'white' }}
                             >
                               Deletar
                             </Button>
