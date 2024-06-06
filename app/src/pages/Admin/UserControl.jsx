@@ -358,7 +358,7 @@ function UserControl() {
                               editable ? (
                                 id === 'permissao' ? (
                                   isEditing(row.id) ? (
-                                    <Box sx={{ minWidth: 120 }}>
+                                    <Box sx={{ maxWidth: 150 }}>
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">PERMISSAO</InputLabel>
                                             <Select
@@ -380,22 +380,26 @@ function UserControl() {
                                   )
                                 ) : (
                                   isEditing(row.id) ? (
-                                    <Box
-                                        component="form"
-                                        sx={{
-                                        '& > :not(style)': { m: 1, width: '25ch' },
-                                        }}
-                                        noValidate
-                                        autoComplete="on"
-                                    >
-                                        <TextField
-                                        id="filled-basic"
-                                        label="Filled"
-                                        variant="filled"
-                                        value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
-                                        onChange={(e) => handleInputChange(e, id, row.id)}
-                                        />
-                                    </Box>
+                                  <Box
+                                    component="form"
+                                    sx={{
+                                      '& > :not(style)': { m: 1, width: '20ch' }, // Ajuste a largura conforme necessário
+                                    }}
+                                    noValidate
+                                    autoComplete="on"
+                                  >
+                                    <TextField
+                                      id="filled-basic"
+                                      label={id === 'email' ? 'Email' : id === 'nome' ? 'Nome' : ''}
+                                      variant="filled"
+                                      value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
+                                      onChange={(e) => handleInputChange(e, id, row.id)}
+                                      sx={{ width: '20ch' }} // Ajuste a largura conforme necessário
+                                    />
+                                  </Box>
+
+
+
                                   ) : (
                                     value
                                   )
