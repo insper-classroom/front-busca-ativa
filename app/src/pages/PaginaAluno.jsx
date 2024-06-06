@@ -47,7 +47,9 @@ export function PaginaAluno() {
       
       const rowsLig = ligacoes.map((lig, index) => ({
         id: index,
-        data: lig.data,
+        //formatar a data para dd/mm/yyyy
+        data: lig.data ? new Date(lig.data).toLocaleDateString('pt-BR') : '',
+        // data: lig.data,
         abae: lig.abae,
         telefone: lig.telefone,
         observacao:lig.observacao
@@ -61,14 +63,14 @@ export function PaginaAluno() {
       
       const rowsVis = visitas.map((vis, index) => ({
         id: index,
-        data: vis.data,
+        data: vis.data ? new Date(vis.data).toLocaleDateString('pt-BR') : '',
         abae: vis.abae,
         observacao:vis.observacao
     }));
 
 
     const columnsAtendimento = [
-        { field: 'data', headerName: 'Data', width: 200 },
+        { field: 'data', headerName: 'Data', width: 200 }, 
         { field: 'func', headerName: 'Feito por', width: 200 },
         { field: 'responsavel', headerName: 'Responsável', width: 200 },
         { field: 'observacao', headerName: 'Observações', width: 200 },
@@ -76,7 +78,7 @@ export function PaginaAluno() {
     
     const rowsAtendimento = atendimentos.map((atendimento, index) => ({
         id: index,
-        data: atendimento.data,
+        data: atendimento.data ? new Date(atendimento.data).toLocaleDateString('pt-BR') : '',
         func: atendimento.func,
         responsavel: atendimento.responsavel,
         observacao: atendimento.observacao,
