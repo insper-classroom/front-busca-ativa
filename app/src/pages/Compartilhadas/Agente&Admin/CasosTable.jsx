@@ -16,6 +16,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import Typography from '@mui/material/Typography';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -28,7 +29,6 @@ const columns = [
     { id: 'turma', label: 'TURMA', minWidth: 100 },
     { id: 'status', label: 'STATUS', minWidth: 100 },
     { id: 'urgencia', label: 'PRIORIDADE', minWidth: 100 },
-    { id: 'data', label: 'DATA', minWidth: 170, format: (value) => new Date(value).toLocaleString() },
     { id: 'actions', label: 'AÇÕES', minWidth: 170 }
 ];
 
@@ -122,7 +122,7 @@ function CasosTable() {
     };
 
     const handleViewClick = (id) => {
-        navigate(`/casos/${id}`);
+        navigate(`/paginaAluno/${id}`);
     };
 
     const handleOpenDialog = () => {
@@ -147,6 +147,21 @@ function CasosTable() {
 
     return (
         <div>
+            <div className='title' style={{display:"flex", justifyContent:"space-between"}}>
+                <Typography 
+                    variant="h4" 
+                    component="h4" 
+                    style={{ 
+                    marginBottom: '10px', 
+                    textAlign: 'center', // Alinhando o texto ao centro
+                    fontFamily: 'Roboto, sans-serif', 
+                    fontWeight: 'bold', // Definindo o peso da fonte como negrito
+                    textTransform: 'uppercase', // Transformando o texto em maiúsculas
+                    paddingLeft: "2%"
+                    }}
+                >
+                    Casos
+                </Typography>
             <div className="filter-container">
                 <div className="filter-box">
                     <TextField
@@ -180,6 +195,7 @@ function CasosTable() {
                         Filtros
                     </Button>
                 </div>
+            </div>
             </div>
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <DialogTitle>Filtros</DialogTitle>
