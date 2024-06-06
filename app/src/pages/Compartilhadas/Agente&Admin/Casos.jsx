@@ -18,6 +18,8 @@ import HeaderAgente from '../../Agente/HeaderAgente';
 const cookies = new Cookies();
 
 export default function Casos() {
+
+    //Inicializas as variáveis que serão usado no componente
     const { id } = useParams();
     const permissao = cookies.get('permissao');
     const [idAluno, setIdAluno] = useState();
@@ -41,37 +43,39 @@ export default function Casos() {
     const openVis = Boolean(anchorVis);
     const openAtendimento = Boolean(anchorAtendimento);
 
+    //Criação das colunas para a tabela de ligacoes
     const columnsLig = [
         { field: 'data', headerName: 'Data', width: 200 },
         { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
         { field: 'telefone', headerName: 'Telefone', width: 200 },
         { field: 'observacao', headerName: 'Observações', width: 200 },
-      ];
+    ];
       
-      const rowsLig = ligacoes.map((lig, index) => ({
+    //Criação das linhas para a tabela de visitas
+    const rowsLig = ligacoes.map((lig, index) => ({
         id: index,
-        //formatar a data para dd/mm/yyyy
         data: lig.data ? new Date(lig.data).toLocaleDateString('pt-BR') : '',
-        // data: lig.data,
         abae: lig.abae,
         telefone: lig.telefone,
         observacao:lig.observacao
     }));
 
+    //Criação das colunas para a tabela de visitas
     const columnsVis = [
         { field: 'data', headerName: 'Data', width: 200 },
         { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
         { field: 'observacao', headerName: 'Observações', width: 200 },
       ];
-      
-      const rowsVis = visitas.map((vis, index) => ({
+    
+    //Criação das linhas para a tabela de visitas
+    const rowsVis = visitas.map((vis, index) => ({
         id: index,
         data: vis.data ? new Date(vis.data).toLocaleDateString('pt-BR') : '',
         abae: vis.abae,
         observacao:vis.observacao
     }));
 
-
+    //Criação das colunas para a tabela de atendimentos
     const columnsAtendimento = [
         { field: 'data', headerName: 'Data', width: 200 }, 
         { field: 'func', headerName: 'Feito por', width: 200 },
@@ -79,6 +83,7 @@ export default function Casos() {
         { field: 'observacao', headerName: 'Observações', width: 200 },
     ];
     
+    //Criação das linhas para a tabela de atendimentos
     const rowsAtendimento = atendimentos.map((atendimento, index) => ({
         id: index,
         data: atendimento.data ? new Date(atendimento.data).toLocaleDateString('pt-BR') : '',
@@ -86,6 +91,7 @@ export default function Casos() {
         responsavel: atendimento.responsavel,
         observacao: atendimento.observacao,
     }));
+
 
     const [valueTabs, setValueTabs] = useState(0);
 
@@ -99,10 +105,6 @@ export default function Casos() {
         responsavel: '',
     });
 
-    // useEffect(() => {
-    //     console.log("hellooo");
-    //     loadUsuario();
-    // }, []);
 
     useEffect(() => {
         loadUsuario();
@@ -125,7 +127,6 @@ export default function Casos() {
             }
         }).then(response => response.json())
         .then(data => {
-            console.log("loadIdAluno")
             setIdAluno(data._id)
             setIsIdAlunoLoaded(true)
         })
@@ -138,11 +139,9 @@ export default function Casos() {
 
 
     function loadCasos() {
-        //TODO pegar o id do aluno
         if (!isIdAlunoLoaded){
             return;
         }
-        console.log("loadCasos")
         fetch(`http://localhost:8000/casos?aluno_id=${idAluno}`, {
             method: 'GET',
             headers: {
@@ -171,8 +170,6 @@ export default function Casos() {
         if (!isIdAlunoLoaded){
             return;
         }
-        //TODO pegar o id do aluno
-        console.log("loadAluno")  
         fetch(`http://localhost:8000/alunoBuscaAtiva/${idAluno}`, {
             method: 'GET',
             headers: {
