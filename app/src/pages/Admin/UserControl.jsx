@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
 import HeaderAdmin from './HeaderAdmin';
-import './static/UserControl.css';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -47,7 +46,7 @@ function UserControl() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [filterPermissions, setFilterPermissions] = useState([]);
-  const [sortOption, setSortOption] = useState("");
+  const [sortOption, setSortOption] = useState('');
   const [editingUserId, setEditingUserId] = useState(null);
   const [editedUsersData, setEditedUsersData] = useState({});
   const token = cookies.get('token');
@@ -61,7 +60,7 @@ function UserControl() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
     })
       .then(response => {
@@ -85,21 +84,21 @@ function UserControl() {
       (filterPermissions.length === 0 || filterPermissions.includes(user.permissao))
     );
 
-    if (sortOption === "nameAsc") {
+    if (sortOption === 'nameAsc') {
       results.sort((a, b) => a.nome.localeCompare(b.nome));
-    } else if (sortOption === "nameDesc") {
+    } else if (sortOption === 'nameDesc') {
       results.sort((a, b) => b.nome.localeCompare(a.nome));
     }
 
     setFilteredUsers(results);
   }, [searchTerm, filterPermissions, sortOption, users]);
 
-  const handleDelete = (id) => {
+  const handleDelete = id => {
     fetch(`http://localhost:8000/usuarios/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
     })
       .then(response => {
@@ -113,12 +112,12 @@ function UserControl() {
       });
   };
   
-  const handleSave = (id) => {
+  const handleSave = id => {
     fetch(`http://localhost:8000/usuarios/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(editedUsersData[id]),
     })
@@ -139,11 +138,11 @@ function UserControl() {
       });
   };
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = event => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSortChange = (event) => {
+  const handleSortChange = event => {
     setSortOption(event.target.value);
   };
 
@@ -155,7 +154,7 @@ function UserControl() {
     }));
   };
 
-  const isEditing = (id) => {
+  const isEditing = id => {
     return id === editingUserId;
   };
 
@@ -181,13 +180,6 @@ function UserControl() {
     }));
   };
 
-  const handleFilterPermissionChange = (event) => {
-    const { value } = event.target;
-    setFilterPermissions(prev =>
-      prev.includes(value) ? prev.filter(perm => perm !== value) : [...prev, value]
-    );
-  };
-
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -203,7 +195,7 @@ function UserControl() {
     setDialogOpen(false);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = event => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
@@ -221,11 +213,10 @@ function UserControl() {
         component="h4" 
         style={{ 
           marginBottom: '10px', 
-          textAlign: 'center', // Alinhando o texto ao centro
+          textAlign: 'center', 
           fontFamily: 'Roboto, sans-serif', 
-          fontWeight: 'bold', // Definindo o peso da fonte como negrito
-          textTransform: 'uppercase', // Transformando o texto em maiúsculas
-          paddingLeft: "2%"
+          fontWeight: 'bold', 
+          textTransform: 'uppercase', 
         }}
       >
         Controle de Usuários
@@ -273,7 +264,7 @@ function UserControl() {
               {['ADMIN', 'AGENTE', 'PROFESSOR'].map(permission => (
                 <FormControlLabel
                   key={permission}
-                  control={<Checkbox checked={filterPermissions.includes(permission)} onChange={handleFilterPermissionChange} value={permission} />}
+                  control={<Checkbox checked={filterPermissions.includes(permission)} onChange={handlePermissionChange} value={permission} />}
                   label={permission}
                 />
               ))}
@@ -298,27 +289,27 @@ function UserControl() {
                   style={{ minWidth: column.minWidth }}
                   sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333', alignItems: 'center' }}
                 >
-                  {column.id === 'permissao' ? ( // Verifique se a coluna é a coluna de permissão
+                  {column.id === 'permissao' ? (
                     <div className='icon-admin' style={{ paddingTop: "4px", display: "flex" }}>
                       <SupervisorAccountIcon style={{ paddingRight: "3px" }} />
                       {column.label}
                     </div>
-                  ) : column.id === "email" ? ( // Verifique se a coluna é a coluna de e-mail
+                  ) : column.id === "email" ? (
                     <div className="icon-email" style={{ paddingTop: "4px", display: "flex" }}>
                       <EmailIcon style={{ paddingRight: "3px" }} />
                       {column.label}
                     </div>
-                  ) : column.id === "nome" ? ( // Verifique se a coluna é a coluna de nome
+                  ) : column.id === "nome" ? (
                     <div className="icon-nome" style={{ paddingTop: "4px", display: "flex" }}>
                       <BadgeIcon style={{ paddingRight: "3px" }} />
                       {column.label}
                     </div>
-                  ) : column.id === "edit" ? ( // Verifique se a coluna é a coluna de editar
+                  ) : column.id === "edit" ? (
                     <div className="icon-edit" style={{ paddingTop: "4px", display: "flex" }}>
                       <CreateIcon style={{ paddingRight: "3px" }} />
                       {column.label}
                     </div>
-                  ) : column.id === "delete" ? ( // Verifique se a coluna é a coluna de deletar
+                  ) : column.id === "delete" ? (
                     <div className="icon-delete" style={{ paddingTop: "4px", display: "flex" }}>
                       <DeleteIcon style={{ paddingRight: "3px" }} />
                       {column.label}
@@ -390,7 +381,7 @@ function UserControl() {
                                   <Box
                                     component="form"
                                     sx={{
-                                      '& > :not(style)': { m: 1, width: '20ch' }, // Ajuste a largura conforme necessário
+                                      '& > :not(style)': { m: 1, width: '20ch' },
                                     }}
                                     noValidate
                                     autoComplete="on"
@@ -401,7 +392,7 @@ function UserControl() {
                                       variant="filled"
                                       value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
                                       onChange={(e) => handleInputChange(e, id, row.id)}
-                                      sx={{ width: '20ch' }} // Ajuste a largura conforme necessário
+                                      sx={{ width: '20ch' }}
                                     />
                                   </Box>
 

@@ -120,7 +120,7 @@ function AlunosTable() {
     };
 
     const handleAddTaskClick = (id) => {
-        navigate(`/tarefas/adicionar/${id}`);
+        navigate(`/tarefas/${id}`);
     };
 
     const handleOpenDialog = () => {
@@ -305,20 +305,7 @@ function AlunosTable() {
                                                             TAREFAS
                                                         </Button>
                                                     );
-                                                } else if (column.id === 'actions') {
-                                                    value = (
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            onClick={() => handleViewClick(aluno._id)}
-                                                            className="button"
-                                                            style={{ backgroundColor: 'green', color: 'white' }}
-                                                            startIcon={<AssignmentIndIcon />}
-                                                        >
-                                                            Visualizar
-                                                        </Button>
-                                                    );
-                                                }
+                                                } 
                                                 return (
                                                     <TableCell key={column.id} align={column.align} className="table-cell">
                                                         {column.format ? column.format(value) : value}

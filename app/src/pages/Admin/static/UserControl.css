@@ -35,3 +35,54 @@
 .filter-group {
     margin-bottom: 10px;
 }
+
+
+.user-control {
+    width: 100%;
+  }
+  
+  .title {
+    margin-bottom: 10px;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .filter-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .filter-box {
+    display: flex;
+    align-items: center;
+  }
+  
+  .compact-input {
+    margin-right: 10px;
+  }
+  
+  .button {
+    margin-left: 10px;
+  }
+  
+  .icon-admin,
+  .icon-email,
+  .icon-nome,
+  .icon-edit,
+  .icon-delete {
+    padding-top: 4px;
+    display: flex;
+  }
+  
+  .button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .create-user {
+    text-decoration: none;
+  }
+  
