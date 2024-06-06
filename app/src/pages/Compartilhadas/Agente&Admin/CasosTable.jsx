@@ -38,7 +38,7 @@ const columns = [
     { id: 'actions', label: 'AÇÕES', minWidth: 170 , Icon: ArticleIcon}
 ];
 
-const urgencyOrder = { 'BAIXA': 1, 'MEDIA': 2, 'ALTA': 3, 'NÃO INFORMADO': 0 };
+const urgencyOrder = { 'BAIXA': 1, 'MEDIA': 2, 'ALTA': 3, 'NAO INFORMADO': 0 };
 
 function CasosTable() {
     const [casos, setCasos] = useState([]);
@@ -229,7 +229,7 @@ function CasosTable() {
                         </div>
                         <div className="filter-group">
                             <h4>Prioridade:</h4>
-                            {['BAIXA', 'MEDIA', 'ALTA', 'NÃO INFORMADO'].map(urgency => (
+                            {['BAIXA', 'MEDIA', 'ALTA', 'NAO INFORMADO'].map(urgency => (
                                 <FormControlLabel
                                     key={urgency}
                                     control={<Checkbox checked={filterUrgency.includes(urgency)} onChange={handleUrgencyChange} value={urgency} />}
@@ -327,7 +327,7 @@ function CasosTable() {
                                                                 return <div className="urgency-dot-media">{value}</div>;
                                                             } else if (isUrgency && value === 'BAIXA') {
                                                                 return <div className="urgency-dot-baixa">{value}</div>;
-                                                            } else if (isUrgency && value === 'NÃO INFORMADO') {
+                                                            } else if (isUrgency && value === 'NAO INFORMADO') {
                                                                 return <div className="urgency-dot-nao-informado">{value}</div>;
 
                                                             } else if (column.format && typeof value === 'object') {
