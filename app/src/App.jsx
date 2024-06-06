@@ -68,7 +68,7 @@ function App() {
             <Route path="/alunos" element={<ListaAluno />} />
             <Route path="/alunos/:id" element={<DadosAluno />} />
             <Route path="/alunos/criar" element={<CadastroAluno />} />
-            <Route path="/paginaAluno" element={<PaginaAluno />} />
+            <Route path="/paginaAluno/:id" element={<PaginaAluno />} />
             </>
           )}
 
