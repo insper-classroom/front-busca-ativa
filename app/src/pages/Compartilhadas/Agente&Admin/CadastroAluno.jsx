@@ -129,9 +129,9 @@ const CadastroAluno = () => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
+                      required = {true}
                       className="form-field"
                       margin="normal"
-                      required
                       fullWidth
                       id="RA"
                       label="RA"
