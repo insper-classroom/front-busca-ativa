@@ -71,3 +71,20 @@ body {
   border-color: white;
   transform: scale(1.05);
 }
+.header ul li.active a {
+  color: #ffffff;  /* Cor de destaque */
+  background-color: #066ddb;
+  font-weight: bold; /* Negrito para maior destaque */
+  /* Linha inferior para destaque visual */
+}
+
+.header ul li a {
+  text-decoration: none;
+  color: #ffffff;
+  padding: 10px 15px;
+  display: block;
+}
+
+.header ul li {
+  display: inline;
+}
