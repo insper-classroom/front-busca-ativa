@@ -11,10 +11,13 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Tab from '@mui/material/Tab';
+import { useParams } from 'react-router-dom';
 
 
 export function PaginaAluno() {
+    const { id } = useParams();
     const [idAluno, setIdAluno] = useState();
+    const [isIdAlunoLoaded, setIsIdAlunoLoaded] = useState(false)
     const [dataAluno, setDataAluno] = useState();
     const [dataCasos, setDataCasos] = useState([]);
     const [urgencia, setUrgencia] = useState('');
@@ -91,16 +94,81 @@ export function PaginaAluno() {
         responsavel: '',
     });
 
+    // useEffect(() => {
+    //     console.log("hellooo");
+    //     loadUsuario();
+    // }, []);
+
     useEffect(() => {
-        loadAluno();
-        loadCasos();
-        lodaUsuario();
-    }, [idAluno]);
+        loadUsuario();
+        loadIdAluno();
+    }, [id]);
+
+    useEffect(() => {
+        if (isIdAlunoLoaded){
+            loadCasos();
+            loadAluno();
+        }
+    }, [idAluno, isIdAlunoLoaded]);
+
+    function loadIdAluno(){
+        fetch(`http://localhost:8000/alunoBuscaAtiva/caso/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(response => response.json())
+        .then(data => {
+            console.log("loadIdAluno")
+            setIdAluno(data._id)
+            setIsIdAlunoLoaded(true)
+        })
+        .catch(response => {
+            alert('Erro ao achar o aluno!');
+            alert(response.status);
+        });
+    }
 
 
+
+    function loadCasos() {
+        //TODO pegar o id do aluno
+        if (!isIdAlunoLoaded){
+            return;
+        }
+        console.log("loadCasos")
+        fetch(`http://localhost:8000/casos?aluno_id=${idAluno}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            setDataCasos(data.caso[0]);
+            setStatus(data.caso[0].status)
+            setUrgencia(data.caso[0].urgencia)
+            setLigacoes(data.caso[0].ligacoes)
+            setVisitas(data.caso[0].visitas)
+            setAtendimentos(data.caso[0].atendimentos)
+            
+            
+        })
+        .catch(response => {
+            alert('Erro ao achar os casos do aluno!');
+            alert(response.status);
+        });
+    }
+    
     function loadAluno() {
-        //TODO pegar o id do aluno  
-        fetch('http://localhost:8000/alunoBuscaAtiva/665f7299a799887b997bcb72', {
+        if (!isIdAlunoLoaded){
+            return;
+        }
+        //TODO pegar o id do aluno
+        console.log("loadAluno")  
+        fetch(`http://localhost:8000/alunoBuscaAtiva/${idAluno}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -117,33 +185,9 @@ export function PaginaAluno() {
             });
     }
 
-    function loadCasos() {
-        //TODO pegar o id do aluno
-        fetch('http://localhost:8000/casos?aluno_id=665f7299a799887b997bcb72', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.caso[0])
-                setDataCasos(data.caso[0]);
-                setStatus(data.caso[0].status)
-                setUrgencia(data.caso[0].urgencia)
-                setLigacoes(data.caso[0].ligacoes)
-                setVisitas(data.caso[0].visitas)
-                setAtendimentos(data.caso[0].atendimentos)
+    
 
-            })
-            .catch(response => {
-                alert('Erro ao achar os casos do aluno!');
-                alert(response.status);
-            });
-    }
-
-    function lodaUsuario(){
+    function loadUsuario(){
 
         fetch('http://localhost:8000/usuarios-dados', {
             method: 'POST',
@@ -162,7 +206,6 @@ export function PaginaAluno() {
 
 
     function gerarRealatorio() {
-        lodaUsuario();
         fetch('http://localhost:8000/casos/gerar-relatorio', {
             method: 'POST',
             headers: {
@@ -271,8 +314,8 @@ export function PaginaAluno() {
                 observacao: '',
 
             });
-            loadAluno()
-            loadCasos()
+            // loadCasos()
+            // loadAluno()
         } catch (error) {
             console.error('Erro:', error);
             alert('Erro ao salvar o caso');
@@ -312,8 +355,8 @@ export function PaginaAluno() {
                 observacao: '',
 
             });
-            loadCasos()
-            loadAlunos()
+            // loadCasos()
+            // loadAlunos()
         } catch (error) {
             console.error('Erro:', error);
             alert('Erro ao salvar o caso');
@@ -351,8 +394,8 @@ export function PaginaAluno() {
                 data: dayjs(),
                 observacao: '',
             });
-            loadAluno();
-            loadCasos();
+            // loadCasos();
+            // loadAluno();
         } catch (error) {
             console.error('Erro:', error);
             alert('Erro ao salvar o caso');
