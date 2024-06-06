@@ -95,7 +95,7 @@ export function PaginaAluno() {
         loadAluno();
         loadCasos();
         lodaUsuario();
-    }, []);
+    }, [idAluno]);
 
 
     function loadAluno() {
@@ -128,13 +128,13 @@ export function PaginaAluno() {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data.caso.atendimentos)
-                setDataCasos(data.caso);
-                setStatus(data.caso.status)
-                setUrgencia(data.caso.urgencia)
-                setLigacoes(data.caso.ligacoes)
-                setVisitas(data.caso.visitas)
-                setAtendimentos(data.caso.atendimentos)
+                console.log(data.caso[0])
+                setDataCasos(data.caso[0]);
+                setStatus(data.caso[0].status)
+                setUrgencia(data.caso[0].urgencia)
+                setLigacoes(data.caso[0].ligacoes)
+                setVisitas(data.caso[0].visitas)
+                setAtendimentos(data.caso[0].atendimentos)
 
             })
             .catch(response => {
