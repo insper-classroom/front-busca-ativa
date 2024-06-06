@@ -122,7 +122,7 @@ function CasosTable() {
     };
 
     const handleViewClick = (id) => {
-        navigate(`/paginaAluno/${id}`);
+        navigate(`/casos/${id}`);
     };
 
     const handleOpenDialog = () => {

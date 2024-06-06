@@ -12,10 +12,14 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Tab from '@mui/material/Tab';
 import { useParams } from 'react-router-dom';
+import HeaderAdmin from '../../Admin/HeaderAdmin';
+import HeaderAgente from '../../Agente/HeaderAgente';
 
+const cookies = new Cookies();
 
-export function PaginaAluno() {
+export default function Casos() {
     const { id } = useParams();
+    const permissao = cookies.get('permissao');
     const [idAluno, setIdAluno] = useState();
     const [isIdAlunoLoaded, setIsIdAlunoLoaded] = useState(false)
     const [dataAluno, setDataAluno] = useState();
@@ -25,7 +29,6 @@ export function PaginaAluno() {
     const [ligacoes, setLigacoes] = useState([])
     const [visitas, setVisitas] = useState([])
     const [atendimentos, setAtendimentos] = useState([])
-    const cookies = new Cookies();
     const token = cookies.get('token');
     const [selectedRowsLig, setSelectedRowsLig] = useState([]);
     const [selectedRowsVis, setSelectedRowsVis] = useState([]);
@@ -450,12 +453,9 @@ export function PaginaAluno() {
       setValueTabs(newValue);
     }
 
-    
-    
-
-
     return (
         <div className='card'>
+            {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
             <Grid container columnSpacing={2} rowSpacing={1}>
                 <Grid item xs={12} style={{ textAlign: "center", paddingTop: "50px" }}>
                     Informações do Aluno
