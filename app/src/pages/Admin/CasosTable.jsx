@@ -28,7 +28,6 @@ const columns = [
     { id: 'turma', label: 'TURMA', minWidth: 100 },
     { id: 'status', label: 'STATUS', minWidth: 100 },
     { id: 'urgencia', label: 'PRIORIDADE', minWidth: 100 },
-    { id: 'data', label: 'DATA', minWidth: 170, format: (value) => new Date(value).toLocaleString() },
     { id: 'actions', label: 'AÇÕES', minWidth: 170 }
 ];
 
