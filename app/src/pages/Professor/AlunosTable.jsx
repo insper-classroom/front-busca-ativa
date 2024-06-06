@@ -21,6 +21,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import InputAdornment from '@mui/material/InputAdornment';
 import { Typography } from '@mui/material';
 
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -29,6 +30,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import BadgeIcon from '@mui/icons-material/Badge';
 import ContactsIcon from '@mui/icons-material/Contacts';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import SearchIcon from '@mui/icons-material/Search';
 
 import './static/AlunosTable.css';
 
@@ -37,7 +39,6 @@ const columns = [
     { id: 'turma', label: 'Turma', minWidth: 100 },
     { id: 'RA', label: 'R.A', minWidth: 100 },
     { id: 'tarefas', label: 'TAREFAS', minWidth: 170 },
-    { id: 'actions', label: 'VISUALIZAR ALUNO/TAREFAS', minWidth: 170 }
 ];
 
 function AlunosTable() {
@@ -169,7 +170,14 @@ function AlunosTable() {
             value={searchTerm}
             onChange={handleSearchChange}
             className="compact-input"
-            style={{ marginRight: '10px' }}  // Add some spacing between inputs
+            InputProps={{
+                endAdornment: (
+                    <InputAdornment position="end">
+                        <SearchIcon />
+                    </InputAdornment>
+                )
+            }}
+            style={{ marginRight: '10px', width: '300px' }}  // Add some spacing between inputs
         />
         <FormControl variant="outlined" size="small" className="compact-input" style={{ marginRight: '10px' }}>
             <InputLabel>Ordenar Por</InputLabel>
@@ -188,6 +196,7 @@ function AlunosTable() {
             size="small"
             className="button"
             onClick={handleOpenDialog}
+            style={{ color: 'white', width: '80px', height: '38px'}}
         >
             Filtros
         </Button>
@@ -290,7 +299,7 @@ function AlunosTable() {
                                                             color="primary"
                                                             onClick={() => handleAddTaskClick(aluno._id)}
                                                             className="button"
-                                                            style={{ backgroundColor: '#007bff', color: 'white' }}
+                                                            style={{ backgroundColor: '#007bff', color: 'white', width: '200px' }}
                                                             startIcon={<ComputerIcon />}
                                                         >
                                                             TAREFAS
