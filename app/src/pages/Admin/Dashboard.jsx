@@ -86,7 +86,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      <HeaderAdmin />  // Componente de cabeçalho
+      <HeaderAdmin />  
       <Container className='dashboard'>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -106,7 +106,7 @@ export default function Dashboard() {
           <Grid item xs={12}>
             <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
               <Typography variant="h6" component="h6" style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 'bold' }}>
-                Total de Casos: {casos.length}  // Exibição do total de casos
+                Total de Casos: {casos.length} 
               </Typography>
             </Paper>
           </Grid>
@@ -121,7 +121,7 @@ export default function Dashboard() {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />  // Define as cores das fatias do gráfico
                   ))}
                 </Pie>
-                <Tooltip />  // Tooltip para exibir informações ao passar o mouse
+                <Tooltip />  
                 <Legend align="center" verticalAlign="bottom" layout="horizontal" iconType="circle" wrapperStyle={{ paddingTop: 10 }} />
               </PieChart>
             </Paper>

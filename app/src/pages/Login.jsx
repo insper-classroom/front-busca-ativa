@@ -34,7 +34,7 @@ export default function Login() {
         const data = await response.json();
         console.log(data);
         cookies.set("token", data.token, { path: "/" }); // Armazena o token de autenticação em um cookie
-        window.location.href = "/home"; // Redireciona para a página inicial
+        window.location.href = "/"; // Redireciona para a página inicial
       } else {
         const errorData = await response.json();
         console.log(errorData);
