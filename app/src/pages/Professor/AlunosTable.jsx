@@ -146,62 +146,54 @@ function AlunosTable() {
     return (
         <div>
             <div className="filter-container" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-    <div className='title'>
-        <Typography 
-            variant="h4" 
-            component="h4" 
-            style={{ 
-                marginBottom: '10px', 
-                fontFamily: 'Roboto, sans-serif', 
-                fontWeight: 'bold', 
-                textTransform: 'uppercase',
-                whiteSpace: 'nowrap',  // Ensure the text stays on one line
-                paddingLeft: '20px'  // Add some padding to the left
-            }}
-        >
-            Controle de Tarefas
-        </Typography>
-    </div>
-    <div className="filter-box" style={{ display: "flex", alignItems: "center" }}>
-        <TextField
-            label="Nome"
-            variant="outlined"
-            size="small"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="compact-input"
-            InputProps={{
-                endAdornment: (
-                    <InputAdornment position="end">
-                        <SearchIcon />
-                    </InputAdornment>
-                )
-            }}
-            style={{ marginRight: '10px', width: '300px' }}  // Add some spacing between inputs
-        />
-        <FormControl variant="outlined" size="small" className="compact-input" style={{ marginRight: '10px' }}>
-            <InputLabel>Ordenar Por</InputLabel>
-            <Select
-                value={sortOption}
-                onChange={handleSortChange}
-                label="Ordenar Por"
-            >
-                <MenuItem value=""><em>Nada</em></MenuItem>
-                <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
-                <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
-            </Select>
-        </FormControl>
-        <Button
-            variant="contained"
-            size="small"
-            className="button"
-            onClick={handleOpenDialog}
-            style={{ color: 'white', width: '80px', height: '38px'}}
-        >
-            Filtros
-        </Button>
-    </div>
-</div>
+                <div className='title'>
+                    <Typography 
+                        variant="h4" 
+                        component="h4" 
+                    >
+                        Controle de Tarefas
+                    </Typography>
+                </div>
+                <div className="filter-box" style={{ display: "flex", alignItems: "center" }}>
+                    <TextField
+                        label="Nome"
+                        variant="outlined"
+                        size="small"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        className="compact-input"
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            )
+                        }}
+                        style={{ marginRight: '10px', width: '300px' }}  // Add some spacing between inputs
+                    />
+                    <FormControl variant="outlined" size="small" className="compact-input" style={{ marginRight: '10px' }}>
+                        <InputLabel>Ordenar Por</InputLabel>
+                        <Select
+                            value={sortOption}
+                            onChange={handleSortChange}
+                            label="Ordenar Por"
+                        >
+                            <MenuItem value=""><em>Nada</em></MenuItem>
+                            <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
+                            <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Button
+                        variant="contained"
+                        size="small"
+                        className="button"
+                        onClick={handleOpenDialog}
+                        style={{ color: 'white', width: '80px', height: '38px'}}
+                    >
+                        Filtros
+                    </Button>
+                </div>
+            </div>
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <DialogTitle>Filtros</DialogTitle>
                 <DialogContent>
@@ -246,32 +238,32 @@ function AlunosTable() {
                                         style={{ minWidth: column.minWidth, backgroundColor: '#f0f0f0', fontWeight: 'bold' }}
                                     >
                                         {column.id === 'RA' ? (
-                                        <div className='icon-admin' style={{ paddingTop: "4px", display: "flex" }}>
-                                            <ContactsIcon style={{ paddingRight: "3px" }} />
-                                            {column.label}
-                                        </div>
+                                            <div className='icon-admin' style={{ paddingTop: "4px", display: "flex" }}>
+                                                <ContactsIcon style={{ paddingRight: "3px" }} />
+                                                {column.label}
+                                            </div>
                                         ) : column.id === "turma" ? (
-                                        <div className="icon-email" style={{ paddingTop: "4px", display: "flex" }}>
-                                            <GroupsIcon style={{ paddingRight: "3px" }} />
-                                            {column.label}
-                                        </div>
+                                            <div className="icon-email" style={{ paddingTop: "4px", display: "flex" }}>
+                                                <GroupsIcon style={{ paddingRight: "3px" }} />
+                                                {column.label}
+                                            </div>
                                         ) : column.id === "nome" ? (
-                                        <div className="icon-nome" style={{ paddingTop: "4px", display: "flex" }}>
-                                            <BadgeIcon style={{ paddingRight: "3px" }} />
-                                            {column.label}
-                                        </div>
+                                            <div className="icon-nome" style={{ paddingTop: "4px", display: "flex" }}>
+                                                <BadgeIcon style={{ paddingRight: "3px" }} />
+                                                {column.label}
+                                            </div>
                                         ) : column.id === "tarefas" ? (
-                                        <div className="icon-edit" style={{ paddingTop: "4px", display: "flex" }}>
-                                            <ComputerIcon style={{ paddingRight: "3px" }} />
-                                            {column.label}
-                                        </div>
+                                            <div className="icon-edit" style={{ paddingTop: "4px", display: "flex" }}>
+                                                <ComputerIcon style={{ paddingRight: "3px" }} />
+                                                {column.label}
+                                            </div>
                                         ) : column.id === "actions" ? (
-                                        <div className="icon-delete" style={{ paddingTop: "4px", display: "flex" }}>
-                                            <AssignmentIndIcon style={{ paddingRight: "3px" }} />
-                                            {column.label}
-                                        </div>
+                                            <div className="icon-delete" style={{ paddingTop: "4px", display: "flex" }}>
+                                                <AssignmentIndIcon style={{ paddingRight: "3px" }} />
+                                                {column.label}
+                                            </div>
                                         ) : (
-                                        column.label
+                                            column.label
                                         )}
                                     </TableCell>
                                 ))}

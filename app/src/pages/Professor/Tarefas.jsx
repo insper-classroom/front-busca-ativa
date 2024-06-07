@@ -189,7 +189,6 @@ function Tarefas() {
         tarefa.titulo && tarefa.titulo.toLowerCase().includes(search.toLowerCase()) &&
         (statusFilter.length === 0 || statusFilter.includes(tarefa.status))
     );
-    
 
     return (
         <div>
@@ -200,7 +199,7 @@ function Tarefas() {
                         <Button variant="contained" color="secondary" onClick={() => window.history.back()}>
                             Voltar
                         </Button>
-                        <Typography variant="h4" component="h1" align="center" style={{ flex: 1, textAlign: 'center' }}>
+                        <Typography variant="h4" component="h1" className="titulo-centro">
                             Tarefas
                         </Typography>
                     </Box>
@@ -208,19 +207,19 @@ function Tarefas() {
                     <Typography variant="h6" component="h2" gutterBottom>
                         Informações do aluno
                     </Typography>
-                    <Box className="aluno-info-container" display="flex" justifyContent="space-between">
+                    <Box className="aluno-info-container">
                         <Paper elevation={3} className="aluno-info-item">
-                            <Typography variant="h6" align="left">
+                            <Typography variant="h6">
                                 Nome: {aluno.nome}
                             </Typography>
                         </Paper>
                         <Paper elevation={3} className="aluno-info-item">
-                            <Typography variant="h6" align="left">
+                            <Typography variant="h6">
                                 Turma: {aluno.turma}
                             </Typography>
                         </Paper>
                         <Paper elevation={3} className="aluno-info-item">
-                            <Typography variant="h6" align="left">
+                            <Typography variant="h6">
                                 RA: {aluno.RA}
                             </Typography>
                         </Paper>
@@ -232,14 +231,14 @@ function Tarefas() {
                             fullWidth
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            style={{ marginBottom: '20px' }}
+                            className="search-input"
                         />
                         <Button
                             variant="contained"
                             color="primary"
                             startIcon={<FilterListIcon />}
                             onClick={handleOpenDialog}
-                            style={{ marginLeft: '10px', marginBottom: '20px' }}
+                            className="filter-button"
                         >
                             Filtros
                         </Button>
@@ -255,7 +254,7 @@ function Tarefas() {
                                 setShowAddTask(!showAddTask);
                             }
                         }}
-                        style={{ marginBottom: '20px' }}
+                        className="add-task-button"
                     >
                         {showAddTask ? 'Cancelar' : 'Adicionar Matéria'}
                     </Button>
@@ -263,7 +262,7 @@ function Tarefas() {
                         Lista de tarefas do aluno
                     </Typography>
                     {showAddTask && (
-                        <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
+                        <form onSubmit={handleSubmit} className="task-form">
                             <TextField
                                 label="Matéria"
                                 variant="outlined"
@@ -271,7 +270,7 @@ function Tarefas() {
                                 required
                                 value={titulo}
                                 onChange={(e) => setTitulo(e.target.value)}
-                                style={{ marginBottom: '20px' }}
+                                className="form-input"
                             />
                             <TextField
                                 label="Tarefa"
@@ -281,7 +280,7 @@ function Tarefas() {
                                 rows={4}
                                 value={observacoes}
                                 onChange={(e) => setObservacoes(e.target.value)}
-                                style={{ marginBottom: '20px' }}
+                                className="form-input"
                             />
                             {editingTaskId && (
                                 <>
@@ -292,7 +291,7 @@ function Tarefas() {
                                         onChange={(e) => setStatus(e.target.value)}
                                         fullWidth
                                         displayEmpty
-                                        style={{ marginBottom: '20px' }}
+                                        className="form-input"
                                     >
                                         <MenuItem value="Em andamento">Em andamento</MenuItem>
                                         <MenuItem value="Finalizado">Finalizado</MenuItem>
@@ -307,7 +306,7 @@ function Tarefas() {
                     <Box className="tarefas-container">
                         {filteredTarefas.length > 0 ? (
                             filteredTarefas.slice().reverse().map((tarefa, index) => (
-                                <Card key={index} style={{ marginBottom: '20px' }}>
+                                <Card key={index} className="tarefa-card">
                                     <CardContent>
                                         <Typography variant='h6'>Matéria: {tarefa.titulo}</Typography>
                                         <Typography variant='h6'>Tarefa:</Typography>
@@ -316,8 +315,7 @@ function Tarefas() {
                                         </Paper>
                                         <Typography 
                                             variant='h6' 
-                                            className="status" 
-                                            style={{ color: tarefa.status === 'Finalizado' ? 'green' : 'red' }}
+                                            className={`status ${tarefa.status === 'Finalizado' ? 'status-finalizado' : 'status-andamento'}`}
                                         >
                                             {tarefa.status}
                                         </Typography>
