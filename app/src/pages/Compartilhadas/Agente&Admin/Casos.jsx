@@ -28,30 +28,28 @@ import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
 import './static/Casos.css';
 
-// Inicializa cookies
 const cookies = new Cookies();
 
-// Função principal do componente
 export default function Casos() {
-  const { id } = useParams(); // Obtém o id da URL
-  const permissao = cookies.get('permissao'); // Obtém a permissão do usuário dos cookies
-  const token = cookies.get('token'); // Obtém o token dos cookies
-  const [idAluno, setIdAluno] = useState(null); // Estado para armazenar o id do aluno
-  const [dataAluno, setDataAluno] = useState({}); // Estado para armazenar os dados do aluno
-  const [dataCasos, setDataCasos] = useState({}); // Estado para armazenar os dados dos casos
-  const [urgencia, setUrgencia] = useState(''); // Estado para armazenar a urgência do caso
-  const [status, setStatus] = useState(''); // Estado para armazenar o status do caso
-  const [ligacoes, setLigacoes] = useState([]); // Estado para armazenar as ligações
-  const [visitas, setVisitas] = useState([]); // Estado para armazenar as visitas
-  const [atendimentos, setAtendimentos] = useState([]); // Estado para armazenar os atendimentos
-  const [usuario, setUsuario] = useState(''); // Estado para armazenar o nome do usuário
-  const [selectedRowsLig, setSelectedRowsLig] = useState([]); // Estado para armazenar as linhas selecionadas das ligações
-  const [selectedRowsVis, setSelectedRowsVis] = useState([]); // Estado para armazenar as linhas selecionadas das visitas
-  const [selectedRowsAtendimento, setSelectedRowsAtendimento] = useState([]); // Estado para armazenar as linhas selecionadas dos atendimentos
-  const [anchorLig, setAnchorLig] = useState(null); // Estado para armazenar o âncora das ligações
-  const [anchorVis, setAnchorVis] = useState(null); // Estado para armazenar o âncora das visitas
-  const [anchorAtendimento, setAnchorAtendimento] = useState(null); // Estado para armazenar o âncora dos atendimentos
-  const [valueTabs, setValueTabs] = useState("0"); // Estado para armazenar o valor das abas
+  const { id } = useParams();
+  const permissao = cookies.get('permissao');
+  const token = cookies.get('token');
+  const [idAluno, setIdAluno] = useState(null);
+  const [dataAluno, setDataAluno] = useState({});
+  const [dataCasos, setDataCasos] = useState({});
+  const [urgencia, setUrgencia] = useState('');
+  const [status, setStatus] = useState('');
+  const [ligacoes, setLigacoes] = useState([]);
+  const [visitas, setVisitas] = useState([]);
+  const [atendimentos, setAtendimentos] = useState([]);
+  const [usuario, setUsuario] = useState('');
+  const [selectedRowsLig, setSelectedRowsLig] = useState([]);
+  const [selectedRowsVis, setSelectedRowsVis] = useState([]);
+  const [selectedRowsAtendimento, setSelectedRowsAtendimento] = useState([]);
+  const [anchorLig, setAnchorLig] = useState(null);
+  const [anchorVis, setAnchorVis] = useState(null);
+  const [anchorAtendimento, setAnchorAtendimento] = useState(null);
+  const [valueTabs, setValueTabs] = useState("0");
   const [formData, setFormData] = useState({
     abae: '',
     data: dayjs(),
@@ -59,13 +57,12 @@ export default function Casos() {
     observacao: '',
     func: '',
     responsavel: '',
-  }); // Estado para armazenar os dados do formulário
+  });
 
-  const openLig = Boolean(anchorLig); // Verifica se o popper de ligação está aberto
-  const openVis = Boolean(anchorVis); // Verifica se o popper de visita está aberto
-  const openAtendimento = Boolean(anchorAtendimento); // Verifica se o popper de atendimento está aberto
+  const openLig = Boolean(anchorLig);
+  const openVis = Boolean(anchorVis);
+  const openAtendimento = Boolean(anchorAtendimento);
 
-  // Definição das colunas da DataGrid para ligações
   const columnsLig = [
     { field: 'data', headerName: 'Data', width: 200 },
     { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
@@ -73,7 +70,6 @@ export default function Casos() {
     { field: 'observacao', headerName: 'Observações', width: 200 },
   ];
 
-  // Mapeamento das linhas da DataGrid para ligações
   const rowsLig = ligacoes.map((lig, index) => ({
     id: index,
     data: lig.data ? new Date(lig.data).toLocaleDateString('pt-BR') : '',
@@ -82,14 +78,12 @@ export default function Casos() {
     observacao: lig.observacao
   }));
 
-  // Definição das colunas da DataGrid para visitas
   const columnsVis = [
     { field: 'data', headerName: 'Data', width: 200 },
     { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
     { field: 'observacao', headerName: 'Observações', width: 200 },
   ];
 
-  // Mapeamento das linhas da DataGrid para visitas
   const rowsVis = visitas.map((vis, index) => ({
     id: index,
     data: vis.data ? new Date(vis.data).toLocaleDateString('pt-BR') : '',
@@ -97,7 +91,6 @@ export default function Casos() {
     observacao: vis.observacao
   }));
 
-  // Definição das colunas da DataGrid para atendimentos
   const columnsAtendimento = [
     { field: 'data', headerName: 'Data', width: 200 },
     { field: 'func', headerName: 'Feito por', width: 200 },
@@ -105,7 +98,6 @@ export default function Casos() {
     { field: 'observacao', headerName: 'Observações', width: 200 },
   ];
 
-  // Mapeamento das linhas da DataGrid para atendimentos
   const rowsAtendimento = atendimentos.map((atendimento, index) => ({
     id: index,
     data: atendimento.data ? new Date(atendimento.data).toLocaleDateString('pt-BR') : '',
@@ -114,13 +106,11 @@ export default function Casos() {
     observacao: atendimento.observacao,
   }));
 
-  // Carrega o usuário, id do aluno e dados do aluno quando o componente é montado ou o id muda
   useEffect(() => {
     loadUsuario();
     loadIdAluno();
   }, [id]);
 
-  // Carrega os dados dos casos e do aluno quando o id do aluno é carregado
   useEffect(() => {
     if (idAluno) {
       loadCasos();
@@ -128,7 +118,6 @@ export default function Casos() {
     }
   }, [idAluno]);
 
-  // Função para carregar o id do aluno a partir do id do caso
   function loadIdAluno() {
     fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/caso/${id}`, {
       method: 'GET',
@@ -147,7 +136,6 @@ export default function Casos() {
       });
   }
 
-  // Função para carregar os dados dos casos
   function loadCasos() {
     fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/casos?aluno_id=${idAluno}`, {
       method: 'GET',
@@ -171,7 +159,6 @@ export default function Casos() {
       });
   }
 
-  // Função para carregar os dados do aluno
   function loadAluno() {
     fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/${idAluno}`, {
       method: 'GET',
@@ -190,7 +177,6 @@ export default function Casos() {
       });
   }
 
-  // Função para carregar os dados do usuário
   function loadUsuario() {
     fetch('https://sibae-5d2fe0c3da99.herokuapp.com/usuarios-dados', {
       method: 'POST',
@@ -205,7 +191,6 @@ export default function Casos() {
       });
   }
 
-  // Função para gerar relatório
   function gerarRealatorio() {
     fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/gerar-relatorio', {
       method: 'POST',
@@ -250,7 +235,6 @@ export default function Casos() {
     setSelectedRowsAtendimento([]);
   }
 
-  // Função para atualizar status e urgência do caso
   function clickSU(newStatus, newUrgencia) {
     const casoData = {
       urgencia: newUrgencia,
@@ -275,7 +259,6 @@ export default function Casos() {
     });
   }
 
-  // Função para submeter uma nova ligação
   const handleSubmitLig = async (e) => {
     e.preventDefault();
     const casoData = {
@@ -309,6 +292,7 @@ export default function Casos() {
         telefone: '',
         observacao: '',
       });
+      setAnchorLig(null);
       loadCasos();
       loadAluno();
     } catch (error) {
@@ -317,7 +301,6 @@ export default function Casos() {
     }
   };
 
-  // Função para submeter uma nova visita
   const handleSubmitVis = async (e) => {
     e.preventDefault();
     const casoData = {
@@ -349,6 +332,7 @@ export default function Casos() {
         data: dayjs(),
         observacao: '',
       });
+      setAnchorVis(null);
       loadCasos();
       loadAluno();
     } catch (error) {
@@ -357,7 +341,6 @@ export default function Casos() {
     }
   };
 
-  // Função para submeter um novo atendimento
   const handleSubmitAtendimento = async (e) => {
     e.preventDefault();
     const casoData = {
@@ -389,6 +372,7 @@ export default function Casos() {
         data: dayjs(),
         observacao: '',
       });
+      setAnchorAtendimento(null);
       loadCasos();
       loadAluno();
     } catch (error) {
@@ -397,7 +381,6 @@ export default function Casos() {
     }
   };
 
-  // Funções para abrir e fechar os poppers
   function clickAtendimento(event) {
     setAnchorAtendimento(anchorAtendimento ? null : event.currentTarget);
   }
@@ -410,21 +393,18 @@ export default function Casos() {
     setAnchorVis(anchorVis ? null : event.currentTarget);
   }
 
-  // Função para lidar com a mudança de status
   const handleChangeStatus = (event) => {
     const newStatus = event.target.value;
     setStatus(newStatus);
     clickSU(newStatus, urgencia);
   };
 
-  // Função para lidar com a mudança de urgência
   const handleChangeUrgencia = (event) => {
     const newUrgencia = event.target.value;
     setUrgencia(newUrgencia);
     clickSU(status, newUrgencia);
   };
 
-  // Função para lidar com mudanças no formulário
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -433,7 +413,6 @@ export default function Casos() {
     });
   };
 
-  // Função para lidar com a mudança de data no formulário
   const handleDateChange = (date) => {
     setFormData({
       ...formData,
@@ -441,14 +420,12 @@ export default function Casos() {
     });
   };
 
-  // Função para lidar com a mudança de abas
   const handleChangeTabs = (event, newValue) => {
     setValueTabs(newValue);
   };
 
   return (
     <div className='card'>
-      {/* Renderiza o cabeçalho com base na permissão do usuário */}
       {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
       <Grid container columnSpacing={2} rowSpacing={1} justifyContent="center" style={{ backgroundColor: '#f5f5f5', marginTop: '7%', borderRadius: '10px', padding: '20px' }}>
         <Grid container spacing={2} style={{ width: '86.7%', marginLeft: "9px", textAlign: "left", border: "1px solid black", borderRadius: "10px", backgroundColor: '#e0e0e0' }}>
