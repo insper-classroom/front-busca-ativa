@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/pt-br';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import dayjs from 'dayjs';
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid } from '@mui/x-data-grid';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -14,6 +14,7 @@ import Tab from '@mui/material/Tab';
 import { useParams } from 'react-router-dom';
 import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
+import './static/Casos.css';
 
 const cookies = new Cookies();
 
@@ -26,9 +27,9 @@ export default function Casos() {
     const [dataCasos, setDataCasos] = useState([]);
     const [urgencia, setUrgencia] = useState('');
     const [status, setStatus] = useState('');
-    const [ligacoes, setLigacoes] = useState([])
-    const [visitas, setVisitas] = useState([])
-    const [atendimentos, setAtendimentos] = useState([])
+    const [ligacoes, setLigacoes] = useState([]);
+    const [visitas, setVisitas] = useState([]);
+    const [atendimentos, setAtendimentos] = useState([]);
     const token = cookies.get('token');
     const [selectedRowsLig, setSelectedRowsLig] = useState([]);
     const [selectedRowsVis, setSelectedRowsVis] = useState([]);
@@ -46,29 +47,28 @@ export default function Casos() {
         { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
         { field: 'telefone', headerName: 'Telefone', width: 200 },
         { field: 'observacao', headerName: 'Observações', width: 200 },
-      ];
-      
-      const rowsLig = ligacoes.map((lig, index) => ({
+    ];
+    
+    const rowsLig = ligacoes.map((lig, index) => ({
         id: index,
         data: lig.data,
         abae: lig.abae,
         telefone: lig.telefone,
-        observacao:lig.observacao
+        observacao: lig.observacao
     }));
 
     const columnsVis = [
         { field: 'data', headerName: 'Data', width: 200 },
         { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
         { field: 'observacao', headerName: 'Observações', width: 200 },
-      ];
-      
-      const rowsVis = visitas.map((vis, index) => ({
+    ];
+    
+    const rowsVis = visitas.map((vis, index) => ({
         id: index,
         data: vis.data,
         abae: vis.abae,
-        observacao:vis.observacao
+        observacao: vis.observacao
     }));
-
 
     const columnsAtendimento = [
         { field: 'data', headerName: 'Data', width: 200 },
@@ -85,8 +85,7 @@ export default function Casos() {
         observacao: atendimento.observacao,
     }));
 
-    const [valueTabs, setValueTabs] = useState(0);
-
+    const [valueTabs, setValueTabs] = useState("0");
 
     const [formData, setFormData] = useState({
         abae: '',
@@ -96,11 +95,6 @@ export default function Casos() {
         func: '',
         responsavel: '',
     });
-
-    // useEffect(() => {
-    //     console.log("hellooo");
-    //     loadUsuario();
-    // }, []);
 
     useEffect(() => {
         loadUsuario();
@@ -123,7 +117,6 @@ export default function Casos() {
             }
         }).then(response => response.json())
         .then(data => {
-            console.log("loadIdAluno")
             setIdAluno(data._id)
             setIsIdAlunoLoaded(true)
         })
@@ -133,14 +126,10 @@ export default function Casos() {
         });
     }
 
-
-
     function loadCasos() {
-        //TODO pegar o id do aluno
         if (!isIdAlunoLoaded){
             return;
         }
-        console.log("loadCasos")
         fetch(`http://localhost:8000/casos?aluno_id=${idAluno}`, {
             method: 'GET',
             headers: {
@@ -156,8 +145,6 @@ export default function Casos() {
             setLigacoes(data.caso[0].ligacoes)
             setVisitas(data.caso[0].visitas)
             setAtendimentos(data.caso[0].atendimentos)
-            
-            
         })
         .catch(response => {
             alert('Erro ao achar os casos do aluno!');
@@ -169,8 +156,6 @@ export default function Casos() {
         if (!isIdAlunoLoaded){
             return;
         }
-        //TODO pegar o id do aluno
-        console.log("loadAluno")  
         fetch(`http://localhost:8000/alunoBuscaAtiva/${idAluno}`, {
             method: 'GET',
             headers: {
@@ -178,37 +163,32 @@ export default function Casos() {
                 'Authorization': `Bearer ${token}`
             }
         })
-            .then(response => response.json())
-            .then(data => {
-                setDataAluno(data);
-            })
-            .catch(response => {
-                alert('Erro ao achar aluno!');
-                alert(response.status);
-            });
+        .then(response => response.json())
+        .then(data => {
+            setDataAluno(data);
+        })
+        .catch(response => {
+            alert('Erro ao achar aluno!');
+            alert(response.status);
+        });
     }
 
-    
-
     function loadUsuario(){
-
         fetch('http://localhost:8000/usuarios-dados', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body:   JSON.stringify({"token": token})
+            body: JSON.stringify({"token": token})
         }).then(response => response.json())
         .then(data => {
             setUsuario(data.nome)
         })
-
     }
 
-
-
     function gerarRealatorio() {
+        console.log('Gerando relatório...');
         fetch('http://localhost:8000/casos/gerar-relatorio', {
             method: 'POST',
             headers: {
@@ -252,15 +232,11 @@ export default function Casos() {
         setSelectedRowsAtendimento([]);
     }
     
-
-    
     function clickSU(newStatus, newUrgencia) {
         const casoData = {
             urgencia: newUrgencia,
             status: newStatus,
         }
-   
-
         fetch('http://localhost:8000/casos/' + dataCasos._id , {
             method: 'PUT',
             headers: {
@@ -273,15 +249,12 @@ export default function Casos() {
               throw new Error('Erro ao atualizar informações do caso');
             }
             alert('Informações atualizadas com sucesso');
-    
         }).catch(response => {
             alert('Erro ao atualizar informações do caso');
             alert(response.status);
         })
     }
-    
 
-    
     const handleSubmitLig = async (e) => {
         e.preventDefault();
         const casoData = {
@@ -291,7 +264,6 @@ export default function Casos() {
             observacao: formData.observacao,
             ligacao: true,
             visita: false,
-
         };
         try {
             const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
@@ -308,14 +280,12 @@ export default function Casos() {
             }
 
             const data = await response.json();
-            console.log('Cadastro realizado com sucesso:', data);
             alert('Cadastro realizado com sucesso');
             setFormData({
                 abae: '',
                 data: dayjs(),
                 telefone: '',
                 observacao: '',
-
             });
             loadCasos()
             loadAluno()
@@ -333,7 +303,6 @@ export default function Casos() {
             observacao: formData.observacao,
             visita: true,
             ligacao:false
-
         };
         try {
             const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
@@ -350,16 +319,12 @@ export default function Casos() {
             }
 
             const data = await response.json();
-            console.log('Cadastro realizado com sucesso:', data);
             alert('Cadastro realizado com sucesso');
             setFormData({
                 abae: '',
                 data: dayjs(),
                 observacao: '',
-
             });
-            // loadCasos()
-            // loadAlunos()
         } catch (error) {
             console.error('Erro:', error);
             alert('Erro ao salvar o caso');
@@ -390,7 +355,6 @@ export default function Casos() {
             }
     
             const data = await response.json();
-            console.log('Cadastro realizado com sucesso:', data);
             alert('Cadastro realizado com sucesso');
             setFormData({
                 abae: '',
@@ -404,14 +368,10 @@ export default function Casos() {
             alert('Erro ao salvar o caso');
         }
     };
-    
-
-
 
     function clickAtendimento(event) {
         setAnchorAtendimento(anchorAtendimento ? null : event.currentTarget);
     }
-
 
     function clickLigacao(event) {
         setAnchorLig(anchorLig ? null : event.currentTarget);
@@ -448,7 +408,6 @@ export default function Casos() {
         });
     };
 
-    
     const handleChangeTabs = (event, newValue) => {
       setValueTabs(newValue);
     }
@@ -457,22 +416,21 @@ export default function Casos() {
         <div className='card'>
             {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
             <Grid container columnSpacing={2} rowSpacing={1}>
-                <Grid item xs={12} style={{ textAlign: "center", paddingTop: "50px" }}>
+                <Grid item xs={12} className="aluno-info-title">
                     Informações do Aluno
                 </Grid>
-                <Grid item xs={12} style={{ paddingTop: "40px", margin: "0px 100px" }}>
-                    <Grid container spacing={2} style={{ textAlign: "center", border: "1px solid black", borderRadius: "10px" }}>
-                        <Grid item xs={4}>Nome: {dataAluno?.nome}</Grid>
-                        <Grid item xs={4}>Turma: {dataAluno?.turma}</Grid>
-                        <Grid item xs={4}>RA: {dataAluno?.RA}</Grid>
-                        <Grid item xs={6}>Endereço: {dataAluno?.endereco}</Grid>
-                        <Grid item xs={6}>Telefone: {dataAluno?.telefone}</Grid>
-                        
+                <Grid item xs={12} className="aluno-info-container">
+                    <Grid container spacing={2} className="aluno-info-box">
+                        <Grid item xs={4} className="info-item">Nome: {dataAluno?.nome}</Grid>
+                        <Grid item xs={4} className="info-item">Turma: {dataAluno?.turma}</Grid>
+                        <Grid item xs={4} className="info-item">RA: {dataAluno?.RA}</Grid>
+                        <Grid item xs={6} className="info-item">Endereço: {dataAluno?.endereco}</Grid>
+                        <Grid item xs={6} className="info-item">Telefone: {dataAluno?.telefone}</Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} style={{ textAlign: "center", paddingTop: "50px", margin: "0px 100px" }}>
-                    <Grid container spacing={2} style={{ textAlign: "center", border: "1px solid black", borderRadius: "10px" }}>
-                        <Grid item xs={12} style={{ textAlign: "center" }}>Ficha do Aluno</Grid>
+                <Grid item xs={12} className="ficha-aluno-container">
+                    <Grid container spacing={2} className="ficha-aluno-box">
+                        <Grid item xs={12} className="ficha-aluno-title">Ficha do Aluno</Grid>
                         <Grid item xs={6}>
                             <FormControl fullWidth>
                                 <InputLabel id="status-select-label">Status</InputLabel>
@@ -508,19 +466,19 @@ export default function Casos() {
                             </FormControl>
                         </Grid>
                         <Grid item xs={4}>
-                            <Button onClick={clickLigacao}>Adicionar Ligação</Button>
+                            <Button variant="contained" color="primary" onClick={clickLigacao}>Adicionar Ligação</Button>
                         </Grid>
                         <Grid item xs={4}>
-                            <Button onClick={clickVisita}>Adicionar Visita</Button>
+                            <Button variant="contained" color="primary" onClick={clickVisita}>Adicionar Visita</Button>
                         </Grid>
                         <Grid item xs={4}>
-                            <Button onClick={clickAtendimento}>Adicionar Atendimento aos Pais</Button>
+                            <Button variant="contained" color="primary" onClick={clickAtendimento}>Adicionar Atendimento aos Pais</Button>
                         </Grid>
 
                         <Grid item xs={12}>
                             <Popper open={openLig} anchorEl={anchorLig} placement="bottom" modifiers={[{ name: 'offset', options: { offset: [0, 40] } }]} >
                                 <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} style={{borderRadius:"10px"}}>
-                                    <Grid container item xs={12} style={{ alignContent: "rigth", background: "lightgrey", borderRadius: "10px", padding: "10px" }}>
+                                    <Grid container item xs={12} className="popper-container">
                                         <Container maxWidth="xs">
                                             <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                                 <Typography component="h1" variant="h5">
@@ -585,7 +543,7 @@ export default function Casos() {
                         <Grid item xs={12}>
                             <Popper open={openVis} anchorEl={anchorVis} placement="bottom" modifiers={[{ name: 'offset', options: { offset: [0, 40] } }]}>
                                 <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} style={{borderRadius:"10px"}} >
-                                    <Grid container item xs={12} style={{ alignContent: "rigth", background: "lightgrey", borderRadius: "10px", padding: "10px" }}>
+                                    <Grid container item xs={12} className="popper-container">
                                         <Container maxWidth="xs">
                                             <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                                 <Typography component="h1" variant="h5">
@@ -639,7 +597,7 @@ export default function Casos() {
                         <Grid item xs={12}>
                             <Popper open={openAtendimento} anchorEl={anchorAtendimento} placement="bottom" modifiers={[{ name: 'offset', options: { offset: [0, 40] } }]} >
                                 <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} style={{borderRadius:"10px"}}>
-                                    <Grid container item xs={12} style={{ alignContent: "rigth", background: "lightgrey", borderRadius: "10px", padding: "10px" }}>
+                                    <Grid container item xs={12} className="popper-container">
                                         <Container maxWidth="xs">
                                             <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                                 <Typography component="h1" variant="h5">
@@ -702,14 +660,14 @@ export default function Casos() {
                             </Popper>
                         </Grid>
 
-                        <Grid item xs={12} style={{ textAlign: "center" }}>Histórico da Busca Ativa</Grid>
+                        <Grid item xs={12} className="historico-title">Histórico da Busca Ativa</Grid>
                         
-                        <Grid item xs={12} style={{ textAlign: "center" }}>
-                            <Button onClick={gerarRealatorio}>Gerar Relatório</Button>
+                        <Grid item xs={12} className="gerar-relatorio-container">
+                            <Button variant="contained" color="primary" onClick={gerarRealatorio}>Gerar Relatório</Button>
                         </Grid>
 
-                        <Grid container item xs={12} >
-                            <TabContext value={valueTabs} style={{alignItems:"rigth"}}>
+                        <Grid container item xs={12} className="tab-container">
+                            <TabContext value={valueTabs}>
                                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                                 <TabList onChange={handleChangeTabs} aria-label="tabs example">
                                     <Tab label="Ligação" value="0" />
@@ -717,9 +675,8 @@ export default function Casos() {
                                     <Tab label="Atendimento aos Pais" value="2" />
                                 </TabList>
                                 </Box>
-                                <TabPanel value="0" >
-                                    
-                                    <Box sx={{ height: 400, width: "100%"}}>
+                                <TabPanel value="0">
+                                    <Box sx={{ height: 400, width: "100%", textAlign: 'center' }}>
                                         <DataGrid rows={rowsLig} columns={columnsLig} pageSize={5} checkboxSelection
                                         onRowSelectionModelChange={(ids) => {
                                             const auxselectedRowsLig = (ids.map((id) => rowsLig.find((row) => row.id === id)));
@@ -730,8 +687,7 @@ export default function Casos() {
                                     </Box>
                                 </TabPanel>
                                 <TabPanel value="1">
-                                
-                                    <Box sx={{ height: 400, width: "100%"}}>
+                                    <Box sx={{ height: 400, width: "100%", textAlign: 'center' }}>
                                         <DataGrid rows={rowsVis} columns={columnsVis} pageSize={5} checkboxSelection
                                         onRowSelectionModelChange={(ids) => {
                                             const auxselectedRowsVis = ids.map((id) => rowsVis.find((row) => row.id === id));
@@ -743,8 +699,7 @@ export default function Casos() {
                                     </Box>
                                 </TabPanel>
                                 <TabPanel value="2">
-                                    
-                                    <Box sx={{ height: 400, width: "100%" }}>
+                                    <Box sx={{ height: 400, width: "100%", textAlign: 'center' }}>
                                         <DataGrid rows={rowsAtendimento} columns={columnsAtendimento} pageSize={5} checkboxSelection
                                         onRowSelectionModelChange={(ids) => {
                                             const auxselectedRowsAtendimento= ids.map((id) => rowsAtendimento.find((row) => row.id === id));
@@ -753,7 +708,6 @@ export default function Casos() {
 []                                          }}
                                             rowSelectionModel={selectedRowsAtendimento.map((row) => row.id)}
                                          />
-                                         
                                     </Box>
                                 </TabPanel>
                             </TabContext>
