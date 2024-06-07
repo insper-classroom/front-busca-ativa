@@ -19,7 +19,6 @@ const cookies = new Cookies();
 
 export default function Casos() {
 
-    //Inicializas as variáveis que serão usado no componente
     const { id } = useParams();
     const permissao = cookies.get('permissao');
     const [idAluno, setIdAluno] = useState();
@@ -43,47 +42,41 @@ export default function Casos() {
     const openVis = Boolean(anchorVis);
     const openAtendimento = Boolean(anchorAtendimento);
 
-    //Criação das colunas para a tabela de ligacoes
     const columnsLig = [
         { field: 'data', headerName: 'Data', width: 200 },
         { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
         { field: 'telefone', headerName: 'Telefone', width: 200 },
         { field: 'observacao', headerName: 'Observações', width: 200 },
     ];
-      
-    //Criação das linhas para a tabela de visitas
+
     const rowsLig = ligacoes.map((lig, index) => ({
         id: index,
         data: lig.data ? new Date(lig.data).toLocaleDateString('pt-BR') : '',
         abae: lig.abae,
         telefone: lig.telefone,
-        observacao:lig.observacao
+        observacao: lig.observacao
     }));
 
-    //Criação das colunas para a tabela de visitas
     const columnsVis = [
         { field: 'data', headerName: 'Data', width: 200 },
         { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
         { field: 'observacao', headerName: 'Observações', width: 200 },
-      ];
-    
-    //Criação das linhas para a tabela de visitas
+    ];
+
     const rowsVis = visitas.map((vis, index) => ({
         id: index,
         data: vis.data ? new Date(vis.data).toLocaleDateString('pt-BR') : '',
         abae: vis.abae,
-        observacao:vis.observacao
+        observacao: vis.observacao
     }));
 
-    //Criação das colunas para a tabela de atendimentos
     const columnsAtendimento = [
-        { field: 'data', headerName: 'Data', width: 200 }, 
+        { field: 'data', headerName: 'Data', width: 200 },
         { field: 'func', headerName: 'Feito por', width: 200 },
         { field: 'responsavel', headerName: 'Responsável', width: 200 },
         { field: 'observacao', headerName: 'Observações', width: 200 },
     ];
-    
-    //Criação das linhas para a tabela de atendimentos
+
     const rowsAtendimento = atendimentos.map((atendimento, index) => ({
         id: index,
         data: atendimento.data ? new Date(atendimento.data).toLocaleDateString('pt-BR') : '',
@@ -92,9 +85,7 @@ export default function Casos() {
         observacao: atendimento.observacao,
     }));
 
-
-    const [valueTabs, setValueTabs] = useState(0);
-
+    const [valueTabs, setValueTabs] = useState("0");
 
     const [formData, setFormData] = useState({
         abae: '',
@@ -105,20 +96,19 @@ export default function Casos() {
         responsavel: '',
     });
 
-
     useEffect(() => {
         loadUsuario();
         loadIdAluno();
     }, [id]);
 
     useEffect(() => {
-        if (isIdAlunoLoaded){
+        if (isIdAlunoLoaded) {
             loadCasos();
             loadAluno();
         }
     }, [idAluno, isIdAlunoLoaded]);
 
-    function loadIdAluno(){
+    function loadIdAluno() {
         fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/caso/${id}`, {
             method: 'GET',
             headers: {
@@ -126,20 +116,18 @@ export default function Casos() {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => response.json())
-        .then(data => {
-            setIdAluno(data._id)
-            setIsIdAlunoLoaded(true)
-        })
-        .catch(response => {
-            alert('Erro ao achar o aluno!');
-            alert(response.status);
-        });
+            .then(data => {
+                setIdAluno(data._id)
+                setIsIdAlunoLoaded(true)
+            })
+            .catch(response => {
+                alert('Erro ao achar o aluno!');
+                alert(response.status);
+            });
     }
 
-
-
     function loadCasos() {
-        if (!isIdAlunoLoaded){
+        if (!isIdAlunoLoaded) {
             return;
         }
         fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/casos?aluno_id=${idAluno}`, {
@@ -149,25 +137,23 @@ export default function Casos() {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            setDataCasos(data.caso[0]);
-            setStatus(data.caso[0].status)
-            setUrgencia(data.caso[0].urgencia)
-            setLigacoes(data.caso[0].ligacoes)
-            setVisitas(data.caso[0].visitas)
-            setAtendimentos(data.caso[0].atendimentos)
-            
-            
-        })
-        .catch(response => {
-            alert('Erro ao achar os casos do aluno!');
-            alert(response.status);
-        });
+            .then(response => response.json())
+            .then(data => {
+                setDataCasos(data.caso[0]);
+                setStatus(data.caso[0].status)
+                setUrgencia(data.caso[0].urgencia)
+                setLigacoes(data.caso[0].ligacoes)
+                setVisitas(data.caso[0].visitas)
+                setAtendimentos(data.caso[0].atendimentos)
+            })
+            .catch(response => {
+                alert('Erro ao achar os casos do aluno!');
+                alert(response.status);
+            });
     }
-    
+
     function loadAluno() {
-        if (!isIdAlunoLoaded){
+        if (!isIdAlunoLoaded) {
             return;
         }
         fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/${idAluno}`, {
@@ -187,25 +173,19 @@ export default function Casos() {
             });
     }
 
-    
-
-    function loadUsuario(){
-
+    function loadUsuario() {
         fetch('https://sibae-5d2fe0c3da99.herokuapp.com/usuarios-dados', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body:   JSON.stringify({"token": token})
+            body: JSON.stringify({ "token": token })
         }).then(response => response.json())
-        .then(data => {
-            setUsuario(data.nome)
-        })
-
+            .then(data => {
+                setUsuario(data.nome)
+            })
     }
-
-
 
     function gerarRealatorio() {
         fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/gerar-relatorio', {
@@ -228,39 +208,36 @@ export default function Casos() {
                 "atendimentos": selectedRowsAtendimento
             })
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.blob();
-        })
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'relatorio.pdf';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'relatorio.pdf';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
         setSelectedRowsLig([]);
         setSelectedRowsVis([]);
         setSelectedRowsAtendimento([]);
     }
-    
 
-    
     function clickSU(newStatus, newUrgencia) {
         const casoData = {
             urgencia: newUrgencia,
             status: newStatus,
         }
-   
 
-        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id , {
+        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -268,19 +245,17 @@ export default function Casos() {
             },
             body: JSON.stringify(casoData),
         }).then(response => {
-            if (!response.ok){
-              throw new Error('Erro ao atualizar informações do caso');
+            if (!response.ok) {
+                throw new Error('Erro ao atualizar informações do caso');
             }
             alert('Informações atualizadas com sucesso');
-    
+
         }).catch(response => {
             alert('Erro ao atualizar informações do caso');
             alert(response.status);
         })
     }
-    
 
-    
     const handleSubmitLig = async (e) => {
         e.preventDefault();
         const casoData = {
@@ -290,7 +265,6 @@ export default function Casos() {
             observacao: formData.observacao,
             ligacao: true,
             visita: false,
-
         };
         try {
             const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id, {
@@ -314,7 +288,6 @@ export default function Casos() {
                 data: dayjs(),
                 telefone: '',
                 observacao: '',
-
             });
             loadCasos()
             loadAluno()
@@ -331,8 +304,7 @@ export default function Casos() {
             data: formData.data,
             observacao: formData.observacao,
             visita: true,
-            ligacao:false
-
+            ligacao: false
         };
         try {
             const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id, {
@@ -355,10 +327,9 @@ export default function Casos() {
                 abae: '',
                 data: dayjs(),
                 observacao: '',
-
             });
-            // loadCasos()
-            // loadAlunos()
+            loadCasos()
+            loadAluno()
         } catch (error) {
             console.error('Erro:', error);
             alert('Erro ao salvar o caso');
@@ -383,11 +354,11 @@ export default function Casos() {
                 },
                 body: JSON.stringify(casoData),
             });
-    
+
             if (!response.ok) {
                 throw new Error('Erro no cadastramento do caso');
             }
-    
+
             const data = await response.json();
             console.log('Cadastro realizado com sucesso:', data);
             alert('Cadastro realizado com sucesso');
@@ -403,14 +374,10 @@ export default function Casos() {
             alert('Erro ao salvar o caso');
         }
     };
-    
-
-
 
     function clickAtendimento(event) {
         setAnchorAtendimento(anchorAtendimento ? null : event.currentTarget);
     }
-
 
     function clickLigacao(event) {
         setAnchorLig(anchorLig ? null : event.currentTarget);
@@ -447,31 +414,25 @@ export default function Casos() {
         });
     };
 
-    
     const handleChangeTabs = (event, newValue) => {
-      setValueTabs(newValue);
+        setValueTabs(newValue);
     }
 
     return (
         <div className='card'>
             {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
-            <Grid container columnSpacing={2} rowSpacing={1}>
-                <Grid item xs={12} style={{ textAlign: "center", paddingTop: "50px" }}>
-                    Informações do Aluno
+            <Grid container columnSpacing={2} rowSpacing={1} justifyContent="center" style={{ backgroundColor: '#f5f5f5', marginTop: '7%', borderRadius: '10px', padding: '20px' }}>
+                <Grid container spacing={2} style={ { width: '86.7%' , marginLeft: "9px",textAlign: "left", border: "1px solid black", borderRadius: "10px", backgroundColor: '#e0e0e0' }}>
+                    <Grid item xs={12} style={{ textAlign: "center", fontWeight: 'bold', fontSize: '1.2rem' }}>Informações do Aluno</Grid>
+                    <Grid item xs={3} style={{ backgroundColor: '#ffffff', borderRadius: '10px', padding: '10px', margin: '10px' }}>Nome: {dataAluno?.nome}</Grid>
+                    <Grid item xs={3} style={{ backgroundColor: '#ffffff', borderRadius: '10px', padding: '10px', margin: '10px' }}>Turma: {dataAluno?.turma}</Grid>
+                    <Grid item xs={3} style={{ backgroundColor: '#ffffff', borderRadius: '10px', padding: '10px', margin: '10px' }}>RA: {dataAluno?.RA}</Grid>
+                    <Grid item xs={6} style={{ backgroundColor: '#ffffff', borderRadius: '10px', padding: '10px', margin: '10px' }}>Endereço: {dataAluno?.endereco}</Grid>
+                    <Grid item xs={3} style={{ backgroundColor: '#ffffff', borderRadius: '10px', padding: '10px', margin: '10px' }}>Telefone: {dataAluno?.telefone}</Grid>
                 </Grid>
-                <Grid item xs={12} style={{ paddingTop: "40px", margin: "0px 100px" }}>
-                    <Grid container spacing={2} style={{ textAlign: "center", border: "1px solid black", borderRadius: "10px" }}>
-                        <Grid item xs={4}>Nome: {dataAluno?.nome}</Grid>
-                        <Grid item xs={4}>Turma: {dataAluno?.turma}</Grid>
-                        <Grid item xs={4}>RA: {dataAluno?.RA}</Grid>
-                        <Grid item xs={6}>Endereço: {dataAluno?.endereco}</Grid>
-                        <Grid item xs={6}>Telefone: {dataAluno?.telefone}</Grid>
-                        
-                    </Grid>
-                </Grid>
-                <Grid item xs={12} style={{ textAlign: "center", paddingTop: "50px", margin: "0px 100px" }}>
-                    <Grid container spacing={2} style={{ textAlign: "center", border: "1px solid black", borderRadius: "10px" }}>
-                        <Grid item xs={12} style={{ textAlign: "center" }}>Ficha do Aluno</Grid>
+                <Grid item xs={12} style={{ width: '90%',textAlign: "center", paddingTop: "50px", margin: "0px 100px" }}>
+                    <Grid container spacing={2} style={{ textAlign: "center", border: "1px solid black", borderRadius: "10px", backgroundColor: '#e0e0e0', padding: '20px' }}>
+                        <Grid item xs={12} style={{ textAlign: "center", fontWeight: 'bold', fontSize: '1.2rem' }}>Ficha do Aluno</Grid>
                         <Grid item xs={6}>
                             <FormControl fullWidth>
                                 <InputLabel id="status-select-label">Status</InputLabel>
@@ -482,6 +443,7 @@ export default function Casos() {
                                     value={status}
                                     onChange={handleChangeStatus}
                                     defaultValue={dataCasos.status}
+                                    style={{ backgroundColor: 'white' }}
                                 >
                                     <MenuItem value={"FINALIZADO"}>Finalizado</MenuItem>
                                     <MenuItem value={"EM ABERTO"}>Em aberto</MenuItem>
@@ -498,6 +460,7 @@ export default function Casos() {
                                     value={urgencia}
                                     onChange={handleChangeUrgencia}
                                     defaultValue={dataCasos.urgencia}
+                                    style={{ backgroundColor: 'white' }}
                                 >
                                     <MenuItem value={"BAIXA"}>Baixa</MenuItem>
                                     <MenuItem value={"MEDIA"}>Média</MenuItem>
@@ -507,19 +470,19 @@ export default function Casos() {
                             </FormControl>
                         </Grid>
                         <Grid item xs={4}>
-                            <Button onClick={clickLigacao}>Adicionar Ligação</Button>
+                            <Button variant="contained" onClick={clickLigacao}>Adicionar Ligação</Button>
                         </Grid>
                         <Grid item xs={4}>
-                            <Button onClick={clickVisita}>Adicionar Visita</Button>
+                            <Button variant="contained" onClick={clickVisita}>Adicionar Visita</Button>
                         </Grid>
                         <Grid item xs={4}>
-                            <Button onClick={clickAtendimento}>Adicionar Atendimento aos Pais</Button>
+                            <Button variant="contained" onClick={clickAtendimento}>Adicionar Atendimento aos Pais</Button>
                         </Grid>
 
                         <Grid item xs={12}>
-                            <Popper open={openLig} anchorEl={anchorLig} placement="bottom" modifiers={[{ name: 'offset', options: { offset: [0, 40] } }]} >
-                                <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} style={{borderRadius:"10px"}}>
-                                    <Grid container item xs={12} style={{ alignContent: "rigth", background: "lightgrey", borderRadius: "10px", padding: "10px" }}>
+                            <Popper open={openLig} anchorEl={anchorLig} placement="bottom" modifiers={[{ name: 'offset', options: { offset: [0, 40] } }]}>
+                                <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} style={{ borderRadius: "10px" }}>
+                                    <Grid container item xs={12} style={{ alignContent: "right", background: "lightgrey", borderRadius: "10px", padding: "10px" }}>
                                         <Container maxWidth="xs">
                                             <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                                 <Typography component="h1" variant="h5">
@@ -583,8 +546,8 @@ export default function Casos() {
                         </Grid>
                         <Grid item xs={12}>
                             <Popper open={openVis} anchorEl={anchorVis} placement="bottom" modifiers={[{ name: 'offset', options: { offset: [0, 40] } }]}>
-                                <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} style={{borderRadius:"10px"}} >
-                                    <Grid container item xs={12} style={{ alignContent: "rigth", background: "lightgrey", borderRadius: "10px", padding: "10px" }}>
+                                <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} style={{ borderRadius: "10px" }}>
+                                    <Grid container item xs={12} style={{ alignContent: "right", background: "lightgrey", borderRadius: "10px", padding: "10px" }}>
                                         <Container maxWidth="xs">
                                             <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                                 <Typography component="h1" variant="h5">
@@ -636,9 +599,9 @@ export default function Casos() {
                             </Popper>
                         </Grid>
                         <Grid item xs={12}>
-                            <Popper open={openAtendimento} anchorEl={anchorAtendimento} placement="bottom" modifiers={[{ name: 'offset', options: { offset: [0, 40] } }]} >
-                                <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} style={{borderRadius:"10px"}}>
-                                    <Grid container item xs={12} style={{ alignContent: "rigth", background: "lightgrey", borderRadius: "10px", padding: "10px" }}>
+                            <Popper open={openAtendimento} anchorEl={anchorAtendimento} placement="bottom" modifiers={[{ name: 'offset', options: { offset: [0, 40] } }]}>
+                                <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }} style={{ borderRadius: "10px" }}>
+                                    <Grid container item xs={12} style={{ alignContent: "right", background: "lightgrey", borderRadius: "10px", padding: "10px" }}>
                                         <Container maxWidth="xs">
                                             <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                                 <Typography component="h1" variant="h5">
@@ -702,63 +665,56 @@ export default function Casos() {
                         </Grid>
 
                         <Grid item xs={12} style={{ textAlign: "center" }}>Histórico da Busca Ativa</Grid>
-                        
+
                         <Grid item xs={12} style={{ textAlign: "center" }}>
-                            <Button onClick={gerarRealatorio}>Gerar Relatório</Button>
+                            <Button variant="contained" onClick={gerarRealatorio}>Gerar Relatório</Button>
                         </Grid>
 
-                        <Grid container item xs={12} >
-                            <TabContext value={valueTabs} style={{alignItems:"rigth"}}>
+                        <Grid item xs={12}>
+                            <TabContext value={valueTabs}>
                                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                                <TabList onChange={handleChangeTabs} aria-label="tabs example">
-                                    <Tab label="Ligação" value="0" />
-                                    <Tab label="Visita" value="1" />
-                                    <Tab label="Atendimento aos Pais" value="2" />
-                                </TabList>
+                                    <TabList onChange={handleChangeTabs} aria-label="tabs example">
+                                        <Tab label="Ligação" value="0" />
+                                        <Tab label="Visita" value="1" />
+                                        <Tab label="Atendimento aos Pais" value="2" />
+                                    </TabList>
                                 </Box>
-                                <TabPanel value="0" >
-                                    
-                                    <Box sx={{ height: 400, width: "100%"}}>
+                                <TabPanel value="0">
+                                    <Box sx={{ height: 400, width: "100%", marginTop: 2 }}>
                                         <DataGrid rows={rowsLig} columns={columnsLig} pageSize={5} checkboxSelection
-                                        onRowSelectionModelChange={(ids) => {
-                                            const auxselectedRowsLig = (ids.map((id) => rowsLig.find((row) => row.id === id)));
-                                            setSelectedRowsLig(auxselectedRowsLig);
-[]                                          }}
-                                        rowSelectionModel={selectedRowsLig.map((row) => row.id)}
+                                            onRowSelectionModelChange={(ids) => {
+                                                const auxselectedRowsLig = (ids.map((id) => rowsLig.find((row) => row.id === id)));
+                                                setSelectedRowsLig(auxselectedRowsLig);
+                                            }}
+                                            rowSelectionModel={selectedRowsLig.map((row) => row.id)}
                                         />
                                     </Box>
                                 </TabPanel>
                                 <TabPanel value="1">
-                                
-                                    <Box sx={{ height: 400, width: "100%"}}>
+                                    <Box sx={{ height: 400, width: "100%", marginTop: 2 }}>
                                         <DataGrid rows={rowsVis} columns={columnsVis} pageSize={5} checkboxSelection
-                                        onRowSelectionModelChange={(ids) => {
-                                            const auxselectedRowsVis = ids.map((id) => rowsVis.find((row) => row.id === id));
-                                            setSelectedRowsVis(auxselectedRowsVis);
-                                            console.log(selectedRowsVis);
-[]                                          }}
+                                            onRowSelectionModelChange={(ids) => {
+                                                const auxselectedRowsVis = ids.map((id) => rowsVis.find((row) => row.id === id));
+                                                setSelectedRowsVis(auxselectedRowsVis);
+                                            }}
                                             rowSelectionModel={selectedRowsVis.map((row) => row.id)}
                                         />
                                     </Box>
                                 </TabPanel>
                                 <TabPanel value="2">
-                                    
-                                    <Box sx={{ height: 400, width: "100%" }}>
+                                    <Box sx={{ height: 400, width: "100%", marginTop: 2 }}>
                                         <DataGrid rows={rowsAtendimento} columns={columnsAtendimento} pageSize={5} checkboxSelection
-                                        onRowSelectionModelChange={(ids) => {
-                                            const auxselectedRowsAtendimento= ids.map((id) => rowsAtendimento.find((row) => row.id === id));
-                                            setSelectedRowsAtendimento(auxselectedRowsAtendimento);
-                                            console.log(selectedRowsAtendimento);
-[]                                          }}
+                                            onRowSelectionModelChange={(ids) => {
+                                                const auxselectedRowsAtendimento = ids.map((id) => rowsAtendimento.find((row) => row.id === id));
+                                                setSelectedRowsAtendimento(auxselectedRowsAtendimento);
+                                            }}
                                             rowSelectionModel={selectedRowsAtendimento.map((row) => row.id)}
-                                         />
-                                         
+                                        />
                                     </Box>
                                 </TabPanel>
                             </TabContext>
                         </Grid>
                     </Grid>
-                    
                 </Grid>
             </Grid>
         </div>
