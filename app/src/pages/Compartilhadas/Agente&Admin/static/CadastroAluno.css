@@ -1,0 +1,44 @@
+.geral {
+    padding: 20px;
+  }
+  
+  .login-container {
+    margin-top: 20px;
+  }
+  
+  .back-button-container {
+    padding-left: 40px;
+    padding-top: 3%;
+  }
+  
+  .back-link {
+    text-decoration: none;
+    color: #007bff;
+  }
+  
+  .back-arrow {
+    font-size: 2rem;
+  }
+  
+  .form-grid {
+    text-align: center;
+  }
+  
+  .form-container {
+    margin-top: 20px;
+  }
+  
+  .form-title {
+    margin-bottom: 20px;
+  }
+  
+  .form-field {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .form-button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  

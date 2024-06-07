@@ -1,0 +1,51 @@
+.card {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.centered-text {
+    text-align: center;
+    padding-top: 50px;
+}
+
+.aluno-info {
+    padding-top: 40px;
+    margin: 0 100px;
+    margin-top: 70px;
+}
+
+.info-container {
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+}
+
+.ficha-aluno {
+    text-align: center;
+    margin: 0 100px;
+}
+
+.popper-box {
+    border-radius: 10px;
+    border-color: black;
+    border: 1px solid black;
+}
+
+.popper-grid {
+    align-content: right;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.select-relatorio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

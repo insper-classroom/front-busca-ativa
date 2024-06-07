@@ -1,4 +1,3 @@
-// Importa os módulos necessários do React, Material-UI, universal-cookie, react-router-dom, e ícones
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Container, Box, Grid } from '@mui/material';
 import Cookies from 'universal-cookie';
@@ -6,20 +5,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
+import './static/CadastroAluno.css';
 
-// Inicializa o objeto de cookies
 const cookies = new Cookies();
 
-// Componente funcional CadastroAluno
 const CadastroAluno = () => {
-  // Recupera o token e a permissão do usuário armazenados nos cookies
   const token = cookies.get('token');
   const permissao = cookies.get('permissao');
-  
-  // Hook de navegação do React Router
   const navigate = useNavigate();
 
-  // Estado inicial do formulário usando useState
   const [formData, setFormData] = useState({
     nome: '',
     turma: '',
@@ -31,7 +25,6 @@ const CadastroAluno = () => {
     responsavel2: '',
   });
 
-  // Função para lidar com mudanças nos campos do formulário
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -40,7 +33,6 @@ const CadastroAluno = () => {
     });
   };
 
-  // Função para lidar com o envio do formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -56,7 +48,6 @@ const CadastroAluno = () => {
     };
 
     try {
-      // Envia os dados do formulário para a API usando fetch
       const response = await fetch('http://localhost:8000/alunoBuscaAtiva', {
         method: 'POST',
         headers: {
@@ -74,7 +65,6 @@ const CadastroAluno = () => {
       console.log('Cadastro realizado com sucesso:', data);
       alert('Cadastro realizado com sucesso');
       
-      // Reseta o estado do formulário
       setFormData({
         nome: '',
         turma: '',
@@ -86,7 +76,6 @@ const CadastroAluno = () => {
         responsavel2: '',
       });
 
-      // Redireciona para a página de alunos após o cadastro bem-sucedido
       navigate('/alunos');
     } catch (error) {
       console.error('Erro:', error);
@@ -96,17 +85,16 @@ const CadastroAluno = () => {
 
   return (
     <div>
-      {/* Renderiza o cabeçalho apropriado com base na permissão do usuário */}
       {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
       <br />
       <div className='geral'>
         <Grid container spacing={2} className="login-container">
-          <Grid item xs={1} style={{paddingLeft:"40px", paddingTop:"3%" }}>
-            <Link to="/usuarios" style={{ textDecoration: 'none', color:"#007bff" }}>
+          <Grid item xs={1} className="back-button-container">
+            <Link to="/alunos" className="back-link">
               <ArrowBackIcon className="back-arrow" />
             </Link>
           </Grid>
-          <Grid item xs={10} style={{ textAlign: 'center' }}>
+          <Grid item xs={10} className="form-grid">
             <Container maxWidth="md">
               <Box component="form" onSubmit={handleSubmit} className="form-container">
                 <Typography component="h1" variant="h5" className="form-title">
@@ -229,7 +217,6 @@ const CadastroAluno = () => {
                       fullWidth
                       variant="contained"
                       className="form-button"
-                      sx={{ mt: 2, mb: 2 }}
                     >
                       Cadastrar
                     </Button>
@@ -245,5 +232,4 @@ const CadastroAluno = () => {
   );
 };
 
-// Exporta o componente para uso em outras partes da aplicação
 export default CadastroAluno;
