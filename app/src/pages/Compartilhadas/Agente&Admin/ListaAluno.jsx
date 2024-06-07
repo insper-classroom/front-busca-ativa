@@ -42,28 +42,42 @@ const columns = [
   { id: 'delete', label: 'DELETAR', minWidth: 100 },
 ];
 
+/**
+ * Função para criar um objeto de dados de aluno.
+ * @param {string} id - ID do aluno.
+ * @param {string} nome - Nome do aluno.
+ * @param {string} turma - Turma do aluno.
+ * @param {string} RA - Registro Acadêmico do aluno.
+ * @returns {object} - Objeto contendo os dados do aluno.
+ */
 function createData(id, nome, turma, RA) {
   return { id, nome, turma, RA };
 }
 
 const cookies = new Cookies();
 
+/**
+ * Componente para listar e gerenciar alunos.
+ * Permite buscar, filtrar, ordenar, visualizar e deletar alunos.
+ */
 function ListaAluno() {
-  const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterYears, setFilterYears] = useState([]);
-  const [filterClasses, setFilterClasses] = useState([]);
-  const [sortOption, setSortOption] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const token = cookies.get('token');
-  const permissao = cookies.get('permissao');
-  const navigate = useNavigate();
+  const [users, setUsers] = useState([]); // Estado para armazenar a lista de alunos
+  const [filteredUsers, setFilteredUsers] = useState([]); // Estado para armazenar a lista filtrada de alunos
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para armazenar o termo de busca
+  const [filterYears, setFilterYears] = useState([]); // Estado para armazenar os anos filtrados
+  const [filterClasses, setFilterClasses] = useState([]); // Estado para armazenar as turmas filtradas
+  const [sortOption, setSortOption] = useState(""); // Estado para armazenar a opção de ordenação
+  const [dialogOpen, setDialogOpen] = useState(false); // Estado para controlar a abertura do diálogo de filtros
+  const token = cookies.get('token'); // Obtenção do token de autenticação
+  const permissao = cookies.get('permissao'); // Obtenção da permissão do usuário
+  const navigate = useNavigate(); // Hook de navegação do React Router
 
+  // Hook para buscar a lista de alunos ao montar o componente
   useEffect(() => {
     fetchUsers();
   }, []);
 
+  // Função para buscar a lista de alunos
   const fetchUsers = () => {
     fetch('https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva', {
       method: 'GET',
@@ -87,6 +101,7 @@ function ListaAluno() {
       });
   };
 
+  // Hook para filtrar e ordenar a lista de alunos com base nos critérios de busca e filtros
   useEffect(() => {
     let results = users.filter(user =>
       (user.nome.toLowerCase().includes(searchTerm.toLowerCase()) || user.RA.includes(searchTerm)) &&
@@ -103,10 +118,12 @@ function ListaAluno() {
     setFilteredUsers(results);
   }, [searchTerm, filterYears, filterClasses, sortOption, users]);
 
+  // Função para lidar com a mudança no campo de busca
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
+  // Função para lidar com a mudança no filtro de anos
   const handleYearChange = (event) => {
     const { value } = event.target;
     setFilterYears(prev =>
@@ -114,6 +131,7 @@ function ListaAluno() {
     );
   };
 
+  // Função para lidar com a mudança no filtro de turmas
   const handleClassChange = (event) => {
     const { value } = event.target;
     setFilterClasses(prev =>
@@ -121,14 +139,17 @@ function ListaAluno() {
     );
   };
 
+  // Função para lidar com a mudança na opção de ordenação
   const handleSortChange = (event) => {
     setSortOption(event.target.value);
   };
 
+  // Função para navegar para a página de visualização dos dados do aluno
   const handleView = (id) => {
     navigate(`/alunos/${id}`);
   };
 
+  // Função para deletar um aluno
   const handleDelete = (id) => {
     fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/${id}`, {
       method: 'DELETE',
@@ -148,26 +169,31 @@ function ListaAluno() {
       });
   };
 
+  // Função para abrir o diálogo de filtros
   const handleOpenDialog = () => {
     setDialogOpen(true);
   };
 
+  // Função para fechar o diálogo de filtros
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0); // Estado para armazenar a página atual da tabela
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Estado para armazenar o número de linhas por página
 
+  // Função para atualizar a página da tabela
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
+  // Função para atualizar o número de linhas por página na tabela
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
+  // Cria as linhas da tabela com base nos usuários filtrados
   const rows = filteredUsers.map(user => {
     return createData(user._id, user.nome, user.turma, user.RA);
   });

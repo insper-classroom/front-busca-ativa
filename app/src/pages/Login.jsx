@@ -4,17 +4,20 @@ import { Button, TextField, Container, Typography, Alert, Grid, Box } from '@mui
 import HeaderLogin from './HeaderLogin';
 import { useNavigate } from 'react-router-dom';
 import logo from '../components/img/logo.png';
-import './static/Login.css'; 
+import './static/Login.css';
 
-
-
+/**
+ * Componente de login.
+ * Permite ao usuário inserir suas credenciais e realizar a autenticação.
+ */
 export default function Login() {
-  const cookies = new Cookies();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const cookies = new Cookies(); // Instância de Cookies para gerenciar cookies
+  const [email, setEmail] = useState(""); // Estado para armazenar o email
+  const [password, setPassword] = useState(""); // Estado para armazenar a senha
+  const [error, setError] = useState(null); // Estado para armazenar mensagens de erro
+  const navigate = useNavigate(); // Hook de navegação do React Router
 
+  // Função para lidar com o envio do formulário de login
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,37 +33,39 @@ export default function Login() {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        cookies.set("token", data.token, { path: "/" });
-        window.location.href = "/home";
+        cookies.set("token", data.token, { path: "/" }); // Armazena o token de autenticação em um cookie
+        window.location.href = "/home"; // Redireciona para a página inicial
       } else {
         const errorData = await response.json();
         console.log(errorData);
-        setError("Credenciais não conferem. Confirme seu email e senha.");
+        setError("Credenciais não conferem. Confirme seu email e senha."); // Exibe mensagem de erro
       }
     } catch (error) {
       console.log(error);
-      setError("Ocorreu um erro ao tentar fazer login.");
+      setError("Ocorreu um erro ao tentar fazer login."); // Exibe mensagem de erro
     }
   };
 
   return (
     <div>
-      <HeaderLogin />
+      <HeaderLogin /> {/* Componente de cabeçalho do login */}
       <div className='login-container'>
         <Grid container spacing={2} className="login-container">
-          <Grid item xs={5} style={{textAlign:'center'}}>
-            <img src={logo} alt="Logo Busca Ativa" style={{  width: 350, height: 300 }} />
-            <Typography variant="h6" component="h6" style={{textAlign: 'justify', paddingLeft:"10%"}}>A Busca Ativa Escolar é uma iniciativa do UNICEF, Undime, Congemas e Conasems que ajuda governos a identificar e reintegrar crianças fora da escola. Utilizando uma metodologia social e uma ferramenta tecnológica, facilita o planejamento de políticas públicas com dados concretos. Reúne áreas como Educação, Saúde e Assistência Social, melhorando a comunicação e o acompanhamento dos casos. A ferramenta é acessível em qualquer dispositivo, auxiliando na gestão das informações sobre cada criança.</Typography>
+          <Grid item xs={5} style={{ textAlign: 'center' }}>
+            <img src={logo} alt="Logo Busca Ativa" style={{ width: 350, height: 300 }} />
+            <Typography variant="h6" component="h6" style={{ textAlign: 'justify', paddingLeft: "10%" }}>
+              A Busca Ativa Escolar é uma iniciativa do UNICEF, Undime, Congemas e Conasems que ajuda governos a identificar e reintegrar crianças fora da escola. Utilizando uma metodologia social e uma ferramenta tecnológica, facilita o planejamento de políticas públicas com dados concretos. Reúne áreas como Educação, Saúde e Assistência Social, melhorando a comunicação e o acompanhamento dos casos. A ferramenta é acessível em qualquer dispositivo, auxiliando na gestão das informações sobre cada criança.
+            </Typography>
           </Grid>
-          <Grid item xs={2} style={{textAlign:'center'}}>
+          <Grid item xs={2} style={{ textAlign: 'center' }}>
             <Box className="box-divider"></Box>
           </Grid>
-          <Grid item xs={5} style={{alignItems:"center", justifyContent:"center", paddingRight:'90px', marginTop: '20px', paddingTop:'15vh'}}>
+          <Grid item xs={5} style={{ alignItems: "center", justifyContent: "center", paddingRight: '90px', marginTop: '20px', paddingTop: '15vh' }}>
             <Container>
               <div className='login-wrapper'>
                 <div className='login-text'>
                   <Typography variant="h4" component="h1" id="login-text">Login</Typography>
-                  <form onSubmit={handleSubmit} style={{opacity:"0.9", backgroundColor:"white"}}>
+                  <form onSubmit={handleSubmit} style={{ opacity: "0.9", backgroundColor: "white" }}>
                     <TextField
                       fullWidth
                       type="email"
@@ -88,7 +93,7 @@ export default function Login() {
                         variant="contained"
                         color="primary"
                         type="submit"
-                        style = {{marginTop: '10%'}}
+                        style={{ marginTop: '10%' }}
                       >
                         Entrar
                       </Button>

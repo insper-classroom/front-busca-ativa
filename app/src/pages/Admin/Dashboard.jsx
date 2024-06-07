@@ -4,18 +4,22 @@ import { PieChart, Pie, Tooltip, Cell, Legend } from 'recharts';
 import { BarChart } from '@mui/x-charts/BarChart';
 import HeaderAdmin from './HeaderAdmin';
 import Cookies from 'universal-cookie';
-
 import './static/Dashboard.css';
 
+/**
+ * Componente principal do Dashboard.
+ * Responsável por exibir gráficos e dados estatísticos sobre os casos registrados.
+ */
 export default function Dashboard() {
-  const [casos, setCasos] = useState([]);
-  const [statusData, setStatusData] = useState([]);
-  const [urgenciaData, setUrgenciaData] = useState([]);
-  const [turmaData, setTurmaData] = useState([]);
-  const [error, setError] = useState(null);
-  const cookies = new Cookies();
-  const token = cookies.get('token');
+  const [casos, setCasos] = useState([]);  // Estado para armazenar os casos
+  const [statusData, setStatusData] = useState([]);  // Estado para armazenar dados de status dos casos
+  const [urgenciaData, setUrgenciaData] = useState([]);  // Estado para armazenar dados de urgência dos casos
+  const [turmaData, setTurmaData] = useState([]);  // Estado para armazenar dados de turma dos casos
+  const [error, setError] = useState(null);  // Estado para armazenar erros
+  const cookies = new Cookies();  // Instância de Cookies para obter o token
+  const token = cookies.get('token');  // Obtenção do token
 
+  // Hook para buscar os dados dos casos quando o componente é montado
   useEffect(() => {
     fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos', {
       method: 'GET',
@@ -26,24 +30,26 @@ export default function Dashboard() {
     })
     .then(response => {
       if (!response.ok) {
-        throw new Error('Failed to fetch cases');
+        throw new Error('Failed to fetch cases');  // Lançamento de erro se a resposta não for bem sucedida
       }
       return response.json();
     })
     .then(data => {
-      setCasos(data.caso);
-      processCaseData(data.caso);
+      setCasos(data.caso);  // Armazena os casos no estado
+      processCaseData(data.caso);  // Processa os dados dos casos para os gráficos
     })
     .catch(error => {
-      setError(error.message);
+      setError(error.message);  // Armazena a mensagem de erro no estado
     });
   }, [token]);
 
+  // Função para processar os dados dos casos e preparar para os gráficos
   const processCaseData = (casos) => {
-    const statusCounts = { 'EM ABERTO': 0, 'FINALIZADO': 0 };
-    const urgenciaCounts = { 'ALTA': 0, 'MEDIA': 0, 'BAIXA': 0, 'NÃO INFORMADO': 0 };
-    const turmaCounts = {};
+    const statusCounts = { 'EM ABERTO': 0, 'FINALIZADO': 0 };  // Contagem de status dos casos
+    const urgenciaCounts = { 'ALTA': 0, 'MEDIA': 0, 'BAIXA': 0, 'NÃO INFORMADO': 0 };  // Contagem de urgência dos casos
+    const turmaCounts = {};  // Contagem de casos por turma
 
+    // Iteração pelos casos para preencher as contagens
     casos.forEach(caso => {
       statusCounts[caso.status]++;
       urgenciaCounts[caso.urgencia]++;
@@ -54,6 +60,7 @@ export default function Dashboard() {
       turmaCounts[turma]++;
     });
 
+    // Prepara os dados para os gráficos de status, urgência e turma
     const statusData = Object.keys(statusCounts).map(key => ({
       name: key,
       value: statusCounts[key]
@@ -69,16 +76,17 @@ export default function Dashboard() {
       value: turmaCounts[key]
     }));
 
+    // Armazena os dados preparados no estado
     setStatusData(statusData);
     setUrgenciaData(urgenciaData);
     setTurmaData(turmaData);
   };
 
-  const COLORS = ['#007bff', '#FBD542', '#008000', '#05263E'];
+  const COLORS = ['#007bff', '#FBD542', '#008000', '#05263E'];  // Cores para os gráficos
 
   return (
     <div>
-      <HeaderAdmin />
+      <HeaderAdmin />  // Componente de cabeçalho
       <Container className='dashboard'>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -98,7 +106,7 @@ export default function Dashboard() {
           <Grid item xs={12}>
             <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
               <Typography variant="h6" component="h6" style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 'bold' }}>
-                Total de Casos: {casos.length}
+                Total de Casos: {casos.length}  // Exibição do total de casos
               </Typography>
             </Paper>
           </Grid>
@@ -110,10 +118,10 @@ export default function Dashboard() {
               <PieChart width={300} height={300}>
                 <Pie dataKey="value" data={statusData} cx={200} cy={150} outerRadius={80} label={(entry) => entry.name}>
                   {statusData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />  // Define as cores das fatias do gráfico
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip />  // Tooltip para exibir informações ao passar o mouse
                 <Legend align="center" verticalAlign="bottom" layout="horizontal" iconType="circle" wrapperStyle={{ paddingTop: 10 }} />
               </PieChart>
             </Paper>

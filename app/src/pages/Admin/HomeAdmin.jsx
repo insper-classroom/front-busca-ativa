@@ -1,14 +1,18 @@
 import React from 'react';
 import HeaderAdmin from './HeaderAdmin';
-import CasosTable from '../Compartilhadas/Agente&Admin/CasosTable'
+import CasosTable from '../Compartilhadas/Agente&Admin/CasosTable';
 import './static/HomeAdmin.css';
 
+/**
+ * Componente de página inicial para a área administrativa.
+ * Exibe o cabeçalho e a tabela de casos.
+ */
 function HomeAdmin() {
     return (
         <div className="home-admin">
-            <HeaderAdmin />
+            <HeaderAdmin /> {/* Componente de cabeçalho */}
             <div className="search-container">
-                <CasosTable /> {/* Utilizando o componente CasosTable */}
+                <CasosTable /> {/* Componente que exibe a tabela de casos */}
             </div>
         </div>
     );

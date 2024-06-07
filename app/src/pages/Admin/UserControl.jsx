@@ -40,21 +40,27 @@ function createData(id, email, nome, permissao) {
 
 const cookies = new Cookies();
 
+/**
+ * Componente de controle de usuários.
+ * Exibe uma tabela com informações dos usuários e permite edições e exclusões.
+ */
 function UserControl() {
-  const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [filterPermissions, setFilterPermissions] = useState([]);
-  const [sortOption, setSortOption] = useState('');
-  const [editingUserId, setEditingUserId] = useState(null);
-  const [editedUsersData, setEditedUsersData] = useState({});
-  const token = cookies.get('token');
+  const [users, setUsers] = useState([]);  // Estado para armazenar a lista de usuários
+  const [searchTerm, setSearchTerm] = useState('');  // Estado para armazenar o termo de busca
+  const [filteredUsers, setFilteredUsers] = useState([]);  // Estado para armazenar os usuários filtrados
+  const [dialogOpen, setDialogOpen] = useState(false);  // Estado para controlar a abertura do diálogo de filtros
+  const [filterPermissions, setFilterPermissions] = useState([]);  // Estado para armazenar as permissões filtradas
+  const [sortOption, setSortOption] = useState('');  // Estado para armazenar a opção de ordenação
+  const [editingUserId, setEditingUserId] = useState(null);  // Estado para armazenar o ID do usuário em edição
+  const [editedUsersData, setEditedUsersData] = useState({});  // Estado para armazenar os dados editados dos usuários
+  const token = cookies.get('token');  // Obtenção do token
 
+  // Hook para buscar a lista de usuários ao montar o componente
   useEffect(() => {
     fetchUsers();
   }, []);
 
+  // Função para buscar os usuários da API
   const fetchUsers = () => {
     fetch('https://sibae-5d2fe0c3da99.herokuapp.com/usuarios', {
       method: 'GET',
@@ -65,34 +71,37 @@ function UserControl() {
     })
       .then(response => {
         if (!response.ok) {
-          throw new Error('Failed to fetch users');
+          throw new Error('Failed to fetch users');  // Lança erro se a resposta não for bem-sucedida
         }
         return response.json();
       })
       .then(data => {
-        setUsers(data);
-        setFilteredUsers(data);
+        setUsers(data);  // Armazena os usuários no estado
+        setFilteredUsers(data);  // Inicializa os usuários filtrados
       })
       .catch(error => {
-        console.error('Error fetching users:', error);
+        console.error('Error fetching users:', error);  // Loga o erro no console
       });
   };
 
+  // Hook para filtrar e ordenar os usuários com base nos critérios
   useEffect(() => {
     let results = users.filter(user =>
       (user.nome.toLowerCase().includes(searchTerm.toLowerCase()) || user.email.toLowerCase().includes(searchTerm.toLowerCase())) &&
       (filterPermissions.length === 0 || filterPermissions.includes(user.permissao))
     );
 
+    // Ordena os resultados conforme a opção selecionada
     if (sortOption === 'nameAsc') {
       results.sort((a, b) => a.nome.localeCompare(b.nome));
     } else if (sortOption === 'nameDesc') {
       results.sort((a, b) => b.nome.localeCompare(a.nome));
     }
 
-    setFilteredUsers(results);
+    setFilteredUsers(results);  // Armazena os usuários filtrados no estado
   }, [searchTerm, filterPermissions, sortOption, users]);
 
+  // Função para deletar um usuário
   const handleDelete = id => {
     fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/usuarios/${id}`, {
       method: 'DELETE',
@@ -103,15 +112,16 @@ function UserControl() {
     })
       .then(response => {
         if (!response.ok) {
-          throw new Error('Failed to delete user');
+          throw new Error('Failed to delete user');  // Lança erro se a resposta não for bem-sucedida
         }
-        setUsers(users.filter(user => user._id !== id));
+        setUsers(users.filter(user => user._id !== id));  // Atualiza a lista de usuários removendo o deletado
       })
       .catch(error => {
-        console.error('Error deleting user:', error);
+        console.error('Error deleting user:', error);  // Loga o erro no console
       });
   };
   
+  // Função para salvar as alterações de um usuário
   const handleSave = id => {
     fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/usuarios/${id}`, {
       method: 'PUT',
@@ -119,33 +129,36 @@ function UserControl() {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(editedUsersData[id]),
+      body: JSON.stringify(editedUsersData[id]),  // Envia os dados editados no corpo da requisição
     })
       .then(response => {
         if (!response.ok) {
-          throw new Error('Failed to save user changes');
+          throw new Error('Failed to save user changes');  // Lança erro se a resposta não for bem-sucedida
         }
-        setEditingUserId(null);
+        setEditingUserId(null);  // Reseta o estado de edição
         setEditedUsersData(prevData => {
           const newData = { ...prevData };
           delete newData[id]; 
           return newData;
         });
-        fetchUsers();
+        fetchUsers();  // Busca novamente a lista de usuários para atualizar a tabela
       })
       .catch(error => {
-        console.error('Error saving user changes:', error);
+        console.error('Error saving user changes:', error);  // Loga o erro no console
       });
   };
 
+  // Função para atualizar o termo de busca
   const handleSearchChange = event => {
     setSearchTerm(event.target.value);
   };
 
+  // Função para atualizar a opção de ordenação
   const handleSortChange = event => {
     setSortOption(event.target.value);
   };
 
+  // Função para iniciar a edição de um usuário
   const handleEdit = (id, userData) => {
     setEditingUserId(id);
     setEditedUsersData(prevData => ({
@@ -154,10 +167,12 @@ function UserControl() {
     }));
   };
 
+  // Verifica se um usuário está em edição
   const isEditing = id => {
     return id === editingUserId;
   };
 
+  // Função para atualizar o campo de entrada durante a edição
   const handleInputChange = (e, field, id) => {
     const { value } = e.target;
     setEditedUsersData(prevData => ({
@@ -169,6 +184,7 @@ function UserControl() {
     }));
   };
 
+  // Função para atualizar a permissão do usuário durante a edição
   const handlePermissionChange = (e, id) => {
     const { value } = e.target;
     setEditedUsersData(prevData => ({
@@ -200,13 +216,14 @@ function UserControl() {
     setPage(0);
   };
 
+  // Cria as linhas para a tabela de usuários
   const rows = filteredUsers.map(user => {
     return createData(user._id, user.email, user.nome, user.permissao);
   });
 
   return (
     <div className='user-control'>
-      <HeaderAdmin />
+      <HeaderAdmin />  {/* Componente de cabeçalho */}
       <div className='title' style={{display:"flex", justifyContent:"space-between"}}>
       <Typography 
         variant="h4" 
@@ -395,9 +412,6 @@ function UserControl() {
                                       sx={{ width: '20ch' }}
                                     />
                                   </Box>
-
-
-
                                   ) : (
                                     value
                                   )
