@@ -46,7 +46,7 @@ export default function Dashboard() {
   // Função para processar os dados dos casos e preparar para os gráficos
   const processCaseData = (casos) => {
     const statusCounts = { 'EM ABERTO': 0, 'FINALIZADO': 0 };  // Contagem de status dos casos
-    const urgenciaCounts = { 'ALTA': 0, 'MEDIA': 0, 'BAIXA': 0, 'NÃO INFORMADO': 0 };  // Contagem de urgência dos casos
+    const urgenciaCounts = { 'ALTA': 0, 'MEDIA': 0, 'BAIXA': 0, 'NAO INFORMADO': 0 };  // Contagem de urgência dos casos
     const turmaCounts = {};  // Contagem de casos por turma
 
     // Iteração pelos casos para preencher as contagens
