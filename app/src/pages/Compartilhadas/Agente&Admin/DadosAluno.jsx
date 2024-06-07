@@ -80,16 +80,14 @@ function DadosAluno() {
       <br />
       <div className='geral'>
         <Grid container spacing={2} className="login-container">
-          <Grid item xs={12} style={{ textAlign: 'center' }}>
-            <Container maxWidth="md" sx={{marginTop: '6%'}}>
-              <Paper sx={{ padding: '25px', margin: '25px' }}>
+          <Grid item xs={12} className="centered-text">
+            <Container maxWidth="md" className="form-container">
+              <Paper className="paper">
                 {aluno ? (
                   <Box component="form" noValidate autoComplete="off">
-                    <br/>
                     <Typography component="h1" variant="h5" className="form-title">
                       Detalhes do Aluno
                     </Typography>
-                    <br/>
                     <Grid container spacing={2}>
                       <Grid item xs={12} sm={6}>
                         <TextField
@@ -101,7 +99,7 @@ function DadosAluno() {
                           onChange={handleInputChange}
                           InputProps={{
                             readOnly: !editMode,
-                            style: { backgroundColor: editMode ? 'white' : 'inherit' }
+                            className: editMode ? 'editable-field' : ''
                           }}
                         />
                       </Grid>
@@ -115,7 +113,7 @@ function DadosAluno() {
                           onChange={handleInputChange}
                           InputProps={{
                             readOnly: !editMode,
-                            style: { backgroundColor: editMode ? 'white' : 'inherit' }
+                            className: editMode ? 'editable-field' : ''
                           }}
                         />
                       </Grid>
@@ -128,7 +126,6 @@ function DadosAluno() {
                           value={editedAluno.RA || ''}
                           InputProps={{
                             readOnly: true,
-                            style: { backgroundColor: 'inherit' }
                           }}
                         />
                       </Grid>
@@ -142,7 +139,7 @@ function DadosAluno() {
                           onChange={handleInputChange}
                           InputProps={{
                             readOnly: !editMode,
-                            style: { backgroundColor: editMode ? 'white' : 'inherit' }
+                            className: editMode ? 'editable-field' : ''
                           }}
                         />
                       </Grid>
@@ -156,7 +153,7 @@ function DadosAluno() {
                           onChange={handleInputChange}
                           InputProps={{
                             readOnly: !editMode,
-                            style: { backgroundColor: editMode ? 'white' : 'inherit' }
+                            className: editMode ? 'editable-field' : ''
                           }}
                         />
                       </Grid>
@@ -170,7 +167,7 @@ function DadosAluno() {
                           onChange={handleInputChange}
                           InputProps={{
                             readOnly: !editMode,
-                            style: { backgroundColor: editMode ? 'white' : 'inherit' }
+                            className: editMode ? 'editable-field' : ''
                           }}
                         />
                       </Grid>
@@ -184,7 +181,7 @@ function DadosAluno() {
                           onChange={handleInputChange}
                           InputProps={{
                             readOnly: !editMode,
-                            style: { backgroundColor: editMode ? 'white' : 'inherit' }
+                            className: editMode ? 'editable-field' : ''
                           }}
                         />
                       </Grid>
@@ -198,12 +195,12 @@ function DadosAluno() {
                           onChange={handleInputChange}
                           InputProps={{
                             readOnly: !editMode,
-                            style: { backgroundColor: editMode ? 'white' : 'inherit' }
+                            className: editMode ? 'editable-field' : ''
                           }}
                         />
                       </Grid>
                     </Grid>
-                    <Box sx={{ marginTop: '16px', display: 'flex', justifyContent: 'space-between' }}>
+                    <Box className="form-buttons">
                       <Button variant="contained" component={Link} to="/alunos">Voltar</Button>
                       {editMode ? (
                         <Button variant="contained" onClick={handleSave}>Salvar</Button>

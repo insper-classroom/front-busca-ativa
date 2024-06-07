@@ -475,13 +475,13 @@ export default function Casos() {
                             </FormControl>
                         </Grid>
                         <Grid item xs={4}>
-                            <Button onClick={clickLigacao}>Adicionar Ligação</Button>
+                            <Button className='botao' onClick={clickLigacao}>Adicionar Ligação</Button>
                         </Grid>
                         <Grid item xs={4}>
-                            <Button onClick={clickVisita}>Adicionar Visita</Button>
+                            <Button className='botao' onClick={clickVisita}>Adicionar Visita</Button>
                         </Grid>
                         <Grid item xs={4}>
-                            <Button onClick={clickAtendimento}>Adicionar Atendimento aos Pais</Button>
+                            <Button className='botao' onClick={clickAtendimento}>Adicionar Atendimento aos Pais</Button>
                         </Grid>
                         <Grid item xs={12}>
                             <Popper open={openLig} anchorEl={anchorLig} placement='bottom' modifiers={[{ name: 'offset', options: { offset: [0, 40] } }]} >

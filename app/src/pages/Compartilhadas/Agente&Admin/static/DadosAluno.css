@@ -1,51 +1,36 @@
 .geral {
-    padding: 20px;
-  }
-  
-  .login-container {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .form-title {
-    margin-bottom: 10px;
-    text-align: center;
-    font-family: 'Roboto, sans-serif';
-    font-weight: bold;
-    text-transform: uppercase;
-  }
-  
-  .view-button {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .delete-button {
-    background-color: red;
-    color: white;
-  }
-  
-  .delete-button:hover {
-    background-color: darkred;
-  }
-  
-  .button-container {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .create-user {
-    text-decoration: none;
-  }
-  
-  .filter-section {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  margin-top: 20px;
+}
+
+.centered-text {
+  text-align: center;
+}
+
+.form-container {
+  margin-top: 6%;
+}
+
+.paper {
+  padding: 25px;
+  margin: 25px;
+}
+
+.form-title {
+  margin-bottom: 20px;
+}
+
+.form-buttons {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.editable-field {
+  background-color: white;
+}
