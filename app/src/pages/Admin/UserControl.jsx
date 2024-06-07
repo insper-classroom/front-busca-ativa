@@ -56,7 +56,7 @@ function UserControl() {
   }, []);
 
   const fetchUsers = () => {
-    fetch('http://localhost:8000/usuarios', {
+    fetch('https://sibae-5d2fe0c3da99.herokuapp.com/usuarios', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ function UserControl() {
   }, [searchTerm, filterPermissions, sortOption, users]);
 
   const handleDelete = id => {
-    fetch(`http://localhost:8000/usuarios/${id}`, {
+    fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/usuarios/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ function UserControl() {
   };
   
   const handleSave = id => {
-    fetch(`http://localhost:8000/usuarios/${id}`, {
+    fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/usuarios/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

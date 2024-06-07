@@ -119,7 +119,7 @@ export default function Casos() {
     }, [idAluno, isIdAlunoLoaded]);
 
     function loadIdAluno(){
-        fetch(`http://localhost:8000/alunoBuscaAtiva/caso/${id}`, {
+        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/caso/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export default function Casos() {
         if (!isIdAlunoLoaded){
             return;
         }
-        fetch(`http://localhost:8000/casos?aluno_id=${idAluno}`, {
+        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/casos?aluno_id=${idAluno}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ export default function Casos() {
         if (!isIdAlunoLoaded){
             return;
         }
-        fetch(`http://localhost:8000/alunoBuscaAtiva/${idAluno}`, {
+        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/${idAluno}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -191,7 +191,7 @@ export default function Casos() {
 
     function loadUsuario(){
 
-        fetch('http://localhost:8000/usuarios-dados', {
+        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/usuarios-dados', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -208,7 +208,7 @@ export default function Casos() {
 
 
     function gerarRealatorio() {
-        fetch('http://localhost:8000/casos/gerar-relatorio', {
+        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/gerar-relatorio', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -260,7 +260,7 @@ export default function Casos() {
         }
    
 
-        fetch('http://localhost:8000/casos/' + dataCasos._id , {
+        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id , {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -293,7 +293,7 @@ export default function Casos() {
 
         };
         try {
-            const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
+            const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -335,7 +335,7 @@ export default function Casos() {
 
         };
         try {
-            const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
+            const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -375,7 +375,7 @@ export default function Casos() {
             atendimento: true,
         };
         try {
-            const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
+            const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

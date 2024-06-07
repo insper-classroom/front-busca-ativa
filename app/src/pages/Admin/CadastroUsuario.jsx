@@ -43,7 +43,7 @@ const RegisterForm = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/usuarios', {
+      const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/usuarios', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

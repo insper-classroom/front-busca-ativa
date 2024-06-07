@@ -57,7 +57,7 @@ const CadastroAluno = () => {
 
     try {
       // Envia os dados do formulário para a API usando fetch
-      const response = await fetch('http://localhost:8000/alunoBuscaAtiva', {
+      const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

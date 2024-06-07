@@ -41,7 +41,7 @@ function Tarefas() {
     }, [id]);
 
     const fetchAluno = () => {
-        fetch(`http://localhost:8000/alunoBuscaAtiva/${id}`, {
+        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ function Tarefas() {
             status: 'Em andamento'
         };
 
-        fetch(`http://localhost:8000/tarefas/${id}`, {
+        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/tarefas/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ function Tarefas() {
             status: status
         };
 
-        fetch(`http://localhost:8000/tarefas/${id}/${editingTaskId}`, {
+        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/tarefas/${id}/${editingTaskId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ function Tarefas() {
     };
 
     const deleteTarefa = (tarefaId) => {
-        fetch(`http://localhost:8000/tarefas/${id}/${tarefaId}`, {
+        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/tarefas/${id}/${tarefaId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

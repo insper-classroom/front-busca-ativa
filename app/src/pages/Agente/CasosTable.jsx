@@ -55,7 +55,7 @@ function CasosTable() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('http://localhost:8000/casos', {
+        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

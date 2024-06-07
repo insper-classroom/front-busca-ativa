@@ -55,7 +55,7 @@ function AlunosTable() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('http://localhost:8000/alunoBuscaAtiva', {
+        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
