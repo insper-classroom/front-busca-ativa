@@ -19,6 +19,8 @@ import './static/Casos.css';
 const cookies = new Cookies();
 
 export default function Casos() {
+
+    //Inicializas as variáveis que serão usado no componente
     const { id } = useParams();
     const permissao = cookies.get('permissao');
     const [idAluno, setIdAluno] = useState();
@@ -42,48 +44,56 @@ export default function Casos() {
     const openVis = Boolean(anchorVis);
     const openAtendimento = Boolean(anchorAtendimento);
 
+    //Criação das colunas para a tabela de ligacoes
     const columnsLig = [
         { field: 'data', headerName: 'Data', width: 200 },
         { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
         { field: 'telefone', headerName: 'Telefone', width: 200 },
         { field: 'observacao', headerName: 'Observações', width: 200 },
     ];
-    
+      
+    //Criação das linhas para a tabela de visitas
     const rowsLig = ligacoes.map((lig, index) => ({
         id: index,
-        data: lig.data,
+        data: lig.data ? new Date(lig.data).toLocaleDateString('pt-BR') : '',
         abae: lig.abae,
         telefone: lig.telefone,
         observacao: lig.observacao
     }));
 
+    //Criação das colunas para a tabela de visitas
     const columnsVis = [
         { field: 'data', headerName: 'Data', width: 200 },
         { field: 'abae', headerName: 'ABAE Responsável', width: 200 },
         { field: 'observacao', headerName: 'Observações', width: 200 },
-    ];
+      ];
     
+    //Criação das linhas para a tabela de visitas
     const rowsVis = visitas.map((vis, index) => ({
         id: index,
-        data: vis.data,
+        data: vis.data ? new Date(vis.data).toLocaleDateString('pt-BR') : '',
         abae: vis.abae,
         observacao: vis.observacao
     }));
 
+    //Criação das colunas para a tabela de atendimentos
     const columnsAtendimento = [
-        { field: 'data', headerName: 'Data', width: 200 },
+        { field: 'data', headerName: 'Data', width: 200 }, 
         { field: 'func', headerName: 'Feito por', width: 200 },
         { field: 'responsavel', headerName: 'Responsável', width: 200 },
         { field: 'observacao', headerName: 'Observações', width: 200 },
     ];
     
+    //Criação das linhas para a tabela de atendimentos
     const rowsAtendimento = atendimentos.map((atendimento, index) => ({
         id: index,
-        data: atendimento.data,
+        data: atendimento.data ? new Date(atendimento.data).toLocaleDateString('pt-BR') : '',
         func: atendimento.func,
         responsavel: atendimento.responsavel,
         observacao: atendimento.observacao,
     }));
+
+
 
     const [valueTabs, setValueTabs] = useState("0");
 
@@ -95,6 +105,7 @@ export default function Casos() {
         func: '',
         responsavel: '',
     });
+
 
     useEffect(() => {
         loadUsuario();
@@ -109,7 +120,7 @@ export default function Casos() {
     }, [idAluno, isIdAlunoLoaded]);
 
     function loadIdAluno(){
-        fetch(`http://localhost:8000/alunoBuscaAtiva/caso/${id}`, {
+        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/caso/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -130,7 +141,7 @@ export default function Casos() {
         if (!isIdAlunoLoaded){
             return;
         }
-        fetch(`http://localhost:8000/casos?aluno_id=${idAluno}`, {
+        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/casos?aluno_id=${idAluno}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -156,7 +167,7 @@ export default function Casos() {
         if (!isIdAlunoLoaded){
             return;
         }
-        fetch(`http://localhost:8000/alunoBuscaAtiva/${idAluno}`, {
+        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/${idAluno}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -174,7 +185,8 @@ export default function Casos() {
     }
 
     function loadUsuario(){
-        fetch('http://localhost:8000/usuarios-dados', {
+
+        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/usuarios-dados', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -189,7 +201,7 @@ export default function Casos() {
 
     function gerarRealatorio() {
         console.log('Gerando relatório...');
-        fetch('http://localhost:8000/casos/gerar-relatorio', {
+        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/gerar-relatorio', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -237,7 +249,9 @@ export default function Casos() {
             urgencia: newUrgencia,
             status: newStatus,
         }
-        fetch('http://localhost:8000/casos/' + dataCasos._id , {
+   
+
+        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id , {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -266,7 +280,7 @@ export default function Casos() {
             visita: false,
         };
         try {
-            const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
+            const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -305,7 +319,7 @@ export default function Casos() {
             ligacao:false
         };
         try {
-            const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
+            const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -341,7 +355,7 @@ export default function Casos() {
             atendimento: true,
         };
         try {
-            const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
+            const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -11,7 +11,7 @@ const Logout = () => {
     const handleLogout = (e) => {
         e.preventDefault();
 
-        fetch('http://localhost:8000/logout', {
+        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/logout', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

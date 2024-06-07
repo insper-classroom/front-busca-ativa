@@ -14,10 +14,10 @@ export default function Dashboard() {
   const [turmaData, setTurmaData] = useState([]);
   const [error, setError] = useState(null);
   const cookies = new Cookies();
-  const token = cookies.get('token');  // Obtenha o token após inicializar `Cookies`
+  const token = cookies.get('token');
 
   useEffect(() => {
-    fetch('http://localhost:8000/casos', {
+    fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export default function Dashboard() {
   return (
     <div>
       <HeaderAdmin />
-      <Container className='dashboard' style={{ paddingTop: '90px' }}>
+      <Container className='dashboard'>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Typography 
@@ -90,7 +90,6 @@ export default function Dashboard() {
                 fontWeight: 'bold', 
                 textTransform: 'uppercase', 
                 color: '#333', 
-                 
               }}
             >
               Dashboard

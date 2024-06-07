@@ -76,7 +76,7 @@ function App() {
             // Colocar as páginas do professor aqui
             <>
             <Route path="/home" element={<HomeProfessor />} />
-            <Route path="/tarefas/adicionar/:id" element={<AdicionarTarefa />} />
+            <Route path="/tarefas/:id" element={<AdicionarTarefa />} />
             </>
           )}
 

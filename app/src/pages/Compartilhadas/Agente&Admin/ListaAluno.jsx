@@ -65,7 +65,7 @@ function ListaAluno() {
   }, []);
 
   const fetchUsers = () => {
-    fetch('http://localhost:8000/alunoBuscaAtiva', {
+    fetch('https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ function ListaAluno() {
   };
 
   const handleDelete = (id) => {
-    fetch(`http://localhost:8000/alunoBuscaAtiva/${id}`, {
+    fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

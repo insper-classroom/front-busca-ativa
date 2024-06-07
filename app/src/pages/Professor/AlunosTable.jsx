@@ -55,7 +55,7 @@ function AlunosTable() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('http://localhost:8000/alunoBuscaAtiva', {
+        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -120,7 +120,7 @@ function AlunosTable() {
     };
 
     const handleAddTaskClick = (id) => {
-        navigate(`/tarefas/adicionar/${id}`);
+        navigate(`/tarefas/${id}`);
     };
 
     const handleOpenDialog = () => {
@@ -305,20 +305,7 @@ function AlunosTable() {
                                                             TAREFAS
                                                         </Button>
                                                     );
-                                                } else if (column.id === 'actions') {
-                                                    value = (
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            onClick={() => handleViewClick(aluno._id)}
-                                                            className="button"
-                                                            style={{ backgroundColor: 'green', color: 'white' }}
-                                                            startIcon={<AssignmentIndIcon />}
-                                                        >
-                                                            Visualizar
-                                                        </Button>
-                                                    );
-                                                }
+                                                } 
                                                 return (
                                                     <TableCell key={column.id} align={column.align} className="table-cell">
                                                         {column.format ? column.format(value) : value}

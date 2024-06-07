@@ -1,18 +1,25 @@
+// Importa os módulos necessários do React, Material-UI, universal-cookie, react-router-dom, e ícones
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Container, Box, Grid } from '@mui/material';
 import Cookies from 'universal-cookie';
-import { Link, useNavigate } from 'react-router-dom'; // Adicione useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
 
+// Inicializa o objeto de cookies
 const cookies = new Cookies();
 
+// Componente funcional CadastroAluno
 const CadastroAluno = () => {
+  // Recupera o token e a permissão do usuário armazenados nos cookies
   const token = cookies.get('token');
   const permissao = cookies.get('permissao');
-  const navigate = useNavigate(); // Use useNavigate
+  
+  // Hook de navegação do React Router
+  const navigate = useNavigate();
 
+  // Estado inicial do formulário usando useState
   const [formData, setFormData] = useState({
     nome: '',
     turma: '',
@@ -24,6 +31,7 @@ const CadastroAluno = () => {
     responsavel2: '',
   });
 
+  // Função para lidar com mudanças nos campos do formulário
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -32,6 +40,7 @@ const CadastroAluno = () => {
     });
   };
 
+  // Função para lidar com o envio do formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -47,7 +56,8 @@ const CadastroAluno = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/alunoBuscaAtiva', {
+      // Envia os dados do formulário para a API usando fetch
+      const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,6 +73,8 @@ const CadastroAluno = () => {
       const data = await response.json();
       console.log('Cadastro realizado com sucesso:', data);
       alert('Cadastro realizado com sucesso');
+      
+      // Reseta o estado do formulário
       setFormData({
         nome: '',
         turma: '',
@@ -74,7 +86,8 @@ const CadastroAluno = () => {
         responsavel2: '',
       });
 
-      navigate('/alunos'); // Redireciona após o cadastro bem-sucedido
+      // Redireciona para a página de alunos após o cadastro bem-sucedido
+      navigate('/alunos');
     } catch (error) {
       console.error('Erro:', error);
       alert('Erro ao realizar cadastro');
@@ -83,6 +96,7 @@ const CadastroAluno = () => {
 
   return (
     <div>
+      {/* Renderiza o cabeçalho apropriado com base na permissão do usuário */}
       {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
       <br />
       <div className='geral'>
@@ -129,7 +143,7 @@ const CadastroAluno = () => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      required = {true}
+                      required
                       className="form-field"
                       margin="normal"
                       fullWidth
@@ -231,4 +245,5 @@ const CadastroAluno = () => {
   );
 };
 
+// Exporta o componente para uso em outras partes da aplicação
 export default CadastroAluno;
