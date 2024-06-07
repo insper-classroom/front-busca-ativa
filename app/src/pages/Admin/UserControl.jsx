@@ -26,6 +26,8 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { Checkbox, FormControlLabel } from '@mui/material';
 
+import './static/UserControl.css';
+
 const columns = [
   { id: 'email', label: 'EMAIL', minWidth: 100, editable: true },
   { id: 'nome', label: 'NOME', minWidth: 100, editable: true },
@@ -111,7 +113,7 @@ function UserControl() {
         console.error('Error deleting user:', error);
       });
   };
-  
+
   const handleSave = id => {
     fetch(`http://localhost:8000/usuarios/${id}`, {
       method: 'PUT',
@@ -128,7 +130,7 @@ function UserControl() {
         setEditingUserId(null);
         setEditedUsersData(prevData => {
           const newData = { ...prevData };
-          delete newData[id]; 
+          delete newData[id];
           return newData;
         });
         fetchUsers();
@@ -207,52 +209,41 @@ function UserControl() {
   return (
     <div className='user-control'>
       <HeaderAdmin />
-      <div className='title' style={{display:"flex", justifyContent:"space-between"}}>
-      <Typography 
-        variant="h4" 
-        component="h4" 
-        style={{ 
-          marginBottom: '10px', 
-          textAlign: 'center', 
-          fontFamily: 'Roboto, sans-serif', 
-          fontWeight: 'bold', 
-          textTransform: 'uppercase', 
-        }}
-      >
-        Controle de Usuários
-      </Typography>
-      <div className="filter-container">
-      
-        <div className="filter-box">
-          <TextField
-            label="Busque pelo nome ou email"
-            variant="outlined"
-            size="small"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="compact-input"
-          />
-          <FormControl variant="outlined" size="small" className="compact-input">
-            <InputLabel>Ordenar Por</InputLabel>
-            <Select
-              value={sortOption}
-              onChange={handleSortChange}
-              label="Ordenar Por"
+      <div className='title'>
+        <Typography variant="h4" component="h4">
+          Controle de Usuários
+        </Typography>
+        <div className="filter-container">
+          <div className="filter-box">
+            <TextField
+              label="Busque pelo nome ou email"
+              variant="outlined"
+              size="small"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="compact-input"
+            />
+            <FormControl variant="outlined" size="small" className="compact-input">
+              <InputLabel>Ordenar Por</InputLabel>
+              <Select
+                value={sortOption}
+                onChange={handleSortChange}
+                label="Ordenar Por"
+              >
+                <MenuItem value=""><em>Nada</em></MenuItem>
+                <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
+                <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
+              </Select>
+            </FormControl>
+            <Button
+              variant="contained"
+              size="small"
+              className="button"
+              onClick={handleOpenDialog}
             >
-              <MenuItem value=""><em>Nada</em></MenuItem>
-              <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
-              <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
-            </Select>
-          </FormControl>
-          <Button
-            variant="contained"
-            size="small"
-            className="button"
-            onClick={handleOpenDialog}
-          >
-            Filtros
-          </Button>
-        </div>
+              Filtros
+            </Button>
+          </div>
         </div>
       </div>
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
@@ -264,7 +255,7 @@ function UserControl() {
               {['ADMIN', 'AGENTE', 'PROFESSOR'].map(permission => (
                 <FormControlLabel
                   key={permission}
-                  control={<Checkbox checked={filterPermissions.includes(permission)} onChange={handlePermissionChange} value={permission} />}
+                  control={<Checkbox checked={filterPermissions.includes(permission)} onChange={(e) => setFilterPermissions(prev => prev.includes(permission) ? prev.filter(p => p !== permission) : [...prev, permission])} value={permission} />}
                   label={permission}
                 />
               ))}
@@ -284,40 +275,40 @@ function UserControl() {
               <TableRow>
                 {columns.map((column) => (
                   <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                  sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333', alignItems: 'center' }}
-                >
-                  {column.id === 'permissao' ? (
-                    <div className='icon-admin' style={{ paddingTop: "4px", display: "flex" }}>
-                      <SupervisorAccountIcon style={{ paddingRight: "3px" }} />
-                      {column.label}
-                    </div>
-                  ) : column.id === "email" ? (
-                    <div className="icon-email" style={{ paddingTop: "4px", display: "flex" }}>
-                      <EmailIcon style={{ paddingRight: "3px" }} />
-                      {column.label}
-                    </div>
-                  ) : column.id === "nome" ? (
-                    <div className="icon-nome" style={{ paddingTop: "4px", display: "flex" }}>
-                      <BadgeIcon style={{ paddingRight: "3px" }} />
-                      {column.label}
-                    </div>
-                  ) : column.id === "edit" ? (
-                    <div className="icon-edit" style={{ paddingTop: "4px", display: "flex" }}>
-                      <CreateIcon style={{ paddingRight: "3px" }} />
-                      {column.label}
-                    </div>
-                  ) : column.id === "delete" ? (
-                    <div className="icon-delete" style={{ paddingTop: "4px", display: "flex" }}>
-                      <DeleteIcon style={{ paddingRight: "3px" }} />
-                      {column.label}
-                    </div>
-                  ) : (
-                    column.label
-                  )}
-                </TableCell>
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                    sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333', alignItems: 'center' }}
+                  >
+                    {column.id === 'permissao' ? (
+                      <div className='icon-admin'>
+                        <SupervisorAccountIcon className="icon" />
+                        {column.label}
+                      </div>
+                    ) : column.id === "email" ? (
+                      <div className="icon-email">
+                        <EmailIcon className="icon" />
+                        {column.label}
+                      </div>
+                    ) : column.id === "nome" ? (
+                      <div className="icon-nome">
+                        <BadgeIcon className="icon" />
+                        {column.label}
+                      </div>
+                    ) : column.id === "edit" ? (
+                      <div className="icon-edit">
+                        <CreateIcon className="icon" />
+                        {column.label}
+                      </div>
+                    ) : column.id === "delete" ? (
+                      <div className="icon-delete">
+                        <DeleteIcon className="icon" />
+                        {column.label}
+                      </div>
+                    ) : (
+                      column.label
+                    )}
+                  </TableCell>
                 ))}
               </TableRow>
             </TableHead>
@@ -334,20 +325,20 @@ function UserControl() {
                           <TableCell key={id} align={column.align}>
                             {id === 'edit' ? (
                               isEditing(row.id) ? (
-                                <Button 
+                                <Button
                                   variant='contained'
                                   sx={{ backgroundColor: '#007bff', color: 'white' }}
                                   startIcon={<CreateIcon />}
                                   onClick={() => handleSave(row.id)}>Salvar</Button>
                               ) : (
-                                <Button 
+                                <Button
                                   variant='contained'
                                   sx={{ backgroundColor: '#007bff', color: 'white' }}
                                   startIcon={<CreateIcon />}
-                                  onClick={() => handleEdit(row.id, row)}>Editar</Button> 
+                                  onClick={() => handleEdit(row.id, row)}>Editar</Button>
                               )
                             ) : id === 'delete' ? (
-                              <Button 
+                              <Button
                                 variant="contained"
                                 sx={{ backgroundColor: 'red', color: 'white' }}
                                 startIcon={<DeleteIcon />}
@@ -357,47 +348,43 @@ function UserControl() {
                                 id === 'permissao' ? (
                                   isEditing(row.id) ? (
                                     <Box sx={{ maxWidth: 150 }}>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">PERMISSAO</InputLabel>
-                                            <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            label="Permissão"
-                                            value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
-                                            onChange={(e) => handlePermissionChange(e, row.id)}
-                                            >
-                                            <MenuItem value={"AGENT"}>AGENT</MenuItem>
-                                            <MenuItem value={"ADMIN"}>ADMIN</MenuItem>
-                                            <MenuItem value={"PROFESSOR"}>PROFESSOR</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                        </Box>
-
+                                      <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">PERMISSAO</InputLabel>
+                                        <Select
+                                          labelId="demo-simple-select-label"
+                                          id="demo-simple-select"
+                                          label="Permissão"
+                                          value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
+                                          onChange={(e) => handlePermissionChange(e, row.id)}
+                                        >
+                                          <MenuItem value={"AGENT"}>AGENT</MenuItem>
+                                          <MenuItem value={"ADMIN"}>ADMIN</MenuItem>
+                                          <MenuItem value={"PROFESSOR"}>PROFESSOR</MenuItem>
+                                        </Select>
+                                      </FormControl>
+                                    </Box>
                                   ) : (
                                     value
                                   )
                                 ) : (
                                   isEditing(row.id) ? (
-                                  <Box
-                                    component="form"
-                                    sx={{
-                                      '& > :not(style)': { m: 1, width: '20ch' },
-                                    }}
-                                    noValidate
-                                    autoComplete="on"
-                                  >
-                                    <TextField
-                                      id="filled-basic"
-                                      label={id === 'email' ? 'Email' : id === 'nome' ? 'Nome' : ''}
-                                      variant="filled"
-                                      value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
-                                      onChange={(e) => handleInputChange(e, id, row.id)}
-                                      sx={{ width: '20ch' }}
-                                    />
-                                  </Box>
-
-
-
+                                    <Box
+                                      component="form"
+                                      sx={{
+                                        '& > :not(style)': { m: 1, width: '20ch' },
+                                      }}
+                                      noValidate
+                                      autoComplete="on"
+                                    >
+                                      <TextField
+                                        id="filled-basic"
+                                        label={id === 'email' ? 'Email' : id === 'nome' ? 'Nome' : ''}
+                                        variant="filled"
+                                        value={editedUsersData[row.id] ? editedUsersData[row.id][id] : value}
+                                        onChange={(e) => handleInputChange(e, id, row.id)}
+                                        sx={{ width: '20ch' }}
+                                      />
+                                    </Box>
                                   ) : (
                                     value
                                   )

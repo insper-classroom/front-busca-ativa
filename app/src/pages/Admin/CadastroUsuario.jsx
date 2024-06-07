@@ -9,7 +9,6 @@ import './static/Cadastro.css';
 const cookies = new Cookies();
 
 const RegisterForm = () => {
-
   const token = cookies.get('token');
 
   const [formData, setFormData] = useState({
@@ -73,107 +72,96 @@ const RegisterForm = () => {
   };
 
   return (
-    
-    <div >
+    <div>
       <HeaderAdmin />
-      
       <div className='geral'>
-      <Grid container spacing={2} className="login-container">
-          <Grid item xs={1} style={{paddingLeft:"40px", paddingTop:"3%" }}>
-            <Link to="/usuarios" style={{ textDecoration: 'none', color:"#007bff" }}>
+        <Grid container spacing={2} className="login-container">
+          <Grid item xs={1} className="back-button-container">
+            <Link to="/usuarios" className="back-link">
               <ArrowBackIcon className="back-arrow" />
             </Link>
           </Grid>
-        <Grid item xs={10} style={{textAlign:'center'}}>
-          <br/>
-          
-          <Container maxWidth="xs">
-              <Box
-              sx={{
-                  marginTop: 8,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-              }}
-              >
-              <Typography component="h1" variant="h5">
+          <Grid item xs={10} className="center-content">
+            <Container maxWidth="xs">
+              <Box className="form-box">
+                <Typography component="h1" variant="h5">
                   Cadastro
-              </Typography>
-              <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                </Typography>
+                <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                   <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  autoComplete="email"
-                  autoFocus
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    autoComplete="email"
+                    autoFocus
                   />
                   <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="nome"
-                  label="Nome"
-                  name="nome"
-                  value={formData.nome}
-                  onChange={handleChange}
-                  autoComplete="nome"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="nome"
+                    label="Nome"
+                    name="nome"
+                    value={formData.nome}
+                    onChange={handleChange}
+                    autoComplete="nome"
                   />
                   <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="senha"
-                  label="Senha"
-                  type="password"
-                  id="senha"
-                  value={formData.senha}
-                  onChange={handleChange}
-                  autoComplete="current-password"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="senha"
+                    label="Senha"
+                    type="password"
+                    id="senha"
+                    value={formData.senha}
+                    onChange={handleChange}
+                    autoComplete="current-password"
                   />
                   <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="confirmarSenha"
-                  label="Confirmar Senha"
-                  type="password"
-                  id="confirmarSenha"
-                  value={formData.confirmarSenha}
-                  onChange={handleChange}
-                  autoComplete="confirm-password"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="confirmarSenha"
+                    label="Confirmar Senha"
+                    type="password"
+                    id="confirmarSenha"
+                    value={formData.confirmarSenha}
+                    onChange={handleChange}
+                    autoComplete="confirm-password"
                   />
                   <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  select
-                  label="Permissões"
-                  name="permissoes"
-                  value={formData.permissoes}
-                  onChange={handleChange}
+                    margin="normal"
+                    required
+                    fullWidth
+                    select
+                    label="Permissões"
+                    name="permissoes"
+                    value={formData.permissoes}
+                    onChange={handleChange}
                   >
-                  <MenuItem value="professor">Professor</MenuItem>
-                  <MenuItem value="admin">Administrador</MenuItem>
-                  <MenuItem value="agente">Agente/Funcionário</MenuItem>
+                    <MenuItem value="professor">Professor</MenuItem>
+                    <MenuItem value="admin">Administrador</MenuItem>
+                    <MenuItem value="agente">Agente/Funcionário</MenuItem>
                   </TextField>
                   <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
                   >
-                  Cadastrar
+                    Cadastrar
                   </Button>
+                </Box>
               </Box>
-              </Box>
-          </Container>
+            </Container>
+          </Grid>
         </Grid>
-      </Grid>
       </div>
     </div>
   );
