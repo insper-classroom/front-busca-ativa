@@ -41,7 +41,7 @@ export default function Dashboard() {
 
   const processCaseData = (casos) => {
     const statusCounts = { 'EM ABERTO': 0, 'FINALIZADO': 0 };
-    const urgenciaCounts = { 'ALTA': 0, 'MEDIA': 0, 'BAIXA': 0, 'NÃO INFORMADO': 0 };
+    const urgenciaCounts = { 'ALTA': 0, 'MEDIA': 0, 'BAIXA': 0, 'NAO INFORMADO': 0 };
     const turmaCounts = {};
 
     casos.forEach(caso => {
