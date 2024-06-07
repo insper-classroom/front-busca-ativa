@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import logoBranco from '../../components/img/logoBranco.png';
 import Logout from '../../functions/Logout';
-import './static/HeaderAgente.css'; // Certifique-se de que o CSS correspondente esteja importado
+// import './static/HeaderAgente.css'; // Certifique-se de que o CSS correspondente esteja importado
 
 /**
  * Componente de cabeçalho para o agente.
