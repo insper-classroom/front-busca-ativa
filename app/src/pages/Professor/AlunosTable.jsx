@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
+import TableContainer from '@mui/material.TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
@@ -41,19 +41,24 @@ const columns = [
     { id: 'tarefas', label: 'TAREFAS', minWidth: 170 },
 ];
 
+/**
+ * Componente de tabela de alunos.
+ * Exibe uma tabela com informações dos alunos e permite filtrar, ordenar e navegar para outras páginas.
+ */
 function AlunosTable() {
-    const [alunos, setAlunos] = useState([]);
-    const [filteredAlunos, setFilteredAlunos] = useState([]);
-    const [error, setError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [filterYears, setFilterYears] = useState([]);
-    const [filterClasses, setFilterClasses] = useState([]);
-    const [sortOption, setSortOption] = useState("");
-    const [dialogOpen, setDialogOpen] = useState(false);
-    const cookies = new Cookies();
-    const token = cookies.get('token');
-    const navigate = useNavigate();
+    const [alunos, setAlunos] = useState([]);  // Estado para armazenar a lista de alunos
+    const [filteredAlunos, setFilteredAlunos] = useState([]);  // Estado para armazenar os alunos filtrados
+    const [error, setError] = useState(null);  // Estado para armazenar erros
+    const [searchTerm, setSearchTerm] = useState('');  // Estado para armazenar o termo de busca
+    const [filterYears, setFilterYears] = useState([]);  // Estado para armazenar os anos filtrados
+    const [filterClasses, setFilterClasses] = useState([]);  // Estado para armazenar as turmas filtradas
+    const [sortOption, setSortOption] = useState('');  // Estado para armazenar a opção de ordenação
+    const [dialogOpen, setDialogOpen] = useState(false);  // Estado para controlar a abertura do diálogo de filtros
+    const cookies = new Cookies();  // Instância de Cookies para obter o token de autenticação
+    const token = cookies.get('token');  // Obtenção do token
+    const navigate = useNavigate();  // Hook para navegação
 
+    // Hook para buscar a lista de alunos ao montar o componente
     useEffect(() => {
         fetch('https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva', {
             method: 'GET',
@@ -64,19 +69,20 @@ function AlunosTable() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to fetch alunos');
+                throw new Error('Failed to fetch alunos');  // Lança erro se a resposta não for bem-sucedida
             }
             return response.json();
         })
         .then(data => {
-            setAlunos(data);
-            setFilteredAlunos(data);
+            setAlunos(data);  // Armazena os alunos no estado
+            setFilteredAlunos(data);  // Inicializa os alunos filtrados
         })
         .catch(error => {
-            setError(error.message);
+            setError(error.message);  // Armazena a mensagem de erro no estado
         });
     }, [token]);
 
+    // Hook para filtrar e ordenar os alunos com base nos critérios
     useEffect(() => {
         let results = alunos.filter(aluno => 
             aluno.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -84,19 +90,22 @@ function AlunosTable() {
             (filterClasses.length === 0 || filterClasses.some(cls => aluno.turma.endsWith(cls)))
         );
 
-        if (sortOption === "nameAsc") {
+        // Ordena os resultados conforme a opção selecionada
+        if (sortOption === 'nameAsc') {
             results.sort((a, b) => a.nome.localeCompare(b.nome));
-        } else if (sortOption === "nameDesc") {
+        } else if (sortOption === 'nameDesc') {
             results.sort((a, b) => b.nome.localeCompare(a.nome));
         }
 
-        setFilteredAlunos(results);
+        setFilteredAlunos(results);  // Armazena os alunos filtrados no estado
     }, [searchTerm, filterYears, filterClasses, sortOption, alunos]);
 
+    // Função para atualizar o termo de busca
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
+    // Função para atualizar os anos filtrados
     const handleYearChange = (event) => {
         const { value } = event.target;
         setFilterYears(prev =>
@@ -104,6 +113,7 @@ function AlunosTable() {
         );
     };
 
+    // Função para atualizar as turmas filtradas
     const handleClassChange = (event) => {
         const { value } = event.target;
         setFilterClasses(prev =>
@@ -111,33 +121,40 @@ function AlunosTable() {
         );
     };
 
+    // Função para atualizar a opção de ordenação
     const handleSortChange = (event) => {
         setSortOption(event.target.value);
     };
 
+    // Função para navegar para a página de visualização do aluno
     const handleViewClick = (id) => {
         navigate(`/alunos/${id}`);
     };
 
+    // Função para navegar para a página de adição de tarefas do aluno
     const handleAddTaskClick = (id) => {
         navigate(`/tarefas/${id}`);
     };
 
+    // Função para abrir o diálogo de filtros
     const handleOpenDialog = () => {
         setDialogOpen(true);
     };
 
+    // Função para fechar o diálogo de filtros
     const handleCloseDialog = () => {
         setDialogOpen(false);
     };
 
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [page, setPage] = useState(0);  // Estado para armazenar a página atual da tabela
+    const [rowsPerPage, setRowsPerPage] = useState(10);  // Estado para armazenar o número de linhas por página
 
+    // Função para atualizar a página da tabela
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
+    // Função para atualizar o número de linhas por página na tabela
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
@@ -146,62 +163,62 @@ function AlunosTable() {
     return (
         <div>
             <div className="filter-container" style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-    <div className='title'>
-        <Typography 
-            variant="h4" 
-            component="h4" 
-            style={{ 
-                marginBottom: '10px', 
-                fontFamily: 'Roboto, sans-serif', 
-                fontWeight: 'bold', 
-                textTransform: 'uppercase',
-                whiteSpace: 'nowrap',  // Ensure the text stays on one line
-                paddingLeft: '20px'  // Add some padding to the left
-            }}
-        >
-            Controle de Tarefas
-        </Typography>
-    </div>
-    <div className="filter-box" style={{ display: "flex", alignItems: "center" }}>
-        <TextField
-            label="Nome"
-            variant="outlined"
-            size="small"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="compact-input"
-            InputProps={{
-                endAdornment: (
-                    <InputAdornment position="end">
-                        <SearchIcon />
-                    </InputAdornment>
-                )
-            }}
-            style={{ marginRight: '10px', width: '300px' }}  // Add some spacing between inputs
-        />
-        <FormControl variant="outlined" size="small" className="compact-input" style={{ marginRight: '10px' }}>
-            <InputLabel>Ordenar Por</InputLabel>
-            <Select
-                value={sortOption}
-                onChange={handleSortChange}
-                label="Ordenar Por"
-            >
-                <MenuItem value=""><em>Nada</em></MenuItem>
-                <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
-                <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
-            </Select>
-        </FormControl>
-        <Button
-            variant="contained"
-            size="small"
-            className="button"
-            onClick={handleOpenDialog}
-            style={{ color: 'white', width: '80px', height: '38px'}}
-        >
-            Filtros
-        </Button>
-    </div>
-</div>
+                <div className='title'>
+                    <Typography 
+                        variant="h4" 
+                        component="h4" 
+                        style={{ 
+                            marginBottom: '10px', 
+                            fontFamily: 'Roboto, sans-serif', 
+                            fontWeight: 'bold', 
+                            textTransform: 'uppercase',
+                            whiteSpace: 'nowrap',  // Ensure the text stays on one line
+                            paddingLeft: '20px'  // Add some padding to the left
+                        }}
+                    >
+                        Controle de Tarefas
+                    </Typography>
+                </div>
+                <div className="filter-box" style={{ display: "flex", alignItems: "center" }}>
+                    <TextField
+                        label="Nome"
+                        variant="outlined"
+                        size="small"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        className="compact-input"
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            )
+                        }}
+                        style={{ marginRight: '10px', width: '300px' }}  // Add some spacing between inputs
+                    />
+                    <FormControl variant="outlined" size="small" className="compact-input" style={{ marginRight: '10px' }}>
+                        <InputLabel>Ordenar Por</InputLabel>
+                        <Select
+                            value={sortOption}
+                            onChange={handleSortChange}
+                            label="Ordenar Por"
+                        >
+                            <MenuItem value=""><em>Nada</em></MenuItem>
+                            <MenuItem value="nameAsc">Nome (A-Z)</MenuItem>
+                            <MenuItem value="nameDesc">Nome (Z-A)</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Button
+                        variant="contained"
+                        size="small"
+                        className="button"
+                        onClick={handleOpenDialog}
+                        style={{ color: 'white', width: '80px', height: '38px'}}
+                    >
+                        Filtros
+                    </Button>
+                </div>
+            </div>
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <DialogTitle>Filtros</DialogTitle>
                 <DialogContent>
