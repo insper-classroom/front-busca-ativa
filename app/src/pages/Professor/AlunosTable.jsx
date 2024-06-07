@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material.TableContainer';
+import TableContainer from "@mui/material/TableContainer"; // Corrigido aqui
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
@@ -225,7 +225,7 @@ function AlunosTable() {
                     <div className="filter-section">
                         <div className="filter-group">
                             <h4>Ano:</h4>
-                            {['5', '6', '7', '8', '9'].map(year => (
+                            {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map(year => ( // Adicionados anos 1, 2, 3 e 4
                                 <FormControlLabel
                                     key={year}
                                     control={<Checkbox checked={filterYears.includes(year)} onChange={handleYearChange} value={year} />}

@@ -670,6 +670,10 @@ export default function Casos() {
                             <Button variant="contained" onClick={gerarRealatorio}>Gerar Relatório</Button>
                         </Grid>
 
+                        <Grid item xs={12} style={{ textAlign: "center", backgroundColor: '#d3d3d3', borderRadius: '10px', padding: '10px', marginTop: '10px' }}>
+                            para conseguir gerar um relatório, você precisa selecionar alguma ligação, visita ou atendimento aos pais
+                        </Grid>
+
                         <Grid item xs={12}>
                             <TabContext value={valueTabs}>
                                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
