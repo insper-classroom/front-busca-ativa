@@ -55,7 +55,7 @@ function CasosTable() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos', {
+        fetch('http://127.0.0.1:8000/casos', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

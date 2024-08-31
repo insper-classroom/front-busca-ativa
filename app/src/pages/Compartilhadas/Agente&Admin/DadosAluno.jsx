@@ -23,7 +23,7 @@ function DadosAluno() {
   }, [id]);
 
   const fetchAluno = () => {
-    fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/${id}`, {
+    fetch(`http://127.0.0.1:8000/alunoBuscaAtiva/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ function DadosAluno() {
   };
 
   const handleSave = () => {
-    fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/${id}`, {
+    fetch(`http://127.0.0.1:8000/alunoBuscaAtiva/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

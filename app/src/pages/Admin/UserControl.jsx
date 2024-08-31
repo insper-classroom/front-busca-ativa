@@ -56,7 +56,7 @@ function UserControl() {
   }, []);
 
   const fetchUsers = () => {
-    fetch('https://sibae-5d2fe0c3da99.herokuapp.com/usuarios', {
+    fetch('http://127.0.0.1:8000/usuarios', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ function UserControl() {
   }, [searchTerm, filterPermissions, sortOption, users]);
 
   const handleDelete = id => {
-    fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/usuarios/${id}`, {
+    fetch(`http://127.0.0.1:8000/usuarios/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ function UserControl() {
   };
   
   const handleSave = id => {
-    fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/usuarios/${id}`, {
+    fetch(`http://127.0.0.1:8000/usuarios/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -203,6 +203,13 @@ function UserControl() {
   const rows = filteredUsers.map(user => {
     return createData(user._id, user.email, user.nome, user.permissao);
   });
+  
+  const rowColors = {
+    ADMIN: '#ffcccc', // Cor para admins
+    AGENTE: '#ccffcc', // Cor para agentes
+    PROFESSOR: '#ccccff', // Cor para professores
+  };
+  
 
   return (
     <div className='user-control'>
@@ -325,13 +332,14 @@ function UserControl() {
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
+                  const backgroundColor = rowColors[row.permissao];
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id} style={{ backgroundColor }} >
                       {columns.map((column) => {
                         const { id, label, editable } = column;
                         const value = row[id];
                         return (
-                          <TableCell key={id} align={column.align}>
+                          <TableCell key={id} align={column.align} >
                             {id === 'edit' ? (
                               isEditing(row.id) ? (
                                 <Button 

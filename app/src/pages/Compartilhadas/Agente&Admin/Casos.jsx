@@ -119,7 +119,7 @@ export default function Casos() {
     }, [idAluno, isIdAlunoLoaded]);
 
     function loadIdAluno(){
-        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/caso/${id}`, {
+        fetch(`http://127.0.0.1:8000/alunoBuscaAtiva/caso/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export default function Casos() {
         if (!isIdAlunoLoaded){
             return;
         }
-        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/casos?aluno_id=${idAluno}`, {
+        fetch(`http://127.0.0.1:8000/casos?aluno_id=${idAluno}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ export default function Casos() {
         if (!isIdAlunoLoaded){
             return;
         }
-        fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/${idAluno}`, {
+        fetch(`http://127.0.0.1:8000/alunoBuscaAtiva/${idAluno}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -191,7 +191,7 @@ export default function Casos() {
 
     function loadUsuario(){
 
-        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/usuarios-dados', {
+        fetch('http://127.0.0.1:8000/usuarios-dados', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -208,7 +208,7 @@ export default function Casos() {
 
 
     function gerarRealatorio() {
-        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/gerar-relatorio', {
+        fetch('http://127.0.0.1:8000/casos/gerar-relatorio', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -260,7 +260,7 @@ export default function Casos() {
         }
    
 
-        fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id , {
+        fetch('http://127.0.0.1:8000/casos/' + dataCasos._id , {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -293,7 +293,7 @@ export default function Casos() {
 
         };
         try {
-            const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id, {
+            const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -335,7 +335,7 @@ export default function Casos() {
 
         };
         try {
-            const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id, {
+            const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -375,7 +375,7 @@ export default function Casos() {
             atendimento: true,
         };
         try {
-            const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/casos/' + dataCasos._id, {
+            const response = await fetch('http://127.0.0.1:8000/casos/' + dataCasos._id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -463,9 +463,10 @@ export default function Casos() {
                     <Grid container spacing={2} style={{ textAlign: "center", border: "1px solid black", borderRadius: "10px" }}>
                         <Grid item xs={4}>Nome: {dataAluno?.nome}</Grid>
                         <Grid item xs={4}>Turma: {dataAluno?.turma}</Grid>
+                        <Grid item xs={4}>Data de Nascimento: {dataAluno?.dataNascimento}</Grid>
                         <Grid item xs={4}>RA: {dataAluno?.RA}</Grid>
-                        <Grid item xs={6}>Endereço: {dataAluno?.endereco}</Grid>
-                        <Grid item xs={6}>Telefone: {dataAluno?.telefone}</Grid>
+                        <Grid item xs={4}>Endereço: {dataAluno?.endereco}</Grid>
+                        <Grid item xs={4}>Telefone: {dataAluno?.telefone}</Grid>
                         
                     </Grid>
                 </Grid>
