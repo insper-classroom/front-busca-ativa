@@ -30,30 +30,33 @@ import ArticleIcon from '@mui/icons-material/Article';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import Typography from '@mui/material/Typography';
 
+// Definição das colunas da tabela, cada coluna possui um id, um label, uma largura mínima, e um ícone opcional
 const columns = [
     { id: 'aluno', label: 'ALUNO', minWidth: 100, format: (aluno) => aluno.nome.toUpperCase(), Icon: ContactsIcon },
     { id: 'turma', label: 'TURMA', minWidth: 100, Icon: GroupsIcon },
-    { id: 'status', label: 'STATUS', minWidth: 100,  Icon: FeedbackIcon},
-    { id: 'urgencia', label: 'PRIORIDADE', minWidth: 100,  Icon: WarningIcon },
-    { id: 'actions', label: 'AÇÕES', minWidth: 170 , Icon: ArticleIcon}
+    { id: 'status', label: 'STATUS', minWidth: 100, Icon: FeedbackIcon },
+    { id: 'urgencia', label: 'PRIORIDADE', minWidth: 100, Icon: WarningIcon },
+    { id: 'actions', label: 'AÇÕES', minWidth: 170, Icon: ArticleIcon }
 ];
 
+// Definição da ordem de urgência para a classificação
 const urgencyOrder = { 'BAIXA': 1, 'MEDIA': 2, 'ALTA': 3, 'NÃO INFORMADO': 0 };
 
 function CasosTable() {
-    const [casos, setCasos] = useState([]);
-    const [filteredCasos, setFilteredCasos] = useState([]);
-    const [error, setError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [filterYears, setFilterYears] = useState([]);
-    const [filterClasses, setFilterClasses] = useState([]);
-    const [filterUrgency, setFilterUrgency] = useState([]);
-    const [sortOption, setSortOption] = useState("");
-    const [dialogOpen, setDialogOpen] = useState(false);
+    const [casos, setCasos] = useState([]); // Estado para armazenar os casos
+    const [filteredCasos, setFilteredCasos] = useState([]); // Estado para armazenar os casos filtrados
+    const [error, setError] = useState(null); // Estado para armazenar erros
+    const [searchTerm, setSearchTerm] = useState(""); // Estado para armazenar o termo de busca
+    const [filterYears, setFilterYears] = useState([]); // Estado para armazenar os filtros por ano
+    const [filterClasses, setFilterClasses] = useState([]); // Estado para armazenar os filtros por classe
+    const [filterUrgency, setFilterUrgency] = useState([]); // Estado para armazenar os filtros por urgência
+    const [sortOption, setSortOption] = useState(""); // Estado para armazenar a opção de ordenação
+    const [dialogOpen, setDialogOpen] = useState(false); // Estado para controlar a abertura do diálogo de filtros
     const cookies = new Cookies();
-    const token = cookies.get('token');
-    const navigate = useNavigate();
+    const token = cookies.get('token'); // Obtém o token dos cookies
+    const navigate = useNavigate(); // Hook para navegação
 
+    // Efeito para buscar os casos da API quando o componente é montado
     useEffect(() => {
         fetch('http://127.0.0.1:8000/casos', {
             method: 'GET',
@@ -69,14 +72,15 @@ function CasosTable() {
             return response.json();
         })
         .then(data => {
-            setCasos(data.caso);
-            setFilteredCasos(data.caso);
+            setCasos(data.caso); // Armazena os casos no estado
+            setFilteredCasos(data.caso); // Inicializa os casos filtrados
         })
         .catch(error => {
-            setError(error.message);
+            setError(error.message); // Armazena erros no estado
         });
     }, [token]);
 
+    // Efeito para filtrar e ordenar os casos sempre que os filtros ou a ordenação são alterados
     useEffect(() => {
         let results = casos.filter(caso => 
             caso.aluno.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -85,6 +89,7 @@ function CasosTable() {
             (filterUrgency.length === 0 || filterUrgency.some(urgency => caso.urgencia.toLowerCase() === urgency.toLowerCase()))
         );
 
+        // Ordena os resultados com base na opção de ordenação selecionada
         if (sortOption === "nameAsc") {
             results.sort((a, b) => a.aluno.nome.localeCompare(b.aluno.nome));
         } else if (sortOption === "nameDesc") {
@@ -95,17 +100,20 @@ function CasosTable() {
             results.sort((a, b) => urgencyOrder[a.urgencia] - urgencyOrder[b.urgencia]);
         }
 
-        setFilteredCasos(results);
+        setFilteredCasos(results); // Armazena os resultados filtrados e ordenados no estado
     }, [searchTerm, sortOption, filterYears, filterClasses, filterUrgency, casos]);
 
+    // Função para lidar com a mudança no campo de busca
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
+    // Função para lidar com a mudança na opção de ordenação
     const handleSortChange = (event) => {
         setSortOption(event.target.value);
     };
 
+    // Função para lidar com a mudança no filtro de anos
     const handleYearChange = (event) => {
         const { value } = event.target;
         setFilterYears(prev =>
@@ -113,6 +121,7 @@ function CasosTable() {
         );
     };
 
+    // Função para lidar com a mudança no filtro de classes
     const handleClassChange = (event) => {
         const { value } = event.target;
         setFilterClasses(prev =>
@@ -120,6 +129,7 @@ function CasosTable() {
         );
     };
 
+    // Função para lidar com a mudança no filtro de urgência
     const handleUrgencyChange = (event) => {
         const { value } = event.target;
         setFilterUrgency(prev =>
@@ -127,25 +137,31 @@ function CasosTable() {
         );
     };
 
+    // Função para lidar com o clique no botão de visualização
     const handleViewClick = (id) => {
         navigate(`/paginaAluno/${id}`);
     };
 
+    // Função para abrir o diálogo de filtros
     const handleOpenDialog = () => {
         setDialogOpen(true);
     };
 
+    // Função para fechar o diálogo de filtros
     const handleCloseDialog = () => {
         setDialogOpen(false);
     };
 
+    // Estado para controlar a paginação
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
+    // Função para mudar a página
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
+    // Função para mudar a quantidade de linhas por página
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
@@ -153,23 +169,26 @@ function CasosTable() {
 
     return (
         <div>
+            {/* Cabeçalho da página */}
             <div className='title' style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography 
-                variant="h4" 
-                component="h4" 
-                style={{ 
-                    marginBottom: '10px', 
-                    textAlign: 'center', 
-                    fontFamily: 'Roboto, sans-serif', 
-                    fontWeight: 'bold', 
-                    textTransform: 'uppercase', 
-                    paddingLeft: "2%"
-                }}
+                    variant="h4" 
+                    component="h4" 
+                    style={{ 
+                        marginBottom: '10px', 
+                        textAlign: 'center', 
+                        fontFamily: 'Roboto, sans-serif', 
+                        fontWeight: 'bold', 
+                        textTransform: 'uppercase', 
+                        paddingLeft: "2%"
+                    }}
                 >
-                Controle de Casos
+                    Controle de Casos
                 </Typography>
+                {/* Contêiner de filtros */}
                 <div className="filter-container">
                     <div className="filter-box">
+                        {/* Campo de busca */}
                         <TextField
                             label="Busque Pelo Nome"
                             variant="outlined"
@@ -178,6 +197,7 @@ function CasosTable() {
                             onChange={handleSearchChange}
                             className="compact-input"
                         />
+                        {/* Controle de seleção para ordenar os resultados */}
                         <FormControl variant="outlined" size="small" className="compact-input">
                             <InputLabel>Ordenar Por</InputLabel>
                             <Select
@@ -192,6 +212,7 @@ function CasosTable() {
                                 <MenuItem value="urgencyLowToHigh">Prioridade (Baixa - Alta)</MenuItem>
                             </Select>
                         </FormControl>
+                        {/* Botão para abrir o diálogo de filtros */}
                         <Button
                             variant="contained"
                             size="small"
@@ -203,6 +224,7 @@ function CasosTable() {
                     </div>
                 </div>
             </div>
+            {/* Diálogo de filtros */}
             <Dialog open={dialogOpen} onClose={handleCloseDialog}>
                 <DialogTitle>Filtros</DialogTitle>
                 <DialogContent>
@@ -245,37 +267,39 @@ function CasosTable() {
                     </Button>
                 </DialogActions>
             </Dialog>
+            {/* Contêiner da tabela */}
             <Paper className="table-container">
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
-                    
-                    <TableHead>
-                        <TableRow className="table-header">
-                            {columns.map((column) => (
-                                <TableCell
-                                    key={column.id}
-                                    align="center"
-                                    style={{ minWidth: column.minWidth }}
-                                    className="header-cell"
-                                    sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
-                                >
-                                    <div className="icon-label" style={{ paddingTop: "4px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                        <div className='icon' style={{ paddingRight: "3px", lineHeight: "0" }}>
-                                            {column.Icon && <Icon component={column.Icon} sx={{ fontSize: 18 }} />}
+                        {/* Cabeçalho da tabela */}
+                        <TableHead>
+                            <TableRow className="table-header">
+                                {columns.map((column) => (
+                                    <TableCell
+                                        key={column.id}
+                                        align="center"
+                                        style={{ minWidth: column.minWidth }}
+                                        className="header-cell"
+                                        sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
+                                    >
+                                        <div className="icon-label" style={{ paddingTop: "4px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                            <div className='icon' style={{ paddingRight: "3px", lineHeight: "0" }}>
+                                                {column.Icon && <Icon component={column.Icon} sx={{ fontSize: 18 }} />}
+                                            </div>
+                                            <div>{column.label}</div>
                                         </div>
-                                        <div>{column.label}</div>
-                                    </div>
-                                    {column.items && column.items.length > 0 && (
-                                        <div className="column-items">
-                                            {column.items.map(item => (
-                                                <div key={item}>{item}</div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
+                                        {column.items && column.items.length > 0 && (
+                                            <div className="column-items">
+                                                {column.items.map(item => (
+                                                    <div key={item}>{item}</div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        {/* Corpo da tabela */}
                         <TableBody>
                             {filteredCasos
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -300,7 +324,7 @@ function CasosTable() {
                                                     value = column.id === 'index' ? index + page * rowsPerPage : caso[column.id];
                                                 }
 
-                                                // Determine class names for status and urgency
+                                                // Determina as classes para status e urgência
                                                 const classNames = [];
                                                 if (column.id === 'status') {
                                                     classNames.push('status', value.toLowerCase());
@@ -316,6 +340,7 @@ function CasosTable() {
                                                 var isUrgency = column.id === 'urgencia';
                                                 return (
                                                     <TableCell key={column.id} align="center" className={classNames.join(' ')}>
+                                                        {/* Renderiza o conteúdo da célula baseado no tipo de dado */}
                                                         {(() => {
                                                             if (isStatus && value === 'EM ABERTO') {
                                                                 return <div className="status-dot-aberto">{value}</div>;
@@ -329,7 +354,6 @@ function CasosTable() {
                                                                 return <div className="urgency-dot-baixa">{value}</div>;
                                                             } else if (isUrgency && value === 'NÃO INFORMADO') {
                                                                 return <div className="urgency-dot-nao-informado">{value}</div>;
-
                                                             } else if (column.format && typeof value === 'object') {
                                                                 return column.format(value);
                                                             } else {
@@ -345,6 +369,7 @@ function CasosTable() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                {/* Controle de paginação */}
                 <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
                     component="div"

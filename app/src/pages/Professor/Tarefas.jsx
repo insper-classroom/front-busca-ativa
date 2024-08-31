@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import HeaderProfessor from './HeaderProfessor';
 import Cookies from 'universal-cookie';
 import { TextField, Button, Container, Typography, Card, CardContent, CardActions, IconButton, Select, MenuItem, InputLabel, Box, Paper, FormControl, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Checkbox } from '@mui/material';
-
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -13,20 +12,25 @@ import './static/Tarefas.css';
 
 const cookies = new Cookies();
 
+/**
+ * Componente de gerenciamento de tarefas de alunos.
+ * Permite visualizar, adicionar, editar e deletar tarefas de alunos específicos.
+ */
 function Tarefas() {
-    const [aluno, setAluno] = useState({});
-    const [tarefas, setTarefas] = useState([]);
-    const [titulo, setTitulo] = useState('');
-    const [observacoes, setObservacoes] = useState('');
-    const [status, setStatus] = useState('');
-    const [showAddTask, setShowAddTask] = useState(false);
-    const [editingTaskId, setEditingTaskId] = useState(null);
-    const [search, setSearch] = useState('');
-    const [statusFilter, setStatusFilter] = useState([]);
-    const [dialogOpen, setDialogOpen] = useState(false);
-    const token = cookies.get('token');
-    const { id } = useParams();
+    const [aluno, setAluno] = useState({}); // Estado para armazenar os dados do aluno
+    const [tarefas, setTarefas] = useState([]); // Estado para armazenar as tarefas do aluno
+    const [titulo, setTitulo] = useState(''); // Estado para armazenar o título da tarefa
+    const [observacoes, setObservacoes] = useState(''); // Estado para armazenar as observações da tarefa
+    const [status, setStatus] = useState(''); // Estado para armazenar o status da tarefa
+    const [showAddTask, setShowAddTask] = useState(false); // Estado para controlar a exibição do formulário de adição de tarefa
+    const [editingTaskId, setEditingTaskId] = useState(null); // Estado para armazenar o ID da tarefa em edição
+    const [search, setSearch] = useState(''); // Estado para armazenar o termo de busca
+    const [statusFilter, setStatusFilter] = useState([]); // Estado para armazenar os filtros de status
+    const [dialogOpen, setDialogOpen] = useState(false); // Estado para controlar a exibição do diálogo de filtros
+    const token = cookies.get('token'); // Obtenção do token de autenticação
+    const { id } = useParams(); // Hook para obter os parâmetros da rota
 
+    // Função para lidar com o envio do formulário
     const handleSubmit = (event) => {
         event.preventDefault();
         if (editingTaskId) {
@@ -36,10 +40,12 @@ function Tarefas() {
         }
     };
 
+    // Hook para buscar os dados do aluno ao montar o componente
     useEffect(() => {
         fetchAluno();
     }, [id]);
 
+    // Função para buscar os dados do aluno
     const fetchAluno = () => {
         fetch(`http://127.0.0.1:8000/alunoBuscaAtiva/${id}`, {
             method: 'GET',
@@ -63,6 +69,7 @@ function Tarefas() {
         });
     };
 
+    // Função para adicionar uma nova tarefa
     const adicionarTarefa = () => {
         const novaTarefa = {
             titulo: titulo,
@@ -96,6 +103,7 @@ function Tarefas() {
         });
     };
 
+    // Função para editar uma tarefa existente
     const editarTarefa = () => {
         const tarefaAtualizada = {
             titulo: titulo,
@@ -131,6 +139,7 @@ function Tarefas() {
         });
     };
 
+    // Função para deletar uma tarefa
     const deleteTarefa = (tarefaId) => {
         fetch(`http://127.0.0.1:8000/tarefas/${id}/${tarefaId}`, {
             method: 'DELETE',
@@ -154,6 +163,7 @@ function Tarefas() {
         });
     };
 
+    // Função para iniciar a edição de uma tarefa
     const startEditing = (tarefa) => {
         setTitulo(tarefa.titulo);
         setObservacoes(tarefa.observacoes);
@@ -162,6 +172,7 @@ function Tarefas() {
         setShowAddTask(true);
     };
 
+    // Função para cancelar a edição de uma tarefa
     const cancelEditing = () => {
         setTitulo('');
         setObservacoes('');
@@ -170,14 +181,17 @@ function Tarefas() {
         setShowAddTask(false);
     };
 
+    // Função para abrir o diálogo de filtros
     const handleOpenDialog = () => {
         setDialogOpen(true);
     };
 
+    // Função para fechar o diálogo de filtros
     const handleCloseDialog = () => {
         setDialogOpen(false);
     };
 
+    // Função para lidar com a mudança dos filtros de status
     const handleStatusFilterChange = (event) => {
         const { value } = event.target;
         setStatusFilter((prev) => 
@@ -185,11 +199,11 @@ function Tarefas() {
         );
     };
 
+    // Filtra as tarefas com base no termo de busca e nos filtros de status
     const filteredTarefas = tarefas.filter(tarefa => 
         tarefa.titulo && tarefa.titulo.toLowerCase().includes(search.toLowerCase()) &&
         (statusFilter.length === 0 || statusFilter.includes(tarefa.status))
     );
-    
 
     return (
         <div>

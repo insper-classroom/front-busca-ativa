@@ -1,0 +1,81 @@
+.card {
+    margin-top: 5%;
+    padding: 20px;
+}
+
+.aluno-info-title {
+    text-align: center;
+    padding-top: 50px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.aluno-info-container {
+    padding-top: 40px;
+    margin: 0px 100px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.aluno-info-box {
+    text-align: left;
+    padding: 10px;
+}
+
+.info-item {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+}
+
+.ficha-aluno-container {
+    text-align: center;
+    padding-top: 50px;
+    margin: 0px 100px;
+}
+
+.ficha-aluno-box {
+    text-align: left;
+    padding: 20px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+}
+
+.ficha-aluno-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.historico-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.gerar-relatorio-container {
+    text-align: center;
+    padding-top: 10px;
+}
+
+.tab-container {
+    margin-top: 20px;
+}
+
+.popper-container {
+    align-content: right;
+    background: lightgrey;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.MuiButton-containedPrimary {
+    background-color: #007bff;
+    color: white;
+}
+
+.MuiButton-containedPrimary:hover {
+    background-color: #0056b3;
+}

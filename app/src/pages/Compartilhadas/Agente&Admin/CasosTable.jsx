@@ -21,7 +21,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import './static/CasosTable.css';
 import { Icon } from '@mui/material';
 import GroupsIcon from '@mui/icons-material/Groups';
 import ContactsIcon from '@mui/icons-material/Contacts';
@@ -29,21 +28,21 @@ import WarningIcon from '@mui/icons-material/Warning';
 import ArticleIcon from '@mui/icons-material/Article';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import Typography from '@mui/material/Typography';
+import './static/CasosTable.css';
 
 const columns = [
     { id: 'aluno', label: 'ALUNO', minWidth: 100, format: (aluno) => aluno.nome.toUpperCase(), Icon: ContactsIcon },
     { id: 'turma', label: 'TURMA', minWidth: 100, Icon: GroupsIcon },
-    { id: 'status', label: 'STATUS', minWidth: 100,  Icon: FeedbackIcon},
-    { id: 'urgencia', label: 'PRIORIDADE', minWidth: 100,  Icon: WarningIcon },
-    { id: 'actions', label: 'AÇÕES', minWidth: 170 , Icon: ArticleIcon}
+    { id: 'status', label: 'STATUS', minWidth: 100, Icon: FeedbackIcon },
+    { id: 'urgencia', label: 'PRIORIDADE', minWidth: 100, Icon: WarningIcon },
+    { id: 'actions', label: 'AÇÕES', minWidth: 170, Icon: ArticleIcon }
 ];
 
-const urgencyOrder = { 'BAIXA': 1, 'MEDIA': 2, 'ALTA': 3, 'NÃO INFORMADO': 0 };
+const urgencyOrder = { 'BAIXA': 1, 'MEDIA': 2, 'ALTA': 3, 'NAO INFORMADO': 0 };
 
 function CasosTable() {
     const [casos, setCasos] = useState([]);
     const [filteredCasos, setFilteredCasos] = useState([]);
-    const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [filterYears, setFilterYears] = useState([]);
     const [filterClasses, setFilterClasses] = useState([]);
@@ -73,16 +72,16 @@ function CasosTable() {
             setFilteredCasos(data.caso);
         })
         .catch(error => {
-            setError(error.message);
+            console.error('Error fetching cases:', error);
         });
     }, [token]);
 
     useEffect(() => {
-        let results = casos.filter(caso => 
+        const results = casos.filter(caso => 
             caso.aluno.nome.toLowerCase().includes(searchTerm.toLowerCase()) &&
             (filterYears.length === 0 || filterYears.some(year => caso.aluno.turma.startsWith(year))) &&
             (filterClasses.length === 0 || filterClasses.some(cls => caso.aluno.turma.endsWith(cls))) &&
-            (filterUrgency.length === 0 || filterUrgency.some(urgency => caso.urgencia.toLowerCase() === urgency.toLowerCase()))
+            (filterUrgency.length === 0 || filterUrgency.includes(caso.urgencia.toUpperCase()))
         );
 
         if (sortOption === "nameAsc") {
@@ -155,18 +154,18 @@ function CasosTable() {
         <div>
             <div className='title' style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography 
-                variant="h4" 
-                component="h4" 
-                style={{ 
-                    marginBottom: '10px', 
-                    textAlign: 'center', 
-                    fontFamily: 'Roboto, sans-serif', 
-                    fontWeight: 'bold', 
-                    textTransform: 'uppercase', 
-                    paddingLeft: "2%"
-                }}
+                    variant="h4" 
+                    component="h4" 
+                    style={{ 
+                        marginBottom: '10px', 
+                        textAlign: 'center', 
+                        fontFamily: 'Roboto, sans-serif', 
+                        fontWeight: 'bold', 
+                        textTransform: 'uppercase', 
+                        paddingLeft: "2%"
+                    }}
                 >
-                Controle de Casos
+                    Controle de Casos
                 </Typography>
                 <div className="filter-container">
                     <div className="filter-box">
@@ -229,7 +228,7 @@ function CasosTable() {
                         </div>
                         <div className="filter-group">
                             <h4>Prioridade:</h4>
-                            {['BAIXA', 'MEDIA', 'ALTA', 'NÃO INFORMADO'].map(urgency => (
+                            {['BAIXA', 'MEDIA', 'ALTA', 'NAO INFORMADO'].map(urgency => (
                                 <FormControlLabel
                                     key={urgency}
                                     control={<Checkbox checked={filterUrgency.includes(urgency)} onChange={handleUrgencyChange} value={urgency} />}
@@ -248,34 +247,26 @@ function CasosTable() {
             <Paper className="table-container">
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
-                    
-                    <TableHead>
-                        <TableRow className="table-header">
-                            {columns.map((column) => (
-                                <TableCell
-                                    key={column.id}
-                                    align="center"
-                                    style={{ minWidth: column.minWidth }}
-                                    className="header-cell"
-                                    sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
-                                >
-                                    <div className="icon-label" style={{ paddingTop: "4px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                        <div className='icon' style={{ paddingRight: "3px", lineHeight: "0" }}>
-                                            {column.Icon && <Icon component={column.Icon} sx={{ fontSize: 18 }} />}
+                        <TableHead>
+                            <TableRow className="table-header">
+                                {columns.map((column) => (
+                                    <TableCell
+                                        key={column.id}
+                                        align="center"
+                                        style={{ minWidth: column.minWidth }}
+                                        className="header-cell"
+                                        sx={{ fontWeight: 'bold', backgroundColor: '#f0f0f0', color: '#333' }}
+                                    >
+                                        <div className="icon-label" style={{ paddingTop: "4px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                            <div className='icon' style={{ paddingRight: "3px", lineHeight: "0" }}>
+                                                {column.Icon && <Icon component={column.Icon} sx={{ fontSize: 18 }} />}
+                                            </div>
+                                            <div>{column.label}</div>
                                         </div>
-                                        <div>{column.label}</div>
-                                    </div>
-                                    {column.items && column.items.length > 0 && (
-                                        <div className="column-items">
-                                            {column.items.map(item => (
-                                                <div key={item}>{item}</div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
                         <TableBody>
                             {filteredCasos
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -300,20 +291,15 @@ function CasosTable() {
                                                     value = column.id === 'index' ? index + page * rowsPerPage : caso[column.id];
                                                 }
 
-                                                // Determine class names for status and urgency
                                                 const classNames = [];
                                                 if (column.id === 'status') {
                                                     classNames.push('status', value.toLowerCase());
                                                 } else if (column.id === 'urgencia') {
                                                     classNames.push('urgencia', value.toLowerCase());
-                                                } else if (column.id === 'actions') {
-                                                    classNames.push('actions');
-                                                } else if (column.id === 'turma') {
-                                                    classNames.push('turma');
                                                 }
 
-                                                var isStatus = column.id === 'status';
-                                                var isUrgency = column.id === 'urgencia';
+                                                const isStatus = column.id === 'status';
+                                                const isUrgency = column.id === 'urgencia';
                                                 return (
                                                     <TableCell key={column.id} align="center" className={classNames.join(' ')}>
                                                         {(() => {
@@ -327,9 +313,8 @@ function CasosTable() {
                                                                 return <div className="urgency-dot-media">{value}</div>;
                                                             } else if (isUrgency && value === 'BAIXA') {
                                                                 return <div className="urgency-dot-baixa">{value}</div>;
-                                                            } else if (isUrgency && value === 'NÃO INFORMADO') {
+                                                            } else if (isUrgency && value === 'NAO INFORMADO') {
                                                                 return <div className="urgency-dot-nao-informado">{value}</div>;
-
                                                             } else if (column.format && typeof value === 'object') {
                                                                 return column.format(value);
                                                             } else {

@@ -10,18 +10,23 @@ import './static/DadosAluno.css';
 
 const cookies = new Cookies();
 
+/**
+ * Componente para exibir e editar os dados de um aluno específico.
+ */
 function DadosAluno() {
-  const { id } = useParams();
-  const [aluno, setAluno] = useState(null);
-  const [editMode, setEditMode] = useState(false);
-  const [editedAluno, setEditedAluno] = useState({});
-  const token = cookies.get('token');
-  const permissao = cookies.get('permissao');
+  const { id } = useParams(); // Obtém o ID do aluno a partir dos parâmetros da URL
+  const [aluno, setAluno] = useState(null); // Estado para armazenar os dados do aluno
+  const [editMode, setEditMode] = useState(false); // Estado para controlar o modo de edição
+  const [editedAluno, setEditedAluno] = useState({}); // Estado para armazenar os dados editados do aluno
+  const token = cookies.get('token'); // Obtém o token de autenticação
+  const permissao = cookies.get('permissao'); // Obtém a permissão do usuário
 
+  // Hook para buscar os dados do aluno ao montar o componente
   useEffect(() => {
     fetchAluno();
   }, [id]);
 
+  // Função para buscar os dados do aluno a partir do servidor
   const fetchAluno = () => {
     fetch(`http://127.0.0.1:8000/alunoBuscaAtiva/${id}`, {
       method: 'GET',
@@ -37,14 +42,15 @@ function DadosAluno() {
         return response.json();
       })
       .then(data => {
-        setAluno(data);
-        setEditedAluno(data);
+        setAluno(data); // Define os dados do aluno no estado
+        setEditedAluno(data); // Define os dados editados do aluno no estado
       })
       .catch(error => {
         console.error('Error fetching aluno:', error);
       });
   };
 
+  // Função para lidar com a mudança nos campos de entrada do formulário
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedAluno(prevAluno => ({
@@ -53,6 +59,7 @@ function DadosAluno() {
     }));
   };
 
+  // Função para salvar as mudanças feitas nos dados do aluno
   const handleSave = () => {
     fetch(`http://127.0.0.1:8000/alunoBuscaAtiva/${id}`, {
       method: 'PUT',
@@ -66,8 +73,8 @@ function DadosAluno() {
         if (!response.ok) {
           throw new Error('Failed to save aluno changes');
         }
-        setEditMode(false);
-        fetchAluno();
+        setEditMode(false); // Desativa o modo de edição
+        fetchAluno(); // Atualiza os dados do aluno
       })
       .catch(error => {
         console.error('Error saving aluno changes:', error);
@@ -76,7 +83,7 @@ function DadosAluno() {
 
   return (
     <div>
-      {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />}
+      {permissao === 'AGENTE' ? <HeaderAgente /> : <HeaderAdmin />} {/* Exibe o cabeçalho apropriado com base na permissão */}
       <br />
       <div className='geral'>
         <Grid container spacing={2} className="login-container">
