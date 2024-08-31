@@ -2,13 +2,24 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Container, Box, Grid } from '@mui/material';
 import Cookies from 'universal-cookie';
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateField } from '@mui/x-date-pickers/DateField';
 import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import HeaderAdmin from '../../Admin/HeaderAdmin';
 import HeaderAgente from '../../Agente/HeaderAgente';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+// Ative o plugin
+dayjs.extend(customParseFormat);
 
 // Inicializa o objeto de cookies
 const cookies = new Cookies();
+
+
 
 // Componente funcional CadastroAluno
 const CadastroAluno = () => {
@@ -25,6 +36,8 @@ const CadastroAluno = () => {
     turma: '',
     RA: '',
     endereco: '',
+    faltas: '',
+    dataNascimento: dayjs(),
     telefone: '',
     telefone2: '',
     responsavel: '',
@@ -37,6 +50,14 @@ const CadastroAluno = () => {
     setFormData({
       ...formData,
       [name]: value,
+
+    });
+  };
+  // Função para lidar com mudanças no campo de data
+  const handleDateChange = (date) => {
+    setFormData({
+      ...formData,
+      dataNascimento: date,
     });
   };
 
@@ -49,6 +70,8 @@ const CadastroAluno = () => {
       turma: formData.turma,
       RA: formData.RA,
       endereco: formData.endereco,
+      faltas: formData.faltas,
+      dataNascimento: formData.dataNascimento,
       telefone: formData.telefone,
       telefone2: formData.telefone2,
       responsavel: formData.responsavel,
@@ -57,7 +80,7 @@ const CadastroAluno = () => {
 
     try {
       // Envia os dados do formulário para a API usando fetch
-      const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva', {
+      const response = await fetch('http://127.0.0.1:8000/alunoBuscaAtiva', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,6 +104,8 @@ const CadastroAluno = () => {
         RA: '',
         endereco: '',
         telefone: '',
+        faltas: '',
+        dataNascimento: dayjs(),
         telefone2: '',
         responsavel: '',
         responsavel2: '',
@@ -169,6 +194,46 @@ const CadastroAluno = () => {
                       autoComplete="endereco"
                     />
                   </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      className="form-field"
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="faltas"
+                      label="Faltas"
+                      name="faltas"
+                      value={formData.faltas}
+                      onChange={handleChange}
+                      autoComplete="faltas"
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={['DateField', 'DateField']}>
+                        <DateField
+                          label="Data de Nascimento"
+                          value={formData.dataNascimento}
+                          onChange={handleDateChange}
+                          format='DD/MM/YYYY'
+                        />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </Grid>
+                  {/* <Grid item xs={12} sm={6}>
+                    <TextField
+                      className="form-field"
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="dataNascimento"
+                      label="Data de Nascimento"
+                      name="dataNascimento"
+                      value={formData.dataNascimento}
+                      onChange={handleChange}
+                      autoComplete="dataNascimento"
+                    />
+                  </Grid> */}
                   <Grid item xs={12} sm={6}>
                     <TextField
                       className="form-field"

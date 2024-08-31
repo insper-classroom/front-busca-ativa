@@ -79,7 +79,7 @@ function ListaAluno() {
 
   // Função para buscar a lista de alunos
   const fetchUsers = () => {
-    fetch('https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva', {
+    fetch('http://127.0.0.1:8000/alunoBuscaAtiva', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -151,7 +151,7 @@ function ListaAluno() {
 
   // Função para deletar um aluno
   const handleDelete = (id) => {
-    fetch(`https://sibae-5d2fe0c3da99.herokuapp.com/alunoBuscaAtiva/${id}`, {
+    fetch(`http://127.0.0.1:8000/alunoBuscaAtiva/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

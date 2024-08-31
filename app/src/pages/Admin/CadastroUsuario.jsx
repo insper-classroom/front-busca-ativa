@@ -6,6 +6,7 @@ import Cookies from 'universal-cookie';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './static/Cadastro.css';
 
+
 const cookies = new Cookies();
 
 const RegisterForm = () => {
@@ -47,7 +48,10 @@ const RegisterForm = () => {
 
     try {
       // Faz a requisição para o cadastro do usuário
-      const response = await fetch('https://sibae-5d2fe0c3da99.herokuapp.com/usuarios', {
+
+      const response = await fetch('http://127.0.0.1:8000/usuarios', {
+
+      
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
